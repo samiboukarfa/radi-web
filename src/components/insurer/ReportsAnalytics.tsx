@@ -124,7 +124,7 @@ const ReportsAnalytics = () => {
               <p className={`text-2xl font-bold ${getPerformanceColor(performanceMetrics.claimsRatio, 'ratio')}`}>
                 {performanceMetrics.claimsRatio}%
               </p>
-              <p className="text-xs text-gray-500">Target: <20%</p>
+              <p className="text-xs text-gray-500">Target: &lt;20%</p>
             </div>
           </CardContent>
         </Card>
@@ -133,7 +133,7 @@ const ReportsAnalytics = () => {
             <div className="text-center">
               <p className="text-sm text-gray-600">Avg Settlement</p>
               <p className="text-2xl font-bold text-blue-600">{performanceMetrics.avgSettlementTime} days</p>
-              <p className="text-xs text-gray-500">Target: <15 days</p>
+              <p className="text-xs text-gray-500">Target: &lt;15 days</p>
             </div>
           </CardContent>
         </Card>
