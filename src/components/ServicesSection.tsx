@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Satellite, Cloud, Gauge, Eye, Chart3, FileText } from 'lucide-react';
+import { Satellite, Cloud, Gauge, Eye, BarChart3, FileText } from 'lucide-react';
 
 const ServicesSection = () => {
   const services = [
@@ -30,7 +30,7 @@ const ServicesSection = () => {
       color: 'text-agri-green'
     },
     {
-      icon: Chart3,
+      icon: BarChart3,
       title: 'Interactive Dashboards',
       description: 'Customized interfaces for farmers and insurers',
       color: 'text-sky-blue'
