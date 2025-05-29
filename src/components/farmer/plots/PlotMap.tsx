@@ -1,6 +1,6 @@
 
 import React, { useState, useRef } from 'react';
-import { MapContainer, TileLayer, Polygon, Popup, Marker, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Polygon, Popup, Marker } from 'react-leaflet';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -14,7 +14,6 @@ import {
   Plus,
   Edit,
   Trash2,
-  Download,
   Layers,
   Search,
   Maximize,
@@ -35,79 +34,11 @@ interface PlotMapProps {
   selectedPlot?: Plot | null;
 }
 
-interface MapControlsProps {
-  isCreating: boolean;
-  setIsCreating: (value: boolean) => void;
-  showSatellite: boolean;
-  setShowSatellite: (value: boolean) => void;
-  onZoomToAll: () => void;
-  onFindLocation: () => void;
-}
-
-const MapControls: React.FC<MapControlsProps> = ({
-  isCreating,
-  setIsCreating,
-  showSatellite,
-  setShowSatellite,
-  onZoomToAll,
-  onFindLocation
-}) => (
-  <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">
-    <Button
-      size="sm"
-      variant={isCreating ? "default" : "outline"}
-      onClick={() => setIsCreating(!isCreating)}
-      className="bg-white/90 backdrop-blur-sm shadow-lg"
-    >
-      <Plus className="h-4 w-4 mr-1" />
-      {isCreating ? 'Cancel' : 'Add Plot'}
-    </Button>
-    
-    <Button
-      size="sm"
-      variant="outline"
-      onClick={() => setShowSatellite(!showSatellite)}
-      className="bg-white/90 backdrop-blur-sm shadow-lg"
-    >
-      <Layers className="h-4 w-4 mr-1" />
-      {showSatellite ? 'Map' : 'Satellite'}
-    </Button>
-    
-    <Button
-      size="sm"
-      variant="outline"
-      onClick={onFindLocation}
-      className="bg-white/90 backdrop-blur-sm shadow-lg"
-    >
-      <Navigation className="h-4 w-4" />
-    </Button>
-    
-    <Button
-      size="sm"
-      variant="outline"
-      onClick={onZoomToAll}
-      className="bg-white/90 backdrop-blur-sm shadow-lg"
-    >
-      <Maximize className="h-4 w-4" />
-    </Button>
-  </div>
-);
-
-const MapEvents = () => {
-  useMapEvents({
-    click: (e) => {
-      console.log('Map clicked at:', e.latlng);
-    }
-  });
-  return null;
-};
-
 const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
   const [farmerData] = useState(getEnhancedFarmerData());
   const [isCreating, setIsCreating] = useState(false);
   const [showSatellite, setShowSatellite] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const mapRef = useRef<L.Map>(null);
 
   // Skikda, Algeria coordinates
   const centerPosition: [number, number] = [36.8756, 6.9147];
@@ -156,30 +87,6 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
     plot.crop.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleZoomToAll = () => {
-    if (mapRef.current && farmerData.plots.length > 0) {
-      const bounds = L.latLngBounds(
-        farmerData.plots.flatMap(plot => plot.coordinates)
-      );
-      mapRef.current.fitBounds(bounds, { padding: [20, 20] });
-    }
-  };
-
-  const handleFindLocation = () => {
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          mapRef.current?.setView([latitude, longitude], 16);
-        },
-        (error) => {
-          console.error('Error getting location:', error);
-          mapRef.current?.setView(centerPosition, defaultZoom);
-        }
-      );
-    }
-  };
-
   return (
     <div className="space-y-6">
       <Card>
@@ -220,21 +127,13 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
             <MapContainer
               center={centerPosition}
               zoom={defaultZoom}
-              ref={mapRef}
               className="h-full w-full"
-              zoomControl={false}
+              zoomControl={true}
             >
-              {!showSatellite ? (
-                <TileLayer
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                />
-              ) : (
-                <TileLayer
-                  url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-                  attribution='Tiles &copy; Esri'
-                />
-              )}
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              />
               
               {filteredPlots.map((plot) => (
                 <Polygon
@@ -248,15 +147,7 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
                     opacity: 1
                   }}
                   eventHandlers={{
-                    click: () => onPlotSelect?.(plot),
-                    mouseover: (e) => {
-                      e.target.setStyle({ fillOpacity: 0.8 });
-                    },
-                    mouseout: (e) => {
-                      e.target.setStyle({ 
-                        fillOpacity: selectedPlot?.id === plot.id ? 0.9 : 0.6 
-                      });
-                    }
+                    click: () => onPlotSelect?.(plot)
                   }}
                 >
                   <Popup>
@@ -315,18 +206,30 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
                   </Marker>
                 ))
               )}
-              
-              <MapEvents />
             </MapContainer>
             
-            <MapControls
-              isCreating={isCreating}
-              setIsCreating={setIsCreating}
-              showSatellite={showSatellite}
-              setShowSatellite={setShowSatellite}
-              onZoomToAll={handleZoomToAll}
-              onFindLocation={handleFindLocation}
-            />
+            {/* Map Controls */}
+            <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">
+              <Button
+                size="sm"
+                variant={isCreating ? "default" : "outline"}
+                onClick={() => setIsCreating(!isCreating)}
+                className="bg-white/90 backdrop-blur-sm shadow-lg"
+              >
+                <Plus className="h-4 w-4 mr-1" />
+                {isCreating ? 'Cancel' : 'Add Plot'}
+              </Button>
+              
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setShowSatellite(!showSatellite)}
+                className="bg-white/90 backdrop-blur-sm shadow-lg"
+              >
+                <Layers className="h-4 w-4 mr-1" />
+                {showSatellite ? 'Map' : 'Satellite'}
+              </Button>
+            </div>
           </div>
 
           <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
@@ -370,7 +273,7 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
                 <p>Click plots for details</p>
                 <p>Search to filter plots</p>
                 <p>Toggle satellite view</p>
-                <p>Find your location</p>
+                <p>Add new plots</p>
               </div>
             </div>
           </div>
