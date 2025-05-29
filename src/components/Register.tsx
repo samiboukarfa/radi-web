@@ -17,6 +17,7 @@ const Register = () => {
     password: '',
     confirmPassword: '',
     userType: '',
+    institutionType: '',
     location: ''
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -40,6 +41,13 @@ const Register = () => {
     { value: 'admin', label: 'Admin' }
   ];
 
+  const institutionTypes = [
+    { value: 'insurance', label: 'Insurance Company' },
+    { value: 'bank', label: 'Bank' },
+    { value: 'agriculture_committee', label: 'Agriculture Committee' },
+    { value: 'other', label: 'Other' }
+  ];
+
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
@@ -59,6 +67,9 @@ const Register = () => {
       newErrors.confirmPassword = 'Passwords do not match';
     }
     if (!formData.userType) newErrors.userType = 'User type is required';
+    if (formData.userType === 'institution' && !formData.institutionType) {
+      newErrors.institutionType = 'Institution type is required';
+    }
     if (!formData.location) newErrors.location = 'Location is required';
 
     setErrors(newErrors);
@@ -171,6 +182,25 @@ const Register = () => {
                 </Select>
                 {errors.userType && <p className="text-sm text-red-500 mt-1">{errors.userType}</p>}
               </div>
+
+              {formData.userType === 'institution' && (
+                <div>
+                  <Label htmlFor="institutionType">Type of Institution</Label>
+                  <Select value={formData.institutionType} onValueChange={(value) => handleInputChange('institutionType', value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select institution type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {institutionTypes.map((type) => (
+                        <SelectItem key={type.value} value={type.value}>
+                          {type.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {errors.institutionType && <p className="text-sm text-red-500 mt-1">{errors.institutionType}</p>}
+                </div>
+              )}
 
               <div>
                 <Label htmlFor="email">Email</Label>

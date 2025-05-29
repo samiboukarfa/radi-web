@@ -1,4 +1,3 @@
-
 export interface User {
   email: string;
   name: string;
@@ -29,12 +28,6 @@ const DEMO_CREDENTIALS = {
     name: 'Insurance Manager',
     location: 'Algiers Office',
     phone: '+213 555 789 012'
-  },
-  'institution@radi.app': {
-    password: 'institution123',
-    userType: 'institution' as const,
-    name: 'Demo Institution',
-    location: 'Oran, Algeria'
   }
 };
 
