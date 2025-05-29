@@ -1,3 +1,4 @@
+
 export interface User {
   email: string;
   name: string;
@@ -158,14 +159,14 @@ export const getDemoInsurerData = () => ({
     { id: 5, name: 'Omar Belhaj', location: 'Tlemcen', area: 12.4, risk: 'Medium', policy: 'Active', lastUpdate: '2024-01-11' }
   ],
   claims: [
-    { id: 1, farmer: 'Ahmed Benali', type: 'Drought Damage', amount: 45000, status: 'Under Review', date: '2024-01-10' },
-    { id: 2, farmer: 'Mohamed Brahim', type: 'Hail Damage', amount: 32000, status: 'Approved', date: '2024-01-08' },
-    { id: 3, farmer: 'Fatima Kaddour', type: 'Pest Infestation', amount: 18000, status: 'Investigating', date: '2024-01-05' }
+    { id: 1, farmer: 'Ahmed Benali', type: 'Drought Damage', amount: 45000, status: 'Under Review', date: '2024-01-10', location: 'Skikda', riskScore: 65 },
+    { id: 2, farmer: 'Mohamed Brahim', type: 'Hail Damage', amount: 32000, status: 'Approved', date: '2024-01-08', location: 'Setif', riskScore: 78 },
+    { id: 3, farmer: 'Fatima Kaddour', type: 'Pest Infestation', amount: 18000, status: 'Investigating', date: '2024-01-05', location: 'Constantine', riskScore: 52 }
   ],
   alerts: [
-    { id: 1, title: 'High Risk Detected - Setif Region', severity: 'high', farmer: 'Mohamed Brahim', time: '2 hours ago' },
-    { id: 2, title: 'New Claim Filed - Drought Damage', severity: 'medium', farmer: 'Ahmed Benali', time: '4 hours ago' },
-    { id: 3, title: 'Weather Warning - Hail Expected', severity: 'high', farmer: 'Multiple Farmers', time: '6 hours ago' }
+    { id: 1, title: 'High Risk Detected - Setif Region', severity: 'high', farmer: 'Mohamed Brahim', time: '2 hours ago', location: 'Setif' },
+    { id: 2, title: 'New Claim Filed - Drought Damage', severity: 'medium', farmer: 'Ahmed Benali', time: '4 hours ago', location: 'Skikda' },
+    { id: 3, title: 'Weather Warning - Hail Expected', severity: 'high', farmer: 'Multiple Farmers', time: '6 hours ago', location: 'Multiple Regions' }
   ],
   recentActivity: [
     'New farmer registration: Aicha Meziane from Batna',
