@@ -1,13 +1,27 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import { Link, useNavigate } from 'react-router-dom';
+import { getUserSession, clearUserSession, isAuthenticated } from '@/utils/auth';
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [language, setLanguage] = useState('EN');
+  const [user, setUser] = useState(getUserSession());
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setUser(getUserSession());
+  }, []);
 
   const toggleLanguage = () => {
     setLanguage(prev => prev === 'EN' ? 'AR' : prev === 'AR' ? 'FR' : 'EN');
+  };
+
+  const handleLogout = () => {
+    clearUserSession();
+    setUser(null);
+    navigate('/');
   };
 
   return (
@@ -15,12 +29,12 @@ const Header = () => {
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2">
             <div className="w-10 h-10 bg-agri-green rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">R</span>
             </div>
             <span className="text-2xl font-bold text-agri-green">RADI</span>
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
@@ -38,12 +52,28 @@ const Header = () => {
             >
               {language}
             </button>
-            <Button variant="outline" className="border-agri-green text-agri-green hover:bg-agri-green hover:text-white">
-              Login
-            </Button>
-            <Button className="bg-agri-green hover:bg-agri-green-dark text-white">
-              Register
-            </Button>
+            
+            {isAuthenticated() && user ? (
+              <div className="flex items-center space-x-4">
+                <span className="text-sm text-gray-600">Welcome, {user.name}</span>
+                <Button onClick={handleLogout} variant="outline" className="border-agri-green text-agri-green hover:bg-agri-green hover:text-white">
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <>
+                <Link to="/login">
+                  <Button variant="outline" className="border-agri-green text-agri-green hover:bg-agri-green hover:text-white">
+                    Login
+                  </Button>
+                </Link>
+                <Link to="/register">
+                  <Button className="bg-agri-green hover:bg-agri-green-dark text-white">
+                    Register
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -74,12 +104,28 @@ const Header = () => {
                 >
                   {language}
                 </button>
-                <Button variant="outline" size="sm" className="border-agri-green text-agri-green">
-                  Login
-                </Button>
-                <Button size="sm" className="bg-agri-green text-white">
-                  Register
-                </Button>
+                
+                {isAuthenticated() && user ? (
+                  <>
+                    <span className="text-sm text-gray-600">{user.name}</span>
+                    <Button onClick={handleLogout} size="sm" variant="outline" className="border-agri-green text-agri-green">
+                      Logout
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Link to="/login">
+                      <Button variant="outline" size="sm" className="border-agri-green text-agri-green">
+                        Login
+                      </Button>
+                    </Link>
+                    <Link to="/register">
+                      <Button size="sm" className="bg-agri-green text-white">
+                        Register
+                      </Button>
+                    </Link>
+                  </>
+                )}
               </div>
             </nav>
           </div>
