@@ -3,10 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Leaflet CSS imports */
-@import 'leaflet/dist/leaflet.css';
-@import 'leaflet-draw/dist/leaflet.draw.css';
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -149,40 +145,4 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-/* Leaflet custom styles */
-.leaflet-container {
-  height: 100%;
-  width: 100%;
-  background: #f8f9fa;
-}
-
-.leaflet-popup-content {
-  margin: 12px 16px;
-  line-height: 1.4;
-}
-
-.leaflet-popup-content-wrapper {
-  border-radius: 8px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
-
-.leaflet-control-layers {
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.leaflet-draw-toolbar {
-  background: white;
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.plot-polygon {
-  transition: all 0.3s ease;
-}
-
-.plot-polygon:hover {
-  filter: brightness(1.1);
 }
