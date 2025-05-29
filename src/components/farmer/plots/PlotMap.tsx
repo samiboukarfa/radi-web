@@ -69,10 +69,21 @@ const DrawingHandler: React.FC<{
   const calculatePolygonArea = (coordinates: [number, number][]): number => {
     if (coordinates.length < 3) return 0;
     
-    const polygon = L.polygon(coordinates);
-    const bounds = polygon.getBounds();
-    const area = L.GeometryUtil ? L.GeometryUtil.geodesicArea(polygon.getLatLngs()[0] as L.LatLng[]) : 0;
-    return area / 10000; // Convert to hectares
+    // Simple area calculation using shoelace formula for approximate area
+    let area = 0;
+    const n = coordinates.length;
+    
+    for (let i = 0; i < n; i++) {
+      const j = (i + 1) % n;
+      area += coordinates[i][0] * coordinates[j][1];
+      area -= coordinates[j][0] * coordinates[i][1];
+    }
+    
+    area = Math.abs(area) / 2;
+    
+    // Convert from degrees to approximate hectares (rough conversion)
+    // This is a simplified calculation - in production you'd use proper geodetic calculations
+    return area * 12100; // Approximate conversion factor for Algeria region
   };
 
   if (currentPath.length === 0) return null;
