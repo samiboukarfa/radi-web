@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { MapContainer, TileLayer, Polygon, Popup, Marker } from 'react-leaflet';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { getEnhancedFarmerData, Plot, Sensor } from '@/utils/farmerData';
 import { MapPin, Activity, Thermometer, Droplets, Zap } from 'lucide-react';
-import 'leaflet/dist/leaflet.css';
 
 interface PlotMapProps {
   onPlotSelect?: (plot: Plot) => void;
@@ -73,91 +71,9 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
           
           {/* Map Container */}
           <div className="h-96 w-full rounded-lg overflow-hidden border">
-            <MapContainer
-              center={centerPosition}
-              zoom={14}
-              style={{ height: '100%', width: '100%' }}
-              ref={mapRef}
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              
-              {/* Plot Polygons */}
-              {farmerData.plots.map((plot) => (
-                <Polygon
-                  key={plot.id}
-                  positions={plot.coordinates}
-                  pathOptions={{
-                    color: getRiskColor(plot.riskLevel),
-                    fillColor: getRiskColor(plot.riskLevel),
-                    fillOpacity: 0.3,
-                    weight: selectedPlot?.id === plot.id ? 4 : 2
-                  }}
-                  eventHandlers={{
-                    click: () => onPlotSelect?.(plot)
-                  }}
-                >
-                  <Popup>
-                    <div className="p-2 min-w-48">
-                      <h3 className="font-semibold text-lg">{plot.name}</h3>
-                      <div className="space-y-1 text-sm">
-                        <p><span className="font-medium">Crop:</span> {plot.crop}</p>
-                        <p><span className="font-medium">Area:</span> {plot.area} hectares</p>
-                        <p><span className="font-medium">Risk Level:</span> 
-                          <Badge 
-                            variant="outline" 
-                            className={`ml-1 border-${getRiskColor(plot.riskLevel).replace('#', '')} text-${getRiskColor(plot.riskLevel).replace('#', '')}`}
-                          >
-                            {plot.riskLevel}
-                          </Badge>
-                        </p>
-                        <p><span className="font-medium">Risk Score:</span> {plot.riskScore}/100</p>
-                        <p><span className="font-medium">Last Yield:</span> {plot.lastYield} tons/ha</p>
-                        <p><span className="font-medium">Sensors:</span> {plot.sensors.length} active</p>
-                      </div>
-                      <Button 
-                        size="sm" 
-                        className="mt-2 w-full"
-                        onClick={() => onPlotSelect?.(plot)}
-                      >
-                        View Details
-                      </Button>
-                    </div>
-                  </Popup>
-                </Polygon>
-              ))}
-              
-              {/* Sensor Markers */}
-              {farmerData.plots.flatMap(plot => 
-                plot.sensors.map(sensor => (
-                  <Marker 
-                    key={sensor.id} 
-                    position={sensor.position}
-                  >
-                    <Popup>
-                      <div className="p-2">
-                        <h4 className="font-semibold flex items-center space-x-2">
-                          {getSensorIcon(sensor.type)}
-                          <span>{sensor.id}</span>
-                        </h4>
-                        <div className="space-y-1 text-sm mt-2">
-                          <p><span className="font-medium">Type:</span> {sensor.type.replace('_', ' ')}</p>
-                          <p><span className="font-medium">Status:</span> 
-                            <span className={`inline-block w-2 h-2 rounded-full ml-2 ${getSensorStatusColor(sensor.status)}`}></span>
-                            <span className="ml-1 capitalize">{sensor.status.replace('_', ' ')}</span>
-                          </p>
-                          <p><span className="font-medium">Last Reading:</span> {sensor.lastReading}</p>
-                          <p><span className="font-medium">Battery:</span> {sensor.batteryLevel}%</p>
-                          <p><span className="font-medium">Plot:</span> {plot.name}</p>
-                        </div>
-                      </div>
-                    </Popup>
-                  </Marker>
-                ))
-              )}
-            </MapContainer>
+            <div className="h-full w-full bg-gray-100 flex items-center justify-center">
+              <p className="text-gray-500">Interactive map will load here</p>
+            </div>
           </div>
         </CardContent>
       </Card>
