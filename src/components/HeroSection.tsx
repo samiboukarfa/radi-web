@@ -1,8 +1,19 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+
+  const handleFarmerClick = () => {
+    navigate('/register');
+  };
+
+  const handleInsurerClick = () => {
+    navigate('/register');
+  };
+
   return (
     <section 
       id="home" 
@@ -42,6 +53,7 @@ const HeroSection = () => {
             <Button 
               size="lg"
               className="bg-sky-blue hover:bg-sky-blue-dark text-white text-lg px-8 py-4 h-auto"
+              onClick={handleFarmerClick}
             >
               Get Started as Farmer
             </Button>
@@ -49,6 +61,7 @@ const HeroSection = () => {
               size="lg"
               variant="outline" 
               className="border-white text-white hover:bg-white hover:text-agri-green text-lg px-8 py-4 h-auto"
+              onClick={handleInsurerClick}
             >
               Join as Insurer
             </Button>
