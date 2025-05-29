@@ -1,5 +1,5 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { MapContainer, TileLayer, Polygon, Popup, Marker, useMapEvents } from 'react-leaflet';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -93,6 +93,15 @@ const MapControls: React.FC<MapControlsProps> = ({
   </div>
 );
 
+const MapEvents = () => {
+  useMapEvents({
+    click: (e) => {
+      console.log('Map clicked at:', e.latlng);
+    }
+  });
+  return null;
+};
+
 const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
   const [farmerData] = useState(getEnhancedFarmerData());
   const [isCreating, setIsCreating] = useState(false);
@@ -100,7 +109,7 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const mapRef = useRef<L.Map>(null);
 
-  // Skikda, Algeria coordinates with better zoom level
+  // Skikda, Algeria coordinates
   const centerPosition: [number, number] = [36.8756, 6.9147];
   const defaultZoom = 14;
 
@@ -165,28 +174,14 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
         },
         (error) => {
           console.error('Error getting location:', error);
-          // Fallback to Skikda center
           mapRef.current?.setView(centerPosition, defaultZoom);
         }
       );
     }
   };
 
-  const MapEvents = () => {
-    useMapEvents({
-      click: (e) => {
-        if (isCreating) {
-          console.log('Creating new plot at:', e.latlng);
-          // Future implementation for plot creation
-        }
-      }
-    });
-    return null;
-  };
-
   return (
     <div className="space-y-6">
-      {/* Enhanced Map Controls */}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -221,7 +216,6 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
             </Badge>
           </div>
           
-          {/* Interactive Map Container */}
           <div className="relative h-[500px] md:h-[400px] w-full rounded-lg overflow-hidden border">
             <MapContainer
               center={centerPosition}
@@ -230,7 +224,6 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
               className="h-full w-full"
               zoomControl={false}
             >
-              {/* Tile Layers */}
               {!showSatellite ? (
                 <TileLayer
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -239,11 +232,10 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
               ) : (
                 <TileLayer
                   url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-                  attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                  attribution='Tiles &copy; Esri'
                 />
               )}
               
-              {/* Plot Polygons */}
               {filteredPlots.map((plot) => (
                 <Polygon
                   key={plot.id}
@@ -288,22 +280,11 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
                         <p><span className="font-medium">Sensors:</span> {plot.sensors.filter(s => s.status === 'online').length}/{plot.sensors.length} online</p>
                         <p><span className="font-medium">Last Yield:</span> {plot.lastYield} tons/ha</p>
                       </div>
-                      <div className="flex gap-1 mt-3">
-                        <Button size="sm" variant="outline" className="text-xs">
-                          <Edit className="h-3 w-3 mr-1" />
-                          Edit
-                        </Button>
-                        <Button size="sm" variant="outline" className="text-xs">
-                          <Download className="h-3 w-3 mr-1" />
-                          Export
-                        </Button>
-                      </div>
                     </div>
                   </Popup>
                 </Polygon>
               ))}
               
-              {/* Sensor Markers */}
               {filteredPlots.flatMap(plot => 
                 plot.sensors.map(sensor => (
                   <Marker
@@ -328,7 +309,6 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
                           </p>
                           <p><span className="font-medium">Last Reading:</span> {sensor.lastReading}</p>
                           <p><span className="font-medium">Battery:</span> {sensor.batteryLevel}%</p>
-                          <p><span className="font-medium">Updated:</span> {new Date(sensor.timestamp).toLocaleString()}</p>
                         </div>
                       </div>
                     </Popup>
@@ -339,7 +319,6 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
               <MapEvents />
             </MapContainer>
             
-            {/* Map Controls Overlay */}
             <MapControls
               isCreating={isCreating}
               setIsCreating={setIsCreating}
@@ -350,7 +329,6 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
             />
           </div>
 
-          {/* Map Legend */}
           <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
             <div>
               <h4 className="font-semibold mb-2">Plot Risk Levels</h4>
@@ -399,7 +377,6 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
         </CardContent>
       </Card>
 
-      {/* Enhanced Plot Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {filteredPlots.map((plot) => (
           <Card 
@@ -456,7 +433,6 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
         ))}
       </div>
 
-      {/* No Results Message */}
       {filteredPlots.length === 0 && searchTerm && (
         <Card>
           <CardContent className="p-8 text-center">
@@ -473,4 +449,3 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
 };
 
 export default PlotMap;
-
