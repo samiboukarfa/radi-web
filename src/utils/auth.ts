@@ -1,4 +1,3 @@
-
 export interface User {
   email: string;
   name: string;
@@ -26,8 +25,9 @@ const DEMO_CREDENTIALS = {
   'insurer@radi.app': {
     password: 'insurer123',
     userType: 'insurer' as const,
-    name: 'Demo Insurer',
-    location: 'Algiers, Algeria'
+    name: 'Insurance Manager',
+    location: 'Algiers Office',
+    phone: '+213 555 789 012'
   },
   'institution@radi.app': {
     password: 'institution123',
@@ -46,7 +46,7 @@ export const authenticateUser = (email: string, password: string): User | null =
       name: credential.name,
       userType: credential.userType,
       location: credential.location,
-      phone: credential.phone,
+      phone: credential.phone || undefined,
       lastLogin: new Date().toLocaleString('en-US', {
         hour: 'numeric',
         minute: '2-digit',
@@ -132,4 +132,46 @@ export const getDemoFarmerData = () => ({
     humidity: 65,
     windSpeed: 12
   }
+});
+
+// Demo insurer data
+export const getDemoInsurerData = () => ({
+  company: {
+    name: 'Assurance Agricole Algérie',
+    license: 'AAA-2024-001',
+    office: 'Algiers Office',
+    manager: 'Insurance Manager'
+  },
+  kpis: {
+    totalFarmers: 127,
+    totalArea: 2847,
+    activePolicies: 89,
+    pendingClaims: 12,
+    monthlyPremium: 245000,
+    riskDistribution: { low: 45, medium: 35, high: 20 }
+  },
+  farmers: [
+    { id: 1, name: 'Ahmed Benali', location: 'Skikda', area: 15.5, risk: 'Medium', policy: 'Active', lastUpdate: '2024-01-15' },
+    { id: 2, name: 'Fatima Kaddour', location: 'Constantine', area: 22.3, risk: 'Low', policy: 'Active', lastUpdate: '2024-01-14' },
+    { id: 3, name: 'Mohamed Brahim', location: 'Setif', area: 8.7, risk: 'High', policy: 'Pending', lastUpdate: '2024-01-13' },
+    { id: 4, name: 'Aicha Meziane', location: 'Batna', area: 18.9, risk: 'Low', policy: 'Active', lastUpdate: '2024-01-12' },
+    { id: 5, name: 'Omar Belhaj', location: 'Tlemcen', area: 12.4, risk: 'Medium', policy: 'Active', lastUpdate: '2024-01-11' }
+  ],
+  claims: [
+    { id: 1, farmer: 'Ahmed Benali', type: 'Drought Damage', amount: 45000, status: 'Under Review', date: '2024-01-10' },
+    { id: 2, farmer: 'Mohamed Brahim', type: 'Hail Damage', amount: 32000, status: 'Approved', date: '2024-01-08' },
+    { id: 3, farmer: 'Fatima Kaddour', type: 'Pest Infestation', amount: 18000, status: 'Investigating', date: '2024-01-05' }
+  ],
+  alerts: [
+    { id: 1, title: 'High Risk Detected - Setif Region', severity: 'high', farmer: 'Mohamed Brahim', time: '2 hours ago' },
+    { id: 2, title: 'New Claim Filed - Drought Damage', severity: 'medium', farmer: 'Ahmed Benali', time: '4 hours ago' },
+    { id: 3, title: 'Weather Warning - Hail Expected', severity: 'high', farmer: 'Multiple Farmers', time: '6 hours ago' }
+  ],
+  recentActivity: [
+    'New farmer registration: Aicha Meziane from Batna',
+    'Risk level updated: Mohamed Brahim - Medium to High',
+    'Claim approved: Fatima Kaddour - 18,000 DZD',
+    'Policy renewal: Omar Belhaj - Annual Premium',
+    'Weather alert issued for Setif region'
+  ]
 });

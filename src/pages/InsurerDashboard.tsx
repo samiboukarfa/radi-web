@@ -1,121 +1,77 @@
 
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { clearUserSession, getUserSession } from '@/utils/auth';
-import { useNavigate } from 'react-router-dom';
-import { Shield, TrendingUp, FileText, Users } from 'lucide-react';
+import React, { useState } from 'react';
+import InsurerDashboardLayout from '@/components/InsurerDashboardLayout';
+import InsurerDashboardOverview from '@/components/InsurerDashboardOverview';
+
+// Placeholder components for other sections
+const PlaceholderContent: React.FC<{ title: string; description: string }> = ({ title, description }) => (
+  <div className="space-y-6">
+    <div className="text-center py-12">
+      <h2 className="text-2xl font-bold text-gray-900 mb-4">{title}</h2>
+      <p className="text-gray-600 max-w-md mx-auto">{description}</p>
+      <div className="mt-8 p-6 bg-blue-50 border border-blue-200 rounded-lg max-w-md mx-auto">
+        <p className="text-sm text-blue-700">
+          This section is under development. Advanced insurer features will be populated in subsequent updates.
+        </p>
+      </div>
+    </div>
+  </div>
+);
 
 const InsurerDashboard = () => {
-  const navigate = useNavigate();
-  const user = getUserSession();
+  const [activeSection, setActiveSection] = useState('dashboard');
 
-  const handleLogout = () => {
-    clearUserSession();
-    navigate('/');
+  const renderContent = () => {
+    switch (activeSection) {
+      case 'dashboard':
+        return <InsurerDashboardOverview />;
+      case 'farmers':
+        return (
+          <PlaceholderContent 
+            title="Farmer Management" 
+            description="Comprehensive farmer registration, management, and policy administration system with bulk operations and detailed farmer profiles."
+          />
+        );
+      case 'risk':
+        return (
+          <PlaceholderContent 
+            title="Risk Assessment" 
+            description="Advanced risk scoring system with regional analysis, predictive modeling, and real-time risk monitoring for individual farmers and geographic areas."
+          />
+        );
+      case 'claims':
+        return (
+          <PlaceholderContent 
+            title="Claims & Alerts Management" 
+            description="Streamlined claims processing workflow with automated validation, satellite imagery analysis, and real-time alert management system."
+          />
+        );
+      case 'reports':
+        return (
+          <PlaceholderContent 
+            title="Reports & Analytics" 
+            description="Comprehensive reporting suite with performance analytics, risk trend analysis, financial reports, and customizable data exports."
+          />
+        );
+      case 'portfolio':
+        return (
+          <PlaceholderContent 
+            title="Portfolio Management" 
+            description="Complete portfolio overview with policy management, premium tracking, coverage analysis, and financial performance monitoring."
+          />
+        );
+      default:
+        return <InsurerDashboardOverview />;
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 bg-agri-green rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">R</span>
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">Insurer Dashboard</h1>
-                <p className="text-sm text-gray-600">Welcome back, {user?.name}</p>
-              </div>
-            </div>
-            <Button onClick={handleLogout} variant="outline">
-              Logout
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      <main className="container mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Policies</CardTitle>
-              <Shield className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">2,341</div>
-              <p className="text-xs text-muted-foreground">+15% from last month</p>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Claims Processed</CardTitle>
-              <FileText className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">156</div>
-              <p className="text-xs text-muted-foreground">This month</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Risk Reduction</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-green-600">23%</div>
-              <p className="text-xs text-muted-foreground">Improved accuracy</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Insured Farmers</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">1,892</div>
-              <p className="text-xs text-muted-foreground">+18% growth</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Risk Assessment</CardTitle>
-              <CardDescription>AI-powered risk analysis and pricing</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600 mb-4">
-                Leverage satellite data and climate models to accurately assess agricultural risks and optimize pricing.
-              </p>
-              <Button className="bg-agri-green hover:bg-agri-green-dark">
-                View Risk Reports
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Claims Management</CardTitle>
-              <CardDescription>Streamlined claims processing</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600 mb-4">
-                Process claims faster with automated verification using satellite imagery and weather data.
-              </p>
-              <Button variant="outline" className="border-agri-green text-agri-green">
-                Process Claims
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </main>
-    </div>
+    <InsurerDashboardLayout 
+      activeSection={activeSection}
+      onSectionChange={setActiveSection}
+    >
+      {renderContent()}
+    </InsurerDashboardLayout>
   );
 };
 
