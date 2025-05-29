@@ -1,3 +1,4 @@
+
 export interface Plot {
   id: number;
   name: string;
@@ -100,19 +101,18 @@ export const getEnhancedFarmerData = () => ({
       crop: 'Wheat',
       area: 15.5,
       riskLevel: 'Medium' as const,
-      color: '#EAB308',
+      color: '#F59E0B',
       coordinates: [
-        [36.8820, 6.9100],
-        [36.8840, 6.9200],
-        [36.8780, 6.9220],
-        [36.8760, 6.9120],
-        [36.8800, 6.9080]
+        [36.8756, 6.9147],
+        [36.8776, 6.9167],
+        [36.8796, 6.9147],
+        [36.8776, 6.9127]
       ] as [number, number][],
       sensors: [
         {
           id: 'SM001',
           type: 'soil_moisture' as const,
-          position: [36.8800, 6.9150] as [number, number],
+          position: [36.8766, 6.9147] as [number, number],
           status: 'online' as const,
           lastReading: 45.2,
           timestamp: '2024-01-15T10:30:00Z',
@@ -121,7 +121,7 @@ export const getEnhancedFarmerData = () => ({
         {
           id: 'TMP001',
           type: 'temperature' as const,
-          position: [36.8810, 6.9180] as [number, number],
+          position: [36.8786, 6.9157] as [number, number],
           status: 'online' as const,
           lastReading: 28.5,
           timestamp: '2024-01-15T10:30:00Z',
@@ -143,19 +143,18 @@ export const getEnhancedFarmerData = () => ({
       crop: 'Olives',
       area: 8.2,
       riskLevel: 'Low' as const,
-      color: '#22C55E',
+      color: '#10B981',
       coordinates: [
-        [36.8700, 6.9250],
-        [36.8730, 6.9320],
-        [36.8680, 6.9340],
-        [36.8650, 6.9280],
-        [36.8670, 6.9240]
+        [36.8726, 6.9187],
+        [36.8746, 6.9207],
+        [36.8766, 6.9187],
+        [36.8746, 6.9167]
       ] as [number, number][],
       sensors: [
         {
           id: 'SM002',
           type: 'soil_moisture' as const,
-          position: [36.8690, 6.9290] as [number, number],
+          position: [36.8746, 6.9187] as [number, number],
           status: 'online' as const,
           lastReading: 38.7,
           timestamp: '2024-01-15T10:25:00Z',
@@ -179,16 +178,16 @@ export const getEnhancedFarmerData = () => ({
       riskLevel: 'High' as const,
       color: '#EF4444',
       coordinates: [
-        [36.8650, 6.9050],
-        [36.8680, 6.9100],
-        [36.8660, 6.9130],
-        [36.8630, 6.9080]
+        [36.8696, 6.9157],
+        [36.8716, 6.9177],
+        [36.8736, 6.9157],
+        [36.8716, 6.9137]
       ] as [number, number][],
       sensors: [
         {
           id: 'SM003',
           type: 'soil_moisture' as const,
-          position: [36.8655, 6.9090] as [number, number],
+          position: [36.8716, 6.9157] as [number, number],
           status: 'battery_low' as const,
           lastReading: 52.1,
           timestamp: '2024-01-15T09:45:00Z',
@@ -197,7 +196,7 @@ export const getEnhancedFarmerData = () => ({
         {
           id: 'PH001',
           type: 'ph' as const,
-          position: [36.8665, 6.9110] as [number, number],
+          position: [36.8726, 6.9167] as [number, number],
           status: 'offline' as const,
           lastReading: 6.8,
           timestamp: '2024-01-14T15:20:00Z',
@@ -219,19 +218,18 @@ export const getEnhancedFarmerData = () => ({
       crop: 'Barley',
       area: 22.1,
       riskLevel: 'Low' as const,
-      color: '#22C55E',
+      color: '#10B981',
       coordinates: [
-        [36.8900, 6.9000],
-        [36.8950, 6.9100],
-        [36.8920, 6.9180],
-        [36.8870, 6.9150],
-        [36.8850, 6.9050]
+        [36.8666, 6.9127],
+        [36.8686, 6.9147],
+        [36.8706, 6.9127],
+        [36.8686, 6.9107]
       ] as [number, number][],
       sensors: [
         {
           id: 'SM004',
           type: 'soil_moisture' as const,
-          position: [36.8900, 6.9100] as [number, number],
+          position: [36.8686, 6.9127] as [number, number],
           status: 'online' as const,
           lastReading: 41.8,
           timestamp: '2024-01-15T10:35:00Z',
@@ -240,7 +238,7 @@ export const getEnhancedFarmerData = () => ({
         {
           id: 'HUM001',
           type: 'humidity' as const,
-          position: [36.8920, 6.9120] as [number, number],
+          position: [36.8696, 6.9137] as [number, number],
           status: 'online' as const,
           lastReading: 67.3,
           timestamp: '2024-01-15T10:35:00Z',
