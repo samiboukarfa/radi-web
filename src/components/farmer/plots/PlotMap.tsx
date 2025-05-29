@@ -1,6 +1,5 @@
 
-import React, { useState, useRef } from 'react';
-import { MapContainer, TileLayer, Polygon, Popup, Marker } from 'react-leaflet';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -19,15 +18,6 @@ import {
   Maximize,
   Navigation
 } from 'lucide-react';
-import L from 'leaflet';
-
-// Fix for default markers in react-leaflet
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-});
 
 interface PlotMapProps {
   onPlotSelect?: (plot: Plot) => void;
@@ -39,10 +29,6 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
   const [isCreating, setIsCreating] = useState(false);
   const [showSatellite, setShowSatellite] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-
-  // Skikda, Algeria coordinates
-  const centerPosition: [number, number] = [36.8756, 6.9147];
-  const defaultZoom = 14;
 
   const getRiskColor = (level: string) => {
     switch (level) {
@@ -70,16 +56,6 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
       case 'battery_low': return '#F59E0B';
       default: return '#6B7280';
     }
-  };
-
-  const createSensorIcon = (sensor: Sensor) => {
-    const color = getSensorStatusColor(sensor.status);
-    return L.divIcon({
-      html: `<div style="background-color: ${color}; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>`,
-      className: 'custom-sensor-icon',
-      iconSize: [20, 20],
-      iconAnchor: [10, 10]
-    });
   };
 
   const filteredPlots = farmerData.plots.filter(plot =>
@@ -123,93 +99,48 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
             </Badge>
           </div>
           
-          <div className="relative h-[500px] md:h-[400px] w-full rounded-lg overflow-hidden border">
-            <MapContainer
-              center={centerPosition}
-              zoom={defaultZoom}
-              className="h-full w-full"
-              zoomControl={true}
-            >
-              <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              />
-              
-              {filteredPlots.map((plot) => (
-                <Polygon
-                  key={plot.id}
-                  positions={plot.coordinates}
-                  pathOptions={{
-                    color: getRiskColor(plot.riskLevel),
-                    fillColor: getRiskColor(plot.riskLevel),
-                    fillOpacity: selectedPlot?.id === plot.id ? 0.9 : 0.6,
-                    weight: selectedPlot?.id === plot.id ? 4 : 2,
-                    opacity: 1
-                  }}
-                  eventHandlers={{
-                    click: () => onPlotSelect?.(plot)
-                  }}
-                >
-                  <Popup>
-                    <div className="p-2 min-w-[200px]">
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-semibold text-lg">{plot.name}</h3>
-                        <Badge 
-                          variant="outline"
-                          style={{ 
-                            borderColor: getRiskColor(plot.riskLevel),
-                            color: getRiskColor(plot.riskLevel)
-                          }}
-                        >
-                          {plot.riskLevel}
-                        </Badge>
-                      </div>
-                      <div className="space-y-1 text-sm">
-                        <p><span className="font-medium">Crop:</span> {plot.crop}</p>
-                        <p><span className="font-medium">Area:</span> {plot.area} hectares</p>
-                        <p><span className="font-medium">Risk Score:</span> {plot.riskScore}/100</p>
-                        <p><span className="font-medium">Sensors:</span> {plot.sensors.filter(s => s.status === 'online').length}/{plot.sensors.length} online</p>
-                        <p><span className="font-medium">Last Yield:</span> {plot.lastYield} tons/ha</p>
-                      </div>
-                    </div>
-                  </Popup>
-                </Polygon>
-              ))}
-              
-              {filteredPlots.flatMap(plot => 
-                plot.sensors.map(sensor => (
-                  <Marker
-                    key={sensor.id}
-                    position={sensor.position}
-                    icon={createSensorIcon(sensor)}
-                  >
-                    <Popup>
-                      <div className="p-2">
-                        <div className="flex items-center gap-2 mb-2">
-                          {getSensorIcon(sensor.type)}
-                          <h4 className="font-semibold text-sm">{sensor.type.replace('_', ' ').toUpperCase()}</h4>
+          {/* Temporary Map Placeholder */}
+          <div className="relative h-[500px] md:h-[400px] w-full rounded-lg overflow-hidden border bg-gradient-to-br from-green-50 to-blue-50">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-center space-y-4">
+                <MapPin className="h-16 w-16 text-green-600 mx-auto" />
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">Skikda Agricultural Region</h3>
+                  <p className="text-gray-600 mb-4">Interactive map view temporarily unavailable</p>
+                  <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
+                    {filteredPlots.map((plot) => (
+                      <div
+                        key={plot.id}
+                        className={`p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 hover:shadow-md ${
+                          selectedPlot?.id === plot.id 
+                            ? 'border-green-500 bg-green-50' 
+                            : 'border-gray-200 bg-white hover:border-gray-300'
+                        }`}
+                        onClick={() => onPlotSelect?.(plot)}
+                        style={{
+                          borderColor: selectedPlot?.id === plot.id ? getRiskColor(plot.riskLevel) : undefined
+                        }}
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-medium text-sm">{plot.name}</span>
+                          <div 
+                            className="w-3 h-3 rounded-full"
+                            style={{ backgroundColor: getRiskColor(plot.riskLevel) }}
+                          ></div>
                         </div>
-                        <div className="space-y-1 text-xs">
-                          <p><span className="font-medium">Status:</span> 
-                            <span className={`ml-1 px-1 py-0.5 rounded text-white ${
-                              sensor.status === 'online' ? 'bg-green-500' :
-                              sensor.status === 'offline' ? 'bg-red-500' : 'bg-yellow-500'
-                            }`}>
-                              {sensor.status}
-                            </span>
-                          </p>
-                          <p><span className="font-medium">Last Reading:</span> {sensor.lastReading}</p>
-                          <p><span className="font-medium">Battery:</span> {sensor.batteryLevel}%</p>
+                        <div className="text-xs text-gray-600">
+                          <p>{plot.crop} - {plot.area}ha</p>
+                          <p>{plot.sensors.filter(s => s.status === 'online').length}/{plot.sensors.length} sensors</p>
                         </div>
                       </div>
-                    </Popup>
-                  </Marker>
-                ))
-              )}
-            </MapContainer>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
             
             {/* Map Controls */}
-            <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">
+            <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
               <Button
                 size="sm"
                 variant={isCreating ? "default" : "outline"}
