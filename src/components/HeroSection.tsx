@@ -1,0 +1,78 @@
+
+import React from 'react';
+import { Button } from '@/components/ui/button';
+
+const HeroSection = () => {
+  return (
+    <section 
+      id="home" 
+      className="relative min-h-screen flex items-center justify-center"
+      style={{
+        backgroundImage: `linear-gradient(rgba(45, 80, 22, 0.7), rgba(45, 80, 22, 0.7)), url('https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed'
+      }}
+    >
+      <div className="container mx-auto px-6 text-center text-white">
+        <div className="max-w-4xl mx-auto fade-in">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+            RADI
+          </h1>
+          <h2 className="text-2xl md:text-3xl mb-4 font-semibold">
+            Risk Assessment Driven by Innovation
+          </h2>
+          
+          {/* Bilingual Slogans */}
+          <div className="mb-8 space-y-3">
+            <p className="text-xl md:text-2xl font-medium" dir="rtl">
+              مع رادي الكل راضي
+            </p>
+            <p className="text-xl md:text-2xl italic">
+              Le risqué n'est plus une surprise
+            </p>
+          </div>
+
+          <p className="text-lg md:text-xl mb-10 text-gray-200 leading-relaxed">
+            Transforming agricultural insurance through AI-powered climate risk assessment
+          </p>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col md:flex-row gap-4 justify-center mb-16">
+            <Button 
+              size="lg"
+              className="bg-sky-blue hover:bg-sky-blue-dark text-white text-lg px-8 py-4 h-auto"
+            >
+              Get Started as Farmer
+            </Button>
+            <Button 
+              size="lg"
+              variant="outline" 
+              className="border-white text-white hover:bg-white hover:text-agri-green text-lg px-8 py-4 h-auto"
+            >
+              Join as Insurer
+            </Button>
+          </div>
+
+          {/* Statistics */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-bold text-sky-blue mb-2">500+</div>
+              <div className="text-lg">Farmers Protected</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-bold text-sky-blue mb-2">15+</div>
+              <div className="text-lg">Insurance Partners</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-bold text-sky-blue mb-2">99%</div>
+              <div className="text-lg">Accuracy Rate</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default HeroSection;
