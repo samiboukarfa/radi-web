@@ -46,7 +46,7 @@ export const authenticateUser = (email: string, password: string): User | null =
       name: credential.name,
       userType: credential.userType,
       location: credential.location,
-      phone: credential.phone || undefined,
+      phone: 'phone' in credential ? credential.phone : undefined,
       lastLogin: new Date().toLocaleString('en-US', {
         hour: 'numeric',
         minute: '2-digit',

@@ -11,7 +11,8 @@ import {
   TrendingUp, 
   DollarSign,
   Activity,
-  Clock
+  Clock,
+  FileText
 } from 'lucide-react';
 
 const InsurerDashboardOverview = () => {
