@@ -99,6 +99,101 @@ const DrawingHandler: React.FC<{
   );
 };
 
+// Map content component to properly structure children
+const MapContent: React.FC<{
+  filteredPlots: Plot[];
+  selectedPlot?: Plot | null;
+  onPlotSelect?: (plot: Plot) => void;
+  isDrawing: boolean;
+  onPlotCreate: (coordinates: [number, number][], area: number) => void;
+  getRiskColor: (level: string) => string;
+  getRiskOpacity: (plot: Plot, isSelected: boolean, isHovered: boolean) => number;
+}> = ({ filteredPlots, selectedPlot, onPlotSelect, isDrawing, onPlotCreate, getRiskColor, getRiskOpacity }) => {
+  return (
+    <>
+      <DrawingHandler
+        isDrawing={isDrawing}
+        onPlotCreate={onPlotCreate}
+      />
+      
+      {filteredPlots.map((plot) => (
+        <React.Fragment key={plot.id}>
+          <Polygon
+            positions={plot.coordinates}
+            color={getRiskColor(plot.riskLevel)}
+            fillColor={getRiskColor(plot.riskLevel)}
+            fillOpacity={getRiskOpacity(plot, selectedPlot?.id === plot.id, false)}
+            weight={selectedPlot?.id === plot.id ? 4 : 2}
+            className="plot-polygon"
+            eventHandlers={{
+              click: () => onPlotSelect?.(plot),
+              mouseover: (e) => {
+                e.target.setStyle({ fillOpacity: 0.8 });
+              },
+              mouseout: (e) => {
+                e.target.setStyle({ 
+                  fillOpacity: getRiskOpacity(plot, selectedPlot?.id === plot.id, false) 
+                });
+              }
+            }}
+          >
+            <Popup>
+              <div className="w-64">
+                <h3 className="font-semibold text-lg mb-2">{plot.name}</h3>
+                <div className="space-y-1 text-sm">
+                  <p><span className="font-medium">Crop:</span> {plot.crop}</p>
+                  <p><span className="font-medium">Area:</span> {plot.area} hectares</p>
+                  <p>
+                    <span className="font-medium">Risk Level:</span>
+                    <Badge
+                      variant="outline"
+                      className="ml-2"
+                      style={{
+                        borderColor: getRiskColor(plot.riskLevel),
+                        color: getRiskColor(plot.riskLevel)
+                      }}
+                    >
+                      {plot.riskLevel}
+                    </Badge>
+                  </p>
+                  <p><span className="font-medium">Last NDVI:</span> {plot.ndviTrend[plot.ndviTrend.length - 1].toFixed(3)}</p>
+                  <p><span className="font-medium">Soil Moisture:</span> {plot.moistureLevels[plot.moistureLevels.length - 1]}%</p>
+                </div>
+                <div className="flex space-x-2 mt-3">
+                  <Button size="sm" variant="outline">
+                    <Edit className="h-3 w-3 mr-1" />
+                    Edit
+                  </Button>
+                  <Button size="sm" variant="outline">
+                    View Details
+                  </Button>
+                </div>
+              </div>
+            </Popup>
+          </Polygon>
+          
+          {/* Plot center marker */}
+          {plot.coordinates.length > 0 && (
+            <Marker
+              position={[
+                plot.coordinates.reduce((sum, coord) => sum + coord[0], 0) / plot.coordinates.length,
+                plot.coordinates.reduce((sum, coord) => sum + coord[1], 0) / plot.coordinates.length
+              ]}
+            >
+              <Popup>
+                <div className="text-center">
+                  <h4 className="font-medium">{plot.name}</h4>
+                  <p className="text-sm text-gray-600">{plot.crop}</p>
+                </div>
+              </Popup>
+            </Marker>
+          )}
+        </React.Fragment>
+      ))}
+    </>
+  );
+};
+
 const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
   const [farmerData, setFarmerData] = useState(getEnhancedFarmerData());
   const [isDrawing, setIsDrawing] = useState(false);
@@ -203,7 +298,6 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
         <div className="p-4 border-b border-gray-200">
           <h3 className="font-semibold text-lg mb-4">Plot Management</h3>
           
-          {/* Controls */}
           <div className="space-y-3">
             <Button
               onClick={() => setIsDrawing(!isDrawing)}
@@ -231,10 +325,9 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
           </div>
         </div>
 
-        {/* Search and Filters */}
         <div className="p-4 border-b border-gray-200 space-y-3">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               placeholder="Search plots..."
               value={searchTerm}
@@ -270,7 +363,6 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
           </div>
         </div>
 
-        {/* Plot List */}
         <div className="flex-1 overflow-y-auto">
           <div className="p-2">
             {filteredPlots.map((plot) => (
@@ -332,85 +424,15 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
             }
           />
           
-          <DrawingHandler
+          <MapContent
+            filteredPlots={filteredPlots}
+            selectedPlot={selectedPlot}
+            onPlotSelect={onPlotSelect}
             isDrawing={isDrawing}
             onPlotCreate={handlePlotCreate}
+            getRiskColor={getRiskColor}
+            getRiskOpacity={getRiskOpacity}
           />
-          
-          {filteredPlots.map((plot) => (
-            <React.Fragment key={plot.id}>
-              <Polygon
-                positions={plot.coordinates}
-                color={getRiskColor(plot.riskLevel)}
-                fillColor={getRiskColor(plot.riskLevel)}
-                fillOpacity={getRiskOpacity(plot, selectedPlot?.id === plot.id, false)}
-                weight={selectedPlot?.id === plot.id ? 4 : 2}
-                className="plot-polygon"
-                eventHandlers={{
-                  click: () => onPlotSelect?.(plot),
-                  mouseover: (e) => {
-                    e.target.setStyle({ fillOpacity: 0.8 });
-                  },
-                  mouseout: (e) => {
-                    e.target.setStyle({ 
-                      fillOpacity: getRiskOpacity(plot, selectedPlot?.id === plot.id, false) 
-                    });
-                  }
-                }}
-              >
-                <Popup>
-                  <div className="w-64">
-                    <h3 className="font-semibold text-lg mb-2">{plot.name}</h3>
-                    <div className="space-y-1 text-sm">
-                      <p><span className="font-medium">Crop:</span> {plot.crop}</p>
-                      <p><span className="font-medium">Area:</span> {plot.area} hectares</p>
-                      <p>
-                        <span className="font-medium">Risk Level:</span>
-                        <Badge
-                          variant="outline"
-                          className="ml-2"
-                          style={{
-                            borderColor: getRiskColor(plot.riskLevel),
-                            color: getRiskColor(plot.riskLevel)
-                          }}
-                        >
-                          {plot.riskLevel}
-                        </Badge>
-                      </p>
-                      <p><span className="font-medium">Last NDVI:</span> {plot.ndviTrend[plot.ndviTrend.length - 1].toFixed(3)}</p>
-                      <p><span className="font-medium">Soil Moisture:</span> {plot.moistureLevels[plot.moistureLevels.length - 1]}%</p>
-                    </div>
-                    <div className="flex space-x-2 mt-3">
-                      <Button size="sm" variant="outline">
-                        <Edit className="h-3 w-3 mr-1" />
-                        Edit
-                      </Button>
-                      <Button size="sm" variant="outline">
-                        View Details
-                      </Button>
-                    </div>
-                  </div>
-                </Popup>
-              </Polygon>
-              
-              {/* Plot center marker */}
-              {plot.coordinates.length > 0 && (
-                <Marker
-                  position={[
-                    plot.coordinates.reduce((sum, coord) => sum + coord[0], 0) / plot.coordinates.length,
-                    plot.coordinates.reduce((sum, coord) => sum + coord[1], 0) / plot.coordinates.length
-                  ]}
-                >
-                  <Popup>
-                    <div className="text-center">
-                      <h4 className="font-medium">{plot.name}</h4>
-                      <p className="text-sm text-gray-600">{plot.crop}</p>
-                    </div>
-                  </Popup>
-                </Marker>
-              )}
-            </React.Fragment>
-          ))}
         </MapContainer>
       </div>
 
