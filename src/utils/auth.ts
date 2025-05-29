@@ -1,4 +1,3 @@
-
 export interface User {
   email: string;
   name: string;
@@ -107,7 +106,7 @@ export const getDashboardRoute = (userType: string): string => {
   }
 };
 
-// Demo farmer data
+// Enhanced demo farmer data - legacy support
 export const getDemoFarmerData = () => ({
   plots: [
     { id: 1, name: 'North Field', crop: 'Wheat', area: 15.5, riskLevel: 'Medium', color: '#F59E0B' },

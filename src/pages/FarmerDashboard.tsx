@@ -1,7 +1,8 @@
-
 import React, { useState } from 'react';
 import FarmerDashboardLayout from '@/components/FarmerDashboardLayout';
 import FarmerDashboardOverview from '@/components/FarmerDashboardOverview';
+import PlotsSection from '@/components/farmer/plots/PlotsSection';
+import RiskSection from '@/components/farmer/risk/RiskSection';
 
 // Placeholder components for other sections
 const PlaceholderContent: React.FC<{ title: string; description: string }> = ({ title, description }) => (
@@ -26,19 +27,9 @@ const FarmerDashboard = () => {
       case 'dashboard':
         return <FarmerDashboardOverview />;
       case 'plots':
-        return (
-          <PlaceholderContent 
-            title="My Plots" 
-            description="Manage and monitor all your agricultural plots with real-time data and mapping capabilities."
-          />
-        );
+        return <PlotsSection />;
       case 'risk':
-        return (
-          <PlaceholderContent 
-            title="Risk Monitoring" 
-            description="Real-time risk assessment and monitoring for all your plots with AI-powered insights."
-          />
-        );
+        return <RiskSection />;
       case 'weather':
         return (
           <PlaceholderContent 
