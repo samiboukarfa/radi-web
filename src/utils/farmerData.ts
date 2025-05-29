@@ -1,4 +1,3 @@
-
 export interface Plot {
   id: number;
   name: string;
@@ -105,6 +104,7 @@ export const getEnhancedFarmerData = () => ({
       coordinates: [
         [36.8756, 6.9147],
         [36.8776, 6.9167],
+        [36.8796, 6.9187],
         [36.8796, 6.9147],
         [36.8776, 6.9127]
       ] as [number, number][],
@@ -147,6 +147,7 @@ export const getEnhancedFarmerData = () => ({
       coordinates: [
         [36.8726, 6.9187],
         [36.8746, 6.9207],
+        [36.8766, 6.9227],
         [36.8766, 6.9187],
         [36.8746, 6.9167]
       ] as [number, number][],
@@ -180,6 +181,7 @@ export const getEnhancedFarmerData = () => ({
       coordinates: [
         [36.8696, 6.9157],
         [36.8716, 6.9177],
+        [36.8736, 6.9197],
         [36.8736, 6.9157],
         [36.8716, 6.9137]
       ] as [number, number][],
@@ -222,7 +224,9 @@ export const getEnhancedFarmerData = () => ({
       coordinates: [
         [36.8666, 6.9127],
         [36.8686, 6.9147],
-        [36.8706, 6.9127],
+        [36.8706, 6.9167],
+        [36.8726, 6.9147],
+        [36.8706, 6.9107],
         [36.8686, 6.9107]
       ] as [number, number][],
       sensors: [
