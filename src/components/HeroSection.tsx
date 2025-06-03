@@ -2,9 +2,12 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import { isAuthenticated, getUserSession, getDashboardRoute } from '@/utils/auth';
 
 const HeroSection = () => {
   const navigate = useNavigate();
+  const user = getUserSession();
+  const isLoggedIn = isAuthenticated();
 
   const handleFarmerClick = () => {
     navigate('/register');
@@ -12,6 +15,13 @@ const HeroSection = () => {
 
   const handleInsurerClick = () => {
     navigate('/register');
+  };
+
+  const handleDashboardClick = () => {
+    if (user) {
+      const dashboardRoute = getDashboardRoute(user.userType);
+      navigate(dashboardRoute);
+    }
   };
 
   return (
@@ -50,21 +60,33 @@ const HeroSection = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col md:flex-row gap-4 justify-center mb-16">
-            <Button 
-              size="lg"
-              className="bg-sky-blue hover:bg-sky-blue-dark text-white text-lg px-8 py-4 h-auto"
-              onClick={handleFarmerClick}
-            >
-              Get Started as Farmer
-            </Button>
-            <Button 
-              size="lg"
-              variant="outline" 
-              className="border-white text-white hover:bg-white hover:text-agri-green text-lg px-8 py-4 h-auto"
-              onClick={handleInsurerClick}
-            >
-              Join as Insurer
-            </Button>
+            {isLoggedIn && user ? (
+              <Button 
+                size="lg"
+                className="bg-sky-blue hover:bg-sky-blue-dark text-white text-lg px-8 py-4 h-auto"
+                onClick={handleDashboardClick}
+              >
+                Go to Dashboard
+              </Button>
+            ) : (
+              <>
+                <Button 
+                  size="lg"
+                  className="bg-sky-blue hover:bg-sky-blue-dark text-white text-lg px-8 py-4 h-auto"
+                  onClick={handleFarmerClick}
+                >
+                  Get Started as Farmer
+                </Button>
+                <Button 
+                  size="lg"
+                  variant="outline" 
+                  className="border-white text-white hover:bg-white hover:text-agri-green text-lg px-8 py-4 h-auto"
+                  onClick={handleInsurerClick}
+                >
+                  Join as Insurer
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Statistics */}
