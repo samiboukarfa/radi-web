@@ -1,10 +1,7 @@
-
 import React from 'react';
 import { Separator } from '@/components/ui/separator';
-
 const Footer = () => {
-  return (
-    <footer className="bg-gray-900 text-white">
+  return <footer className="bg-gray-900 text-white">
       <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
@@ -42,7 +39,7 @@ const Footer = () => {
             <nav className="flex flex-col space-y-2">
               <a href="#" className="text-gray-300 hover:text-white transition-colors">Risk Assessment</a>
               <a href="#" className="text-gray-300 hover:text-white transition-colors">Weather Monitoring</a>
-              <a href="#" className="text-gray-300 hover:text-white transition-colors">Insurance Solutions</a>
+              
               <a href="#" className="text-gray-300 hover:text-white transition-colors">Analytics Dashboard</a>
             </nav>
           </div>
@@ -84,8 +81,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
