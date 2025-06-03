@@ -1,40 +1,29 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { isAuthenticated, getUserSession, getDashboardRoute } from '@/utils/auth';
-
 const HeroSection = () => {
   const navigate = useNavigate();
   const user = getUserSession();
   const isLoggedIn = isAuthenticated();
-
   const handleFarmerClick = () => {
     navigate('/register');
   };
-
   const handleInsurerClick = () => {
     navigate('/register');
   };
-
   const handleDashboardClick = () => {
     if (user) {
       const dashboardRoute = getDashboardRoute(user.userType);
       navigate(dashboardRoute);
     }
   };
-
-  return (
-    <section 
-      id="home" 
-      className="relative min-h-screen flex items-center justify-center"
-      style={{
-        backgroundImage: `linear-gradient(rgba(45, 80, 22, 0.7), rgba(45, 80, 22, 0.7)), url('https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed'
-      }}
-    >
+  return <section id="home" className="relative min-h-screen flex items-center justify-center" style={{
+    backgroundImage: `linear-gradient(rgba(45, 80, 22, 0.7), rgba(45, 80, 22, 0.7)), url('https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundAttachment: 'fixed'
+  }}>
       <div className="container mx-auto px-6 text-center text-white">
         <div className="max-w-4xl mx-auto fade-in">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
@@ -46,9 +35,7 @@ const HeroSection = () => {
           
           {/* Bilingual Slogans */}
           <div className="mb-8 space-y-3">
-            <p className="text-xl md:text-2xl font-medium" dir="rtl">
-              مع رادي الكل راضي
-            </p>
+            
             <p className="text-xl md:text-2xl italic">
               Le risqué n'est plus une surprise
             </p>
@@ -60,33 +47,16 @@ const HeroSection = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col md:flex-row gap-4 justify-center mb-16">
-            {isLoggedIn && user ? (
-              <Button 
-                size="lg"
-                className="bg-sky-blue hover:bg-sky-blue-dark text-white text-lg px-8 py-4 h-auto"
-                onClick={handleDashboardClick}
-              >
+            {isLoggedIn && user ? <Button size="lg" className="bg-sky-blue hover:bg-sky-blue-dark text-white text-lg px-8 py-4 h-auto" onClick={handleDashboardClick}>
                 Go to Dashboard
-              </Button>
-            ) : (
-              <>
-                <Button 
-                  size="lg"
-                  className="bg-sky-blue hover:bg-sky-blue-dark text-white text-lg px-8 py-4 h-auto"
-                  onClick={handleFarmerClick}
-                >
+              </Button> : <>
+                <Button size="lg" className="bg-sky-blue hover:bg-sky-blue-dark text-white text-lg px-8 py-4 h-auto" onClick={handleFarmerClick}>
                   Get Started as Farmer
                 </Button>
-                <Button 
-                  size="lg"
-                  variant="outline" 
-                  className="border-white text-white hover:bg-white hover:text-agri-green text-lg px-8 py-4 h-auto"
-                  onClick={handleInsurerClick}
-                >
+                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-agri-green text-lg px-8 py-4 h-auto" onClick={handleInsurerClick}>
                   Join as Insurer
                 </Button>
-              </>
-            )}
+              </>}
           </div>
 
           {/* Statistics */}
@@ -106,8 +76,6 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default HeroSection;
