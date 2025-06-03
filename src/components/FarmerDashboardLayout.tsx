@@ -1,373 +1,275 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { getUserSession, clearUserSession, switchFarmerProfile, getCurrentProfile } from '@/utils/auth';
-import { getFarmerProfile } from '@/utils/farmerProfiles';
+import { clearUserSession, getUserSession, switchFarmerProfile, getCurrentProfile } from '@/utils/auth';
+import { useNavigate } from 'react-router-dom';
 import { 
-  Bell, 
+  LayoutDashboard, 
   MapPin, 
   AlertTriangle, 
   Cloud, 
-  BarChart2, 
+  Activity, 
   FileText, 
-  User, 
+  Bell,
+  Settings,
   LogOut,
   Menu,
   X,
-  Home,
+  ChevronDown,
+  Award,
   Users
 } from 'lucide-react';
 
-interface NavigationItem {
-  id: string;
-  label: string;
-  icon: React.ComponentType<any>;
-  badge?: number;
-}
-
-const navigationItems: NavigationItem[] = [
-  { id: 'dashboard', label: 'Dashboard Overview', icon: Home },
-  { id: 'plots', label: 'My Plots', icon: MapPin },
-  { id: 'risk', label: 'Risk Monitoring', icon: AlertTriangle, badge: 2 },
-  { id: 'weather', label: 'Weather Data', icon: Cloud },
-  { id: 'sensors', label: 'Sensor Data', icon: BarChart2 },
-  { id: 'reports', label: 'Reports', icon: FileText },
-  { id: 'alerts', label: 'Alerts', icon: Bell, badge: 2 },
-  { id: 'profile', label: 'Profile', icon: User }
-];
-
 interface FarmerDashboardLayoutProps {
+  activeSection: string;
+  onSectionChange: (section: string) => void;
   children: React.ReactNode;
-  activeSection?: string;
-  onSectionChange?: (section: string) => void;
 }
 
-const FarmerDashboardLayout: React.FC<FarmerDashboardLayoutProps> = ({ 
-  children, 
-  activeSection = 'dashboard',
-  onSectionChange
+const FarmerDashboardLayout: React.FC<FarmerDashboardLayoutProps> = ({
+  activeSection,
+  onSectionChange,
+  children
 }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [currentSection, setCurrentSection] = useState(activeSection);
-  const [language, setLanguage] = useState('EN');
-  const [currentProfileId, setCurrentProfileId] = useState(getCurrentProfile());
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const navigate = useNavigate();
-  
   const user = getUserSession();
-  const farmerProfile = getFarmerProfile(currentProfileId);
+  const currentProfile = getCurrentProfile();
 
   useEffect(() => {
     if (!user || user.userType !== 'farmer') {
       navigate('/login');
-      return;
     }
   }, [user, navigate]);
-
-  useEffect(() => {
-    setCurrentSection(activeSection);
-  }, [activeSection]);
 
   const handleLogout = () => {
     clearUserSession();
     navigate('/');
   };
 
-  const handleSectionChange = (sectionId: string) => {
-    setCurrentSection(sectionId);
-    setSidebarOpen(false); // Close sidebar on mobile after selection
-    if (onSectionChange) {
-      onSectionChange(sectionId);
-    }
-  };
-
-  const handleProfileSwitch = (profileId: string) => {
-    setCurrentProfileId(profileId);
-    switchFarmerProfile(profileId);
-  };
-
-  const toggleLanguage = () => {
-    setLanguage(prev => prev === 'EN' ? 'AR' : prev === 'AR' ? 'FR' : 'EN');
-  };
-
-  const getSectionTitle = (sectionId: string) => {
-    const section = navigationItems.find(item => item.id === sectionId);
-    return section?.label || 'Dashboard';
-  };
-
-  const profileOptions = [
-    { id: 'ahmed', name: 'Ahmed Benali', location: 'Skikda', description: 'Mixed farming (Original)' },
-    { id: 'salem', name: 'Salem Khrobi', location: 'Constantine', description: 'Olive cultivation case study' },
-    { id: 'hamza', name: 'Hamza Dawdi', location: 'Constantine', description: 'Wheat hailstorm claim case study' }
+  const navigationItems = [
+    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'plots', label: 'My Plots', icon: MapPin },
+    { id: 'risk', label: 'Risk Monitoring', icon: AlertTriangle },
+    { id: 'weather', label: 'Weather', icon: Cloud },
+    { id: 'sensors', label: 'Sensors', icon: Activity },
+    { id: 'reports', label: 'Reports', icon: FileText },
+    { id: 'alerts', label: 'Alerts', icon: Bell },
+    { id: 'profile', label: 'Profile', icon: Settings }
   ];
 
-  if (!user) {
-    return null; // Will redirect in useEffect
-  }
+  const farmerProfiles = [
+    { 
+      id: 'ahmed', 
+      name: 'Ahmed Benali', 
+      location: 'Skikda, Algeria',
+      description: 'Original demo farmer - Mixed crops',
+      isDefault: true
+    },
+    { 
+      id: 'salem', 
+      name: 'Salem Khrobi', 
+      location: 'Lkhrob, Constantine',
+      description: 'Case Study: Olive cultivation with drought monitoring',
+      isCaseStudy: true
+    },
+    { 
+      id: 'hamza', 
+      name: 'Hamza Dawdi', 
+      location: 'Mezaguet Roha, Constantine',
+      description: 'Case Study: Wheat farming with hailstorm claim',
+      isCaseStudy: true
+    }
+  ];
+
+  const currentProfileData = farmerProfiles.find(p => p.id === currentProfile) || farmerProfiles[0];
+
+  const handleProfileSwitch = (profileId: string) => {
+    switchFarmerProfile(profileId);
+    setIsProfileDropdownOpen(false);
+  };
+
+  const NavItem: React.FC<{ item: any; isMobile?: boolean }> = ({ item, isMobile = false }) => (
+    <button
+      onClick={() => {
+        onSectionChange(item.id);
+        if (isMobile) setIsMobileMenuOpen(false);
+      }}
+      className={`
+        flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200
+        ${activeSection === item.id 
+          ? 'bg-agri-green text-white shadow-md' 
+          : 'text-gray-700 hover:bg-green-50 hover:text-agri-green'
+        }
+        ${isMobile ? 'w-full justify-start' : ''}
+      `}
+    >
+      <item.icon className="h-5 w-5" />
+      <span className="font-medium">{item.label}</span>
+    </button>
+  );
+
+  if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-gray-50 flex w-full">
-      {/* Mobile Sidebar Overlay */}
-      {sidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-
-      {/* Sidebar */}
-      <div className={`
-        fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out
-        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-      `}>
-        {/* Sidebar Header */}
-        <div className="p-6 border-b border-gray-200">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      {/* Top Header */}
+      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
+        <div className="px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-green-700 rounded-lg flex items-center justify-center">
+            {/* Logo and Profile Switcher */}
+            <div className="flex items-center space-x-4">
+              <div className="w-10 h-10 bg-agri-green rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xl">R</span>
               </div>
               <div>
-                <h1 className="text-lg font-bold text-green-700">RADI</h1>
-              </div>
-            </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="lg:hidden"
-              onClick={() => setSidebarOpen(false)}
-            >
-              <X className="h-5 w-5" />
-            </Button>
-          </div>
-          
-          {/* User Info */}
-          <div className="mt-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-green-700 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-medium">
-                  {farmerProfile.personalInfo.fullName.split(' ').map(n => n[0]).join('')}
-                </span>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-900">{farmerProfile.personalInfo.fullName}</p>
-                <p className="text-xs text-gray-500">Demo Farmer</p>
-              </div>
-            </div>
-            <div className="mt-2 flex items-center space-x-2">
-              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
-                DEMO MODE
-              </span>
-              {(currentProfileId === 'salem' || currentProfileId === 'hamza') && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                  CASE STUDY
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Profile Switcher */}
-          <div className="mt-4">
-            <label className="text-xs font-medium text-gray-600 block mb-2">Switch Demo Profile</label>
-            <Select value={currentProfileId} onValueChange={handleProfileSwitch}>
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {profileOptions.map((profile) => (
-                  <SelectItem key={profile.id} value={profile.id}>
-                    <div className="flex flex-col">
-                      <span className="font-medium">{profile.name}</span>
-                      <span className="text-xs text-gray-500">{profile.description}</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        {/* Navigation Menu */}
-        <nav className="flex-1 p-4 space-y-1">
-          {navigationItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = currentSection === item.id;
-            
-            return (
-              <button
-                key={item.id}
-                onClick={() => handleSectionChange(item.id)}
-                className={`
-                  w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-lg transition-colors
-                  ${isActive 
-                    ? 'bg-green-700 text-white' 
-                    : 'text-gray-700 hover:bg-gray-100 hover:text-green-700'
-                  }
-                `}
-              >
-                <div className="flex items-center space-x-3">
-                  <Icon className="h-5 w-5" />
-                  <span>{item.label}</span>
-                </div>
-                {item.badge && (
-                  <span className={`
-                    inline-flex items-center justify-center px-2 py-1 text-xs font-bold rounded-full
-                    ${isActive ? 'bg-white text-green-700' : 'bg-red-500 text-white'}
-                  `}>
-                    {item.badge}
+                <h1 className="text-xl font-bold text-gray-900">RADI</h1>
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm text-gray-600">Farmer Dashboard</span>
+                  <span className="px-2 py-0.5 bg-orange-100 text-orange-700 text-xs font-medium rounded-full">
+                    DEMO MODE
                   </span>
-                )}
-              </button>
-            );
-          })}
-        </nav>
-
-        {/* Logout Button */}
-        <div className="p-4 border-t border-gray-200">
-          <Button
-            onClick={handleLogout}
-            variant="outline"
-            className="w-full justify-start text-gray-700 hover:text-red-600 hover:border-red-600"
-          >
-            <LogOut className="h-4 w-4 mr-2" />
-            Logout
-          </Button>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col min-h-screen lg:ml-0">
-        {/* Top Header */}
-        <header className="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
-          <div className="flex items-center justify-between">
-            {/* Left Side - Breadcrumb and Mobile Menu */}
-            <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="lg:hidden"
-                onClick={() => setSidebarOpen(true)}
-              >
-                <Menu className="h-5 w-5" />
-              </Button>
-              
-              <div>
-                <h1 className="text-xl font-semibold text-gray-900">
-                  {getSectionTitle(currentSection)}
-                </h1>
-                <p className="text-sm text-gray-500">
-                  {farmerProfile.personalInfo.fullName} • {farmerProfile.personalInfo.farmAddress.split(',')[1]} • Last login: Today at {user.lastLogin}
-                </p>
+                  {currentProfileData.isCaseStudy && (
+                    <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-medium rounded-full flex items-center">
+                      <Award className="h-3 w-3 mr-1" />
+                      Case Study
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
 
-            {/* Right Side - Quick Info and Actions */}
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center space-x-1">
+              {navigationItems.map((item) => (
+                <NavItem key={item.id} item={item} />
+              ))}
+            </nav>
+
+            {/* User Info and Actions */}
             <div className="flex items-center space-x-4">
-              {/* Weather Widget */}
-              <div className="hidden md:flex items-center space-x-2 text-sm text-gray-600">
-                <Cloud className="h-4 w-4" />
-                <span>{farmerProfile.weather.current.temperature}°C</span>
-                <span className="text-gray-400">|</span>
-                <span>{farmerProfile.weather.current.condition}</span>
+              {/* Profile Switcher */}
+              <div className="relative">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                  className="flex items-center space-x-2"
+                >
+                  <Users className="h-4 w-4" />
+                  <span className="hidden md:inline">{currentProfileData.name}</span>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+                
+                {isProfileDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                    <div className="p-3 border-b border-gray-100">
+                      <h3 className="font-medium text-gray-900">Switch Demo Profile</h3>
+                      <p className="text-xs text-gray-500">Experience different farmer scenarios</p>
+                    </div>
+                    <div className="p-2">
+                      {farmerProfiles.map((profile) => (
+                        <button
+                          key={profile.id}
+                          onClick={() => handleProfileSwitch(profile.id)}
+                          className={`w-full text-left p-3 rounded-lg hover:bg-gray-50 transition-colors ${
+                            currentProfile === profile.id ? 'bg-green-50 border border-green-200' : ''
+                          }`}
+                        >
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center space-x-2">
+                                <h4 className="font-medium text-gray-900 text-sm">{profile.name}</h4>
+                                {profile.isCaseStudy && (
+                                  <Award className="h-3 w-3 text-blue-600" />
+                                )}
+                                {currentProfile === profile.id && (
+                                  <span className="text-xs text-green-600 font-medium">ACTIVE</span>
+                                )}
+                              </div>
+                              <p className="text-xs text-gray-600 mt-1">{profile.location}</p>
+                              <p className="text-xs text-gray-500 mt-1">{profile.description}</p>
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
-              {/* Language Toggle */}
+              {/* Notifications */}
+              <div className="relative">
+                <Button variant="outline" size="sm" className="relative">
+                  <Bell className="h-4 w-4" />
+                  <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                    {currentProfile === 'salem' ? '2' : currentProfile === 'hamza' ? '3' : '2'}
+                  </span>
+                </Button>
+              </div>
+
+              {/* User Profile */}
+              <div className="hidden md:block text-right">
+                <p className="text-sm font-medium text-gray-900">{user.name}</p>
+                <p className="text-xs text-gray-600">{user.location}</p>
+              </div>
+
+              {/* Logout */}
+              <Button onClick={handleLogout} variant="outline" size="sm">
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </Button>
+
+              {/* Mobile Menu Button */}
               <Button
                 variant="outline"
                 size="sm"
-                onClick={toggleLanguage}
-                className="hidden sm:flex"
+                className="lg:hidden"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
-                {language}
+                {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
               </Button>
-
-              {/* Notifications */}
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell className="h-5 w-5" />
-                {farmerProfile.alerts.length > 0 && (
-                  <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                    {farmerProfile.alerts.length}
-                  </span>
-                )}
-              </Button>
-
-              {/* Profile Indicator */}
-              <div className="hidden md:flex items-center space-x-2">
-                <Users className="h-4 w-4 text-gray-400" />
-                <span className="text-sm text-gray-600">
-                  {profileOptions.find(p => p.id === currentProfileId)?.name}
-                </span>
-              </div>
             </div>
           </div>
-        </header>
-
-        {/* Main Content Area */}
-        <main className="flex-1 p-6 pb-20 lg:pb-6">
-          {/* Case Study Banner */}
-          {(currentProfileId === 'salem' || currentProfileId === 'hamza') && (
-            <Card className="mb-6 border-blue-200 bg-blue-50">
-              <CardContent className="p-4">
-                <div className="flex items-center space-x-2 text-sm text-blue-800">
-                  <AlertTriangle className="h-4 w-4" />
-                  <span className="font-medium">Case Study Environment:</span>
-                  <span>
-                    {currentProfileId === 'salem' 
-                      ? 'Salem Khrobi - Constantine olive farm with drought monitoring'
-                      : 'Hamza Dawdi - Wheat farm with validated hailstorm claim (CNMA-CLM-2023-001)'
-                    }
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Demo Disclaimer */}
-          <Card className="mb-6 border-orange-200 bg-orange-50">
-            <CardContent className="p-4">
-              <div className="flex items-center space-x-2 text-sm text-orange-800">
-                <AlertTriangle className="h-4 w-4" />
-                <span className="font-medium">Demo Environment:</span>
-                <span>This is a demonstration account with sample data for testing purposes.</span>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Dynamic Content */}
-          {children}
-        </main>
-      </div>
-
-      {/* Mobile Bottom Navigation (shown on very small screens) */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-2 py-1 sm:hidden">
-        <div className="flex items-center justify-around">
-          {navigationItems.slice(0, 5).map((item) => {
-            const Icon = item.icon;
-            const isActive = currentSection === item.id;
-            
-            return (
-              <button
-                key={item.id}
-                onClick={() => handleSectionChange(item.id)}
-                className={`
-                  flex flex-col items-center p-2 rounded-lg transition-colors relative
-                  ${isActive ? 'text-green-700' : 'text-gray-600'}
-                `}
-              >
-                <Icon className="h-5 w-5" />
-                <span className="text-xs mt-1">{item.label.split(' ')[0]}</span>
-                {item.badge && (
-                  <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                    {item.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
         </div>
-      </div>
+      </header>
+
+      {/* Click outside handler for profile dropdown */}
+      {isProfileDropdownOpen && (
+        <div 
+          className="fixed inset-0 z-30" 
+          onClick={() => setIsProfileDropdownOpen(false)}
+        />
+      )}
+
+      {/* Mobile Navigation Overlay */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden fixed inset-0 z-50 bg-black bg-opacity-50">
+          <div className="bg-white w-80 h-full p-6 space-y-4">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-semibold">Navigation</h2>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            {navigationItems.map((item) => (
+              <NavItem key={item.id} item={item} isMobile />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Main Content */}
+      <main className="flex-1 p-6">
+        <div className="max-w-7xl mx-auto">
+          {children}
+        </div>
+      </main>
     </div>
   );
 };
