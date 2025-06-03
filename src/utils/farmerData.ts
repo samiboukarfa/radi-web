@@ -1,3 +1,4 @@
+
 export interface Plot {
   id: number;
   name: string;
@@ -106,4 +107,5 @@ export const getEnhancedFarmerData = () => {
   };
 };
 
-import { getFarmerProfile, getCurrentProfile } from './farmerProfiles';
+import { getFarmerProfile } from './farmerProfiles';
+import { getCurrentProfile } from './auth';
