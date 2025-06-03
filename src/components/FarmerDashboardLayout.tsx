@@ -3,7 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { getUserSession, clearUserSession, getDemoFarmerData } from '@/utils/auth';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { getUserSession, clearUserSession, switchFarmerProfile, getCurrentProfile } from '@/utils/auth';
+import { getFarmerProfile } from '@/utils/farmerProfiles';
 import { 
   Bell, 
   MapPin, 
@@ -15,7 +17,8 @@ import {
   LogOut,
   Menu,
   X,
-  Home
+  Home,
+  Users
 } from 'lucide-react';
 
 interface NavigationItem {
@@ -50,10 +53,11 @@ const FarmerDashboardLayout: React.FC<FarmerDashboardLayoutProps> = ({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentSection, setCurrentSection] = useState(activeSection);
   const [language, setLanguage] = useState('EN');
+  const [currentProfileId, setCurrentProfileId] = useState(getCurrentProfile());
   const navigate = useNavigate();
   
   const user = getUserSession();
-  const demoData = getDemoFarmerData();
+  const farmerProfile = getFarmerProfile(currentProfileId);
 
   useEffect(() => {
     if (!user || user.userType !== 'farmer') {
@@ -79,6 +83,11 @@ const FarmerDashboardLayout: React.FC<FarmerDashboardLayoutProps> = ({
     }
   };
 
+  const handleProfileSwitch = (profileId: string) => {
+    setCurrentProfileId(profileId);
+    switchFarmerProfile(profileId);
+  };
+
   const toggleLanguage = () => {
     setLanguage(prev => prev === 'EN' ? 'AR' : prev === 'AR' ? 'FR' : 'EN');
   };
@@ -87,6 +96,12 @@ const FarmerDashboardLayout: React.FC<FarmerDashboardLayoutProps> = ({
     const section = navigationItems.find(item => item.id === sectionId);
     return section?.label || 'Dashboard';
   };
+
+  const profileOptions = [
+    { id: 'ahmed', name: 'Ahmed Benali', location: 'Skikda', description: 'Mixed farming (Original)' },
+    { id: 'salem', name: 'Salem Khrobi', location: 'Constantine', description: 'Olive cultivation case study' },
+    { id: 'hamza', name: 'Hamza Dawdi', location: 'Constantine', description: 'Wheat hailstorm claim case study' }
+  ];
 
   if (!user) {
     return null; // Will redirect in useEffect
@@ -133,19 +148,44 @@ const FarmerDashboardLayout: React.FC<FarmerDashboardLayoutProps> = ({
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-green-700 rounded-full flex items-center justify-center">
                 <span className="text-white text-sm font-medium">
-                  {user.name.split(' ').map(n => n[0]).join('')}
+                  {farmerProfile.personalInfo.fullName.split(' ').map(n => n[0]).join('')}
                 </span>
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-900">{user.name}</p>
+                <p className="text-sm font-medium text-gray-900">{farmerProfile.personalInfo.fullName}</p>
                 <p className="text-xs text-gray-500">Demo Farmer</p>
               </div>
             </div>
-            <div className="mt-2">
+            <div className="mt-2 flex items-center space-x-2">
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
                 DEMO MODE
               </span>
+              {(currentProfileId === 'salem' || currentProfileId === 'hamza') && (
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                  CASE STUDY
+                </span>
+              )}
             </div>
+          </div>
+
+          {/* Profile Switcher */}
+          <div className="mt-4">
+            <label className="text-xs font-medium text-gray-600 block mb-2">Switch Demo Profile</label>
+            <Select value={currentProfileId} onValueChange={handleProfileSwitch}>
+              <SelectTrigger className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {profileOptions.map((profile) => (
+                  <SelectItem key={profile.id} value={profile.id}>
+                    <div className="flex flex-col">
+                      <span className="font-medium">{profile.name}</span>
+                      <span className="text-xs text-gray-500">{profile.description}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
@@ -218,7 +258,7 @@ const FarmerDashboardLayout: React.FC<FarmerDashboardLayoutProps> = ({
                   {getSectionTitle(currentSection)}
                 </h1>
                 <p className="text-sm text-gray-500">
-                  {user.name} • {user.location} • Last login: Today at {user.lastLogin}
+                  {farmerProfile.personalInfo.fullName} • {farmerProfile.personalInfo.farmAddress.split(',')[1]} • Last login: Today at {user.lastLogin}
                 </p>
               </div>
             </div>
@@ -228,9 +268,9 @@ const FarmerDashboardLayout: React.FC<FarmerDashboardLayoutProps> = ({
               {/* Weather Widget */}
               <div className="hidden md:flex items-center space-x-2 text-sm text-gray-600">
                 <Cloud className="h-4 w-4" />
-                <span>{demoData.weather.temperature}°C</span>
+                <span>{farmerProfile.weather.current.temperature}°C</span>
                 <span className="text-gray-400">|</span>
-                <span>{demoData.weather.condition}</span>
+                <span>{farmerProfile.weather.current.condition}</span>
               </div>
 
               {/* Language Toggle */}
@@ -246,18 +286,44 @@ const FarmerDashboardLayout: React.FC<FarmerDashboardLayoutProps> = ({
               {/* Notifications */}
               <Button variant="ghost" size="icon" className="relative">
                 <Bell className="h-5 w-5" />
-                {demoData.alerts.length > 0 && (
+                {farmerProfile.alerts.length > 0 && (
                   <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                    {demoData.alerts.length}
+                    {farmerProfile.alerts.length}
                   </span>
                 )}
               </Button>
+
+              {/* Profile Indicator */}
+              <div className="hidden md:flex items-center space-x-2">
+                <Users className="h-4 w-4 text-gray-400" />
+                <span className="text-sm text-gray-600">
+                  {profileOptions.find(p => p.id === currentProfileId)?.name}
+                </span>
+              </div>
             </div>
           </div>
         </header>
 
         {/* Main Content Area */}
         <main className="flex-1 p-6 pb-20 lg:pb-6">
+          {/* Case Study Banner */}
+          {(currentProfileId === 'salem' || currentProfileId === 'hamza') && (
+            <Card className="mb-6 border-blue-200 bg-blue-50">
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-2 text-sm text-blue-800">
+                  <AlertTriangle className="h-4 w-4" />
+                  <span className="font-medium">Case Study Environment:</span>
+                  <span>
+                    {currentProfileId === 'salem' 
+                      ? 'Salem Khrobi - Constantine olive farm with drought monitoring'
+                      : 'Hamza Dawdi - Wheat farm with validated hailstorm claim (CNMA-CLM-2023-001)'
+                    }
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Demo Disclaimer */}
           <Card className="mb-6 border-orange-200 bg-orange-50">
             <CardContent className="p-4">

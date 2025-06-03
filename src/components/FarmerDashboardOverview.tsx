@@ -2,7 +2,8 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { getDemoFarmerData, getUserSession } from '@/utils/auth';
+import { getUserSession, getCurrentProfile } from '@/utils/auth';
+import { getFarmerProfile } from '@/utils/farmerProfiles';
 import { 
   MapPin, 
   AlertTriangle, 
@@ -10,15 +11,17 @@ import {
   TrendingUp,
   Plus,
   Eye,
-  CheckCircle
+  CheckCircle,
+  Award
 } from 'lucide-react';
 
 const FarmerDashboardOverview: React.FC = () => {
   const user = getUserSession();
-  const demoData = getDemoFarmerData();
+  const currentProfileId = getCurrentProfile();
+  const farmerData = getFarmerProfile(currentProfileId);
 
-  const totalArea = demoData.plots.reduce((sum, plot) => sum + plot.area, 0);
-  const highRiskPlots = demoData.plots.filter(plot => plot.riskLevel === 'High').length;
+  const totalArea = farmerData.plots.reduce((sum, plot) => sum + plot.area, 0);
+  const highRiskPlots = farmerData.plots.filter(plot => plot.riskLevel === 'High').length;
   
   const getRiskColor = (level: string) => {
     switch (level) {
@@ -38,20 +41,52 @@ const FarmerDashboardOverview: React.FC = () => {
     }
   };
 
+  const getProfileSpecificMessage = () => {
+    switch (currentProfileId) {
+      case 'salem':
+        return {
+          title: `Welcome back, ${farmerData.personalInfo.fullName} 🫒`,
+          subtitle: 'Your olive grove in Constantine is showing stable conditions',
+          highlight: 'Low Risk (8.0/10) - Excellent olive health despite drought conditions'
+        };
+      case 'hamza':
+        return {
+          title: `Welcome back, ${farmerData.personalInfo.fullName} 🌾`,
+          subtitle: 'Post-hailstorm recovery monitoring for your wheat field',
+          highlight: 'Claim CNMA-CLM-2023-001 approved - 45,000 DZD paid'
+        };
+      default:
+        return {
+          title: `Welcome back, ${farmerData.personalInfo.fullName} 👋`,
+          subtitle: `Here's an overview of your farming operations in ${farmerData.personalInfo.farmAddress.split(',')[1]}`,
+          highlight: 'Mixed farming operations with comprehensive monitoring'
+        };
+    }
+  };
+
+  const profileMessage = getProfileSpecificMessage();
+
   return (
     <div className="space-y-6">
       {/* Welcome Message */}
       <div className="bg-gradient-to-r from-agri-green to-green-600 text-white p-6 rounded-lg">
         <h1 className="text-2xl font-bold mb-2">
-          Welcome back, {user?.name} 👋
+          {profileMessage.title}
         </h1>
-        <p className="text-green-100">
-          Here's an overview of your farming operations in {user?.location}
+        <p className="text-green-100 mb-2">
+          {profileMessage.subtitle}
         </p>
-        <div className="mt-4 text-sm text-green-100">
-          <span className="inline-flex items-center px-2 py-1 bg-white bg-opacity-20 rounded-full">
+        <div className="mt-4 flex items-center space-x-4 text-sm">
+          <span className="inline-flex items-center px-3 py-1 bg-white bg-opacity-20 rounded-full">
             Demo Account Active
           </span>
+          {(currentProfileId === 'salem' || currentProfileId === 'hamza') && (
+            <span className="inline-flex items-center px-3 py-1 bg-blue-500 bg-opacity-80 rounded-full">
+              <Award className="h-3 w-3 mr-1" />
+              Case Study Profile
+            </span>
+          )}
+          <span className="text-green-100">{profileMessage.highlight}</span>
         </div>
       </div>
 
@@ -63,7 +98,7 @@ const FarmerDashboardOverview: React.FC = () => {
             <MapPin className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{demoData.plots.length}</div>
+            <div className="text-2xl font-bold">{farmerData.plots.length}</div>
             <p className="text-xs text-muted-foreground">
               {totalArea.toFixed(1)} hectares total
             </p>
@@ -76,9 +111,17 @@ const FarmerDashboardOverview: React.FC = () => {
             <AlertTriangle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">Medium</div>
+            <div className={`text-2xl font-bold ${
+              currentProfileId === 'salem' ? 'text-green-600' :
+              currentProfileId === 'hamza' ? 'text-red-600' : 'text-yellow-600'
+            }`}>
+              {currentProfileId === 'salem' ? 'Low' :
+               currentProfileId === 'hamza' ? 'High' : 'Medium'}
+            </div>
             <p className="text-xs text-muted-foreground">
-              {highRiskPlots} plot{highRiskPlots !== 1 ? 's' : ''} need attention
+              {currentProfileId === 'salem' ? 'Excellent olive conditions' :
+               currentProfileId === 'hamza' ? 'Post-storm monitoring' :
+               `${highRiskPlots} plot${highRiskPlots !== 1 ? 's' : ''} need attention`}
             </p>
           </CardContent>
         </Card>
@@ -89,9 +132,11 @@ const FarmerDashboardOverview: React.FC = () => {
             <AlertTriangle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{demoData.alerts.length}</div>
+            <div className="text-2xl font-bold text-red-600">{farmerData.alerts.length}</div>
             <p className="text-xs text-muted-foreground">
-              Require immediate attention
+              {currentProfileId === 'salem' ? 'Drought monitoring' :
+               currentProfileId === 'hamza' ? 'Damage assessment' :
+               'Require immediate attention'}
             </p>
           </CardContent>
         </Card>
@@ -102,9 +147,9 @@ const FarmerDashboardOverview: React.FC = () => {
             <Cloud className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{demoData.weather.temperature}°C</div>
+            <div className="text-2xl font-bold">{farmerData.weather.current.temperature}°C</div>
             <p className="text-xs text-muted-foreground">
-              {demoData.weather.condition}
+              {farmerData.weather.current.condition}
             </p>
           </CardContent>
         </Card>
@@ -116,11 +161,14 @@ const FarmerDashboardOverview: React.FC = () => {
         <Card>
           <CardHeader>
             <CardTitle>My Plots Overview</CardTitle>
-            <CardDescription>Current status of your agricultural plots</CardDescription>
+            <CardDescription>
+              Current status of your {currentProfileId === 'salem' ? 'olive grove' : 
+                                   currentProfileId === 'hamza' ? 'wheat field' : 'agricultural plots'}
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {demoData.plots.map((plot) => (
+              {farmerData.plots.map((plot) => (
                 <div key={plot.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                   <div className="flex items-center space-x-3">
                     <div 
@@ -130,6 +178,12 @@ const FarmerDashboardOverview: React.FC = () => {
                     <div>
                       <p className="font-medium text-sm">{plot.name}</p>
                       <p className="text-xs text-gray-500">{plot.crop} • {plot.area} ha</p>
+                      {currentProfileId === 'salem' && (
+                        <p className="text-xs text-green-600">NDVI: 0.31 (Stable)</p>
+                      )}
+                      {currentProfileId === 'hamza' && (
+                        <p className="text-xs text-red-600">Post-hail damage monitored</p>
+                      )}
                     </div>
                   </div>
                   <span className={`px-2 py-1 text-xs font-medium rounded-full ${getRiskColor(plot.riskLevel)}`}>
@@ -153,7 +207,7 @@ const FarmerDashboardOverview: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {demoData.recentActivity.map((activity, index) => (
+              {farmerData.recentActivity.map((activity, index) => (
                 <div key={index} className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-agri-green rounded-full mt-2 flex-shrink-0" />
                   <div className="flex-1">
@@ -179,7 +233,7 @@ const FarmerDashboardOverview: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {demoData.alerts.map((alert) => (
+              {farmerData.alerts.map((alert) => (
                 <div key={alert.id} className="p-3 border border-gray-200 rounded-lg">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
@@ -187,6 +241,7 @@ const FarmerDashboardOverview: React.FC = () => {
                       <p className="text-xs text-gray-500 mt-1">
                         {alert.plot} • {alert.time}
                       </p>
+                      <p className="text-xs text-gray-600 mt-1">{alert.description}</p>
                     </div>
                     <span className={`px-2 py-1 text-xs font-medium rounded-full ${getSeverityColor(alert.severity)}`}>
                       {alert.severity.charAt(0).toUpperCase() + alert.severity.slice(1)}
@@ -202,38 +257,76 @@ const FarmerDashboardOverview: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* Weather Summary */}
+        {/* Weather Summary / Claims (Profile Specific) */}
         <Card>
           <CardHeader>
-            <CardTitle>Weather Summary</CardTitle>
-            <CardDescription>Current conditions in {demoData.weather.location}</CardDescription>
+            <CardTitle>
+              {currentProfileId === 'hamza' ? 'Insurance Claims' : 'Weather Summary'}
+            </CardTitle>
+            <CardDescription>
+              {currentProfileId === 'hamza' 
+                ? 'CNMA claim status and documentation' 
+                : `Current conditions in ${farmerData.personalInfo.farmAddress.split(',')[1]}`}
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <Cloud className="h-8 w-8 text-sky-blue" />
-                  <div>
-                    <p className="text-2xl font-bold">{demoData.weather.temperature}°C</p>
-                    <p className="text-sm text-gray-500">{demoData.weather.condition}</p>
+            {currentProfileId === 'hamza' && farmerData.claims ? (
+              <div className="space-y-4">
+                {farmerData.claims.map((claim, index) => (
+                  <div key={index} className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2">
+                          <CheckCircle className="h-4 w-4 text-green-600" />
+                          <p className="font-medium text-sm text-green-800">{claim.event} Claim</p>
+                        </div>
+                        <p className="text-xs text-green-600 mt-1">ID: {claim.id}</p>
+                        <p className="text-xs text-green-600">Amount: {claim.payout.toLocaleString()} DZD</p>
+                        <p className="text-xs text-green-600">Date: {claim.date}</p>
+                        <p className="text-xs text-gray-600 mt-2">{claim.evidence}</p>
+                      </div>
+                      <span className="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+                        {claim.status}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <Cloud className="h-8 w-8 text-sky-blue" />
+                    <div>
+                      <p className="text-2xl font-bold">{farmerData.weather.current.temperature}°C</p>
+                      <p className="text-sm text-gray-500">{farmerData.weather.current.condition}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <p className="text-gray-500">Humidity</p>
-                  <p className="font-medium">{demoData.weather.humidity}%</p>
+                
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="text-gray-500">Humidity</p>
+                    <p className="font-medium">{farmerData.weather.current.humidity}%</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500">Wind Speed</p>
+                    <p className="font-medium">{farmerData.weather.current.windSpeed} km/h</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-gray-500">Wind Speed</p>
-                  <p className="font-medium">{demoData.weather.windSpeed} km/h</p>
-                </div>
+                
+                {farmerData.weather.alerts.length > 0 && (
+                  <div className="mt-4 p-2 bg-yellow-50 border border-yellow-200 rounded">
+                    <p className="text-xs text-yellow-800 font-medium">
+                      Weather Alert: {farmerData.weather.alerts[0].message}
+                    </p>
+                  </div>
+                )}
               </div>
-            </div>
+            )}
             <Button variant="outline" className="w-full mt-4" size="sm">
               <TrendingUp className="h-4 w-4 mr-2" />
-              View Forecast
+              {currentProfileId === 'hamza' ? 'View Claim Details' : 'View Forecast'}
             </Button>
           </CardContent>
         </Card>
@@ -250,8 +343,14 @@ const FarmerDashboardOverview: React.FC = () => {
             <Button className="justify-start h-auto p-4 bg-agri-green hover:bg-agri-green-dark">
               <Plus className="h-5 w-5 mr-2" />
               <div className="text-left">
-                <p className="font-medium">Add New Plot</p>
-                <p className="text-xs opacity-90">Register a new field</p>
+                <p className="font-medium">
+                  {currentProfileId === 'salem' ? 'Monitor Olive Trees' :
+                   currentProfileId === 'hamza' ? 'Submit Claim Update' : 'Add New Plot'}
+                </p>
+                <p className="text-xs opacity-90">
+                  {currentProfileId === 'salem' ? 'Check NDVI trends' :
+                   currentProfileId === 'hamza' ? 'Report recovery status' : 'Register a new field'}
+                </p>
               </div>
             </Button>
             
@@ -259,15 +358,22 @@ const FarmerDashboardOverview: React.FC = () => {
               <AlertTriangle className="h-5 w-5 mr-2" />
               <div className="text-left">
                 <p className="font-medium">View Latest Alert</p>
-                <p className="text-xs text-gray-500">Check urgent notifications</p>
+                <p className="text-xs text-gray-500">
+                  {currentProfileId === 'salem' ? 'Drought monitoring' :
+                   currentProfileId === 'hamza' ? 'Damage assessment' : 'Check urgent notifications'}
+                </p>
               </div>
             </Button>
             
             <Button variant="outline" className="justify-start h-auto p-4">
               <Cloud className="h-5 w-5 mr-2" />
               <div className="text-left">
-                <p className="font-medium">Check Weather</p>
-                <p className="text-xs text-gray-500">7-day forecast</p>
+                <p className="font-medium">
+                  {currentProfileId === 'hamza' ? 'Weather Archive' : 'Check Weather'}
+                </p>
+                <p className="text-xs text-gray-500">
+                  {currentProfileId === 'hamza' ? 'May 2023 hailstorm data' : '7-day forecast'}
+                </p>
               </div>
             </Button>
           </div>

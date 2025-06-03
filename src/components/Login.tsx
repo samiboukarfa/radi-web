@@ -18,9 +18,11 @@ const Login = () => {
   const navigate = useNavigate();
 
   const demoCredentials = [
-    { role: 'Admin', email: 'admin@radi.app', password: 'password123' },
-    { role: 'Farmer', email: 'farmer@radi.app', password: 'farmer123' },
-    { role: 'Insurer', email: 'insurer@radi.app', password: 'insurer123' },
+    { role: 'Admin', email: 'admin@radi.app', password: 'admin123' },
+    { role: 'Farmer (Ahmed)', email: 'farmer@radi.app', password: 'farmer123', description: 'Original Skikda farmer' },
+    { role: 'Farmer (Salem)', email: 'salem@radi.app', password: 'farmer123', description: 'Constantine olives case study' },
+    { role: 'Farmer (Hamza)', email: 'hamza@radi.app', password: 'farmer123', description: 'Wheat hailstorm claim case study' },
+    { role: 'CNMA Insurer', email: 'cnma@radi.app', password: 'insurer123', description: 'Algeria agricultural insurance leader' },
     { role: 'Institution', email: 'institution@radi.app', password: 'institution123' }
   ];
 
@@ -74,16 +76,22 @@ const Login = () => {
           <Info className="h-4 w-4" />
           <AlertDescription>
             <div className="text-sm">
-              <p className="font-semibold mb-2">Demo Credentials:</p>
-              <div className="space-y-1">
+              <p className="font-semibold mb-2">Demo Credentials (Case Studies Included):</p>
+              <div className="space-y-1 max-h-48 overflow-y-auto">
                 {demoCredentials.map((cred, index) => (
                   <div key={index} className="text-xs">
                     <button
                       type="button"
                       onClick={() => handleDemoLogin(cred.email, cred.password)}
-                      className="text-left hover:text-agri-green transition-colors"
+                      className="text-left hover:text-agri-green transition-colors w-full"
                     >
-                      <span className="font-medium">{cred.role}:</span> {cred.email} / {cred.password}
+                      <div className="flex flex-col">
+                        <span className="font-medium">{cred.role}:</span>
+                        <span className="text-gray-600">{cred.email} / {cred.password}</span>
+                        {cred.description && (
+                          <span className="text-gray-500 italic">{cred.description}</span>
+                        )}
+                      </div>
                     </button>
                   </div>
                 ))}

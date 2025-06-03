@@ -12,7 +12,8 @@ import {
   DollarSign,
   Activity,
   Clock,
-  FileText
+  FileText,
+  Award
 } from 'lucide-react';
 
 const InsurerDashboardOverview = () => {
@@ -56,19 +57,38 @@ const InsurerDashboardOverview = () => {
 
   return (
     <div className="space-y-6">
-      {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl p-6">
+      {/* CNMA Welcome Section */}
+      <div className="bg-gradient-to-r from-blue-700 to-blue-800 text-white rounded-xl p-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold mb-2">
-              Welcome to {data.company.name}
-            </h1>
-            <p className="text-blue-100">
-              Insurance Portfolio Management Dashboard - Demo Environment
+            <div className="flex items-center space-x-3 mb-2">
+              <div className="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-xl">C</span>
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold">
+                  {data.company.name}
+                </h1>
+                <p className="text-blue-100 text-sm">{data.company.tagline}</p>
+              </div>
+            </div>
+            <p className="text-blue-100 mb-2">
+              Agricultural Insurance Portfolio Management - Demo Environment
             </p>
+            <div className="flex items-center space-x-4 text-sm">
+              <div className="flex items-center space-x-1">
+                <Award className="h-4 w-4" />
+                <span>{data.company.marketShare}</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Shield className="h-4 w-4" />
+                <span>{data.company.ranking}</span>
+              </div>
+            </div>
           </div>
           <div className="text-right">
             <p className="text-sm text-blue-100">License: {data.company.license}</p>
+            <p className="text-sm text-blue-100">Office: {data.company.office}</p>
             <p className="text-sm text-blue-100">Last Login: Today at 11:30 AM</p>
           </div>
         </div>
@@ -121,45 +141,64 @@ const InsurerDashboardOverview = () => {
         </div>
       </div>
 
-      {/* Risk Distribution Chart */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-1">
+      {/* Case Studies and Farmers Overview */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Case Study Farmers */}
+        <Card>
           <CardHeader>
-            <CardTitle>Risk Distribution</CardTitle>
-            <CardDescription>Portfolio risk breakdown</CardDescription>
+            <CardTitle>Case Study Farmers</CardTitle>
+            <CardDescription>Featured farmers with documented RADI validation</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">Low Risk</span>
+              {data.farmers.map((farmer) => (
+                <div key={farmer.id} className="border border-gray-200 rounded-lg p-3">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-2">
+                        <h4 className="font-medium text-gray-900 text-sm">{farmer.name}</h4>
+                        {(farmer.name === 'Salem Khrobi' || farmer.name === 'Hamza Dawdi') && (
+                          <Badge variant="outline" className="text-xs border-blue-500 text-blue-700">
+                            Case Study
+                          </Badge>
+                        )}
+                      </div>
+                      <p className="text-xs text-gray-600 mt-1">
+                        {farmer.location} • {farmer.crop} • {farmer.area} ha
+                      </p>
+                      <p className="text-xs text-gray-600">
+                        Policy: {farmer.policyNumber}
+                      </p>
+                      {farmer.claims.length > 0 && (
+                        <p className="text-xs text-green-600 mt-1">
+                          ✓ Claim processed: {formatCurrency(farmer.claims[0].amount)}
+                        </p>
+                      )}
+                    </div>
+                    <div className="text-right">
+                      <Badge 
+                        className={`text-xs ${
+                          farmer.risk === 'Low' ? 'bg-green-100 text-green-800' :
+                          farmer.risk === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-red-100 text-red-800'
+                        }`}
+                      >
+                        Risk: {farmer.riskScore}/10
+                      </Badge>
+                      <p className="text-xs text-gray-500 mt-1">{farmer.policy}</p>
+                    </div>
+                  </div>
                 </div>
-                <span className="font-semibold">{data.kpis.riskDistribution.low}%</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">Medium Risk</span>
-                </div>
-                <span className="font-semibold">{data.kpis.riskDistribution.medium}%</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">High Risk</span>
-                </div>
-                <span className="font-semibold">{data.kpis.riskDistribution.high}%</span>
-              </div>
+              ))}
             </div>
           </CardContent>
         </Card>
 
         {/* Recent Activity */}
-        <Card className="lg:col-span-2">
+        <Card>
           <CardHeader>
             <CardTitle>Recent Activity</CardTitle>
-            <CardDescription>Latest portfolio updates and actions</CardDescription>
+            <CardDescription>Latest portfolio updates and CNMA operations</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -182,10 +221,42 @@ const InsurerDashboardOverview = () => {
         </Card>
       </div>
 
-      {/* Active Alerts and Recent Claims */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* Risk Distribution and Claims Analysis */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="lg:col-span-1">
+          <CardHeader>
+            <CardTitle>Risk Distribution</CardTitle>
+            <CardDescription>Portfolio risk breakdown</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">Low Risk (Salem)</span>
+                </div>
+                <span className="font-semibold">{data.kpis.riskDistribution.low}%</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">Medium Risk (Ahmed)</span>
+                </div>
+                <span className="font-semibold">{data.kpis.riskDistribution.medium}%</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">High Risk (Hamza)</span>
+                </div>
+                <span className="font-semibold">{data.kpis.riskDistribution.high}%</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Active Alerts */}
-        <Card>
+        <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               Active Alerts
@@ -212,43 +283,62 @@ const InsurerDashboardOverview = () => {
             </div>
           </CardContent>
         </Card>
+      </div>
 
-        {/* Recent Claims */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Claims</CardTitle>
-            <CardDescription>Latest claim submissions and status</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {data.claims.map((claim) => (
-                <div key={claim.id} className="border border-gray-200 rounded-lg p-3">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
+      {/* Claims Processing */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Claims Management</CardTitle>
+          <CardDescription>Recent claims with case study validation</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {data.claims.map((claim) => (
+              <div key={claim.id} className="border border-gray-200 rounded-lg p-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-2">
                       <h4 className="font-medium text-gray-900 text-sm">{claim.type}</h4>
-                      <p className="text-xs text-gray-600 mt-1">Farmer: {claim.farmer}</p>
-                      <p className="text-xs text-gray-600">Amount: {formatCurrency(claim.amount)}</p>
-                      <p className="text-xs text-gray-500 mt-1">{claim.date}</p>
+                      {claim.farmer === 'Hamza Dawdi' && (
+                        <Badge variant="outline" className="text-xs border-green-500 text-green-700">
+                          Validated Case Study
+                        </Badge>
+                      )}
                     </div>
+                    <p className="text-xs text-gray-600 mt-1">Farmer: {claim.farmer}</p>
+                    <p className="text-xs text-gray-600">Amount: {formatCurrency(claim.amount)}</p>
+                    <p className="text-xs text-gray-600">Location: {claim.location}</p>
+                    {claim.evidence && (
+                      <p className="text-xs text-blue-600 mt-1">Evidence: {claim.evidence}</p>
+                    )}
+                    {claim.weatherData && (
+                      <p className="text-xs text-purple-600 mt-1">Weather: {claim.weatherData}</p>
+                    )}
+                    <p className="text-xs text-gray-500 mt-1">{claim.date}</p>
+                  </div>
+                  <div className="text-right">
                     <Badge 
-                      variant={claim.status === 'Approved' ? 'default' : 
+                      variant={claim.status === 'Paid' ? 'default' : 
                               claim.status === 'Under Review' ? 'secondary' : 'outline'}
                     >
                       {claim.status}
                     </Badge>
+                    {claim.claimId && (
+                      <p className="text-xs text-gray-500 mt-1">{claim.claimId}</p>
+                    )}
                   </div>
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Quick Actions */}
       <Card>
         <CardHeader>
           <CardTitle>Quick Actions</CardTitle>
-          <CardDescription>Frequently used tools and functions</CardDescription>
+          <CardDescription>Frequently used CNMA tools and functions</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

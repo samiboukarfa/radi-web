@@ -13,7 +13,8 @@ import {
   Bell,
   LogOut,
   Menu,
-  X
+  X,
+  Award
 } from 'lucide-react';
 
 interface InsurerDashboardLayoutProps {
@@ -82,8 +83,8 @@ const InsurerDashboardLayout: React.FC<InsurerDashboardLayoutProps> = ({
           <div className="flex items-center justify-between">
             {/* Logo and Company Info */}
             <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">R</span>
+              <div className="w-10 h-10 bg-blue-700 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-xl">C</span>
               </div>
               <div>
                 <h1 className="text-xl font-bold text-gray-900">
@@ -93,6 +94,10 @@ const InsurerDashboardLayout: React.FC<InsurerDashboardLayoutProps> = ({
                   <span className="text-sm text-gray-600">{insurerData.company.office}</span>
                   <span className="px-2 py-0.5 bg-orange-100 text-orange-700 text-xs font-medium rounded-full">
                     DEMO MODE
+                  </span>
+                  <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-medium rounded-full flex items-center">
+                    <Award className="h-3 w-3 mr-1" />
+                    Market Leader
                   </span>
                 </div>
               </div>
