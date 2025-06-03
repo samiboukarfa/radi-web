@@ -11,6 +11,12 @@ const PlotsSection: React.FC = () => {
   const [farmerData] = useState(getEnhancedFarmerData());
   const [selectedPlot, setSelectedPlot] = useState<Plot | null>(null);
   const [activeTab, setActiveTab] = useState('map');
+  const [isCreating, setIsCreating] = useState(false);
+
+  const handleAddNewPlot = () => {
+    setActiveTab('map'); // Switch to map tab if not already there
+    setIsCreating(true); // Trigger the add plot form
+  };
 
   return (
     <div className="space-y-6">
@@ -25,7 +31,7 @@ const PlotsSection: React.FC = () => {
             <Upload className="h-4 w-4 mr-2" />
             Import Data
           </Button>
-          <Button>
+          <Button onClick={handleAddNewPlot}>
             <Plus className="h-4 w-4 mr-2" />
             Add New Plot
           </Button>
@@ -84,7 +90,12 @@ const PlotsSection: React.FC = () => {
         </TabsList>
 
         <TabsContent value="map" className="space-y-4">
-          <PlotMap onPlotSelect={setSelectedPlot} selectedPlot={selectedPlot} />
+          <PlotMap 
+            onPlotSelect={setSelectedPlot} 
+            selectedPlot={selectedPlot} 
+            isCreating={isCreating}
+            onSetCreating={setIsCreating}
+          />
           
           {selectedPlot && (
             <Card>

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -16,6 +15,8 @@ import {
 interface PlotMapProps {
   onPlotSelect?: (plot: Plot) => void;
   selectedPlot?: Plot | null;
+  isCreating?: boolean;
+  onSetCreating?: (creating: boolean) => void;
 }
 
 interface PlotFormData {
@@ -31,10 +32,19 @@ interface PlotFormData {
   notes?: string;
 }
 
-const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
+const PlotMap: React.FC<PlotMapProps> = ({ 
+  onPlotSelect, 
+  selectedPlot, 
+  isCreating = false, 
+  onSetCreating 
+}) => {
   const [farmerData, setFarmerData] = useState(getEnhancedFarmerData());
-  const [isCreating, setIsCreating] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Use internal state if no external handler provided (for backward compatibility)
+  const [internalIsCreating, setInternalIsCreating] = useState(false);
+  const actualIsCreating = onSetCreating ? isCreating : internalIsCreating;
+  const actualSetCreating = onSetCreating || setInternalIsCreating;
 
   const getRiskColor = (level: string) => {
     switch (level) {
@@ -80,7 +90,7 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
       plots: [...prev.plots, newPlot]
     }));
 
-    setIsCreating(false);
+    actualSetCreating(false);
     console.log('New plot added:', newPlot);
   };
 
@@ -105,11 +115,11 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
                 />
               </div>
               <Button
-                onClick={() => setIsCreating(!isCreating)}
-                variant={isCreating ? "outline" : "default"}
+                onClick={() => actualSetCreating(!actualIsCreating)}
+                variant={actualIsCreating ? "outline" : "default"}
               >
                 <Plus className="h-4 w-4 mr-2" />
-                {isCreating ? 'Cancel' : 'Add Plot'}
+                {actualIsCreating ? 'Cancel' : 'Add Plot'}
               </Button>
             </div>
           </div>
@@ -127,16 +137,16 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
             </Badge>
           </div>
 
-          {isCreating && (
+          {actualIsCreating && (
             <div className="mb-6">
               <AddPlotForm 
-                onCancel={() => setIsCreating(false)}
+                onCancel={() => actualSetCreating(false)}
                 onSubmit={handleAddPlot}
               />
             </div>
           )}
 
-          {!isCreating && (
+          {!actualIsCreating && (
             <div className="text-center py-8 bg-gradient-to-br from-green-50 to-blue-50 rounded-lg border">
               <MapPin className="h-12 w-12 text-green-600 mx-auto mb-4" />
               <h3 className="text-lg font-semibold text-gray-800 mb-2">Skikda Agricultural Region</h3>
