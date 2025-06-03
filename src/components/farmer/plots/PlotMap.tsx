@@ -3,20 +3,14 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { getEnhancedFarmerData, Plot, Sensor } from '@/utils/farmerData';
+import { getEnhancedFarmerData, Plot } from '@/utils/farmerData';
+import AddPlotForm from './AddPlotForm';
 import { 
   MapPin, 
-  Activity, 
-  Thermometer, 
-  Droplets, 
-  Zap, 
   Plus,
   Edit,
   Trash2,
-  Layers,
-  Search,
-  Maximize,
-  Navigation
+  Search
 } from 'lucide-react';
 
 interface PlotMapProps {
@@ -24,10 +18,22 @@ interface PlotMapProps {
   selectedPlot?: Plot | null;
 }
 
+interface PlotFormData {
+  name: string;
+  crop: string;
+  area: number;
+  soilType: string;
+  irrigationMethod: string;
+  plantingDate: string;
+  expectedHarvest: string;
+  latitude: number;
+  longitude: number;
+  notes?: string;
+}
+
 const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
-  const [farmerData] = useState(getEnhancedFarmerData());
+  const [farmerData, setFarmerData] = useState(getEnhancedFarmerData());
   const [isCreating, setIsCreating] = useState(false);
-  const [showSatellite, setShowSatellite] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
   const getRiskColor = (level: string) => {
@@ -39,29 +45,42 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
     }
   };
 
-  const getSensorIcon = (type: string) => {
-    switch (type) {
-      case 'soil_moisture': return <Droplets className="h-3 w-3" />;
-      case 'temperature': return <Thermometer className="h-3 w-3" />;
-      case 'ph': return <Activity className="h-3 w-3" />;
-      case 'humidity': return <Zap className="h-3 w-3" />;
-      default: return <MapPin className="h-3 w-3" />;
-    }
-  };
-
-  const getSensorStatusColor = (status: string) => {
-    switch (status) {
-      case 'online': return '#10B981';
-      case 'offline': return '#EF4444';
-      case 'battery_low': return '#F59E0B';
-      default: return '#6B7280';
-    }
-  };
-
   const filteredPlots = farmerData.plots.filter(plot =>
     plot.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     plot.crop.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleAddPlot = (formData: PlotFormData) => {
+    const newPlot: Plot = {
+      id: `plot_${Date.now()}`,
+      name: formData.name,
+      crop: formData.crop,
+      area: formData.area,
+      coordinates: {
+        lat: formData.latitude,
+        lng: formData.longitude
+      },
+      soilType: formData.soilType,
+      irrigationMethod: formData.irrigationMethod,
+      plantingDate: formData.plantingDate,
+      expectedHarvest: formData.expectedHarvest,
+      riskLevel: 'Low', // Default risk level for new plots
+      riskScore: Math.floor(Math.random() * 40) + 10, // Random low risk score
+      lastYield: 0, // No previous yield for new plots
+      sensors: [], // No sensors initially
+      ndviTrend: [0.5], // Default NDVI value
+      moistureLevels: [65], // Default moisture level
+      notes: formData.notes
+    };
+
+    setFarmerData(prev => ({
+      ...prev,
+      plots: [...prev.plots, newPlot]
+    }));
+
+    setIsCreating(false);
+    console.log('New plot added:', newPlot);
+  };
 
   return (
     <div className="space-y-6">
@@ -70,7 +89,7 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center space-x-2">
               <MapPin className="h-5 w-5" />
-              <span>Interactive Plot Map - Skikda Region</span>
+              <span>Plot Management - Skikda Region</span>
             </CardTitle>
             <div className="flex items-center space-x-2">
               <div className="relative">
@@ -83,6 +102,13 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
+              <Button
+                onClick={() => setIsCreating(!isCreating)}
+                variant={isCreating ? "outline" : "default"}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                {isCreating ? 'Cancel' : 'Add Plot'}
+              </Button>
             </div>
           </div>
         </CardHeader>
@@ -98,70 +124,26 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
               High Risk ({farmerData.plots.filter(p => p.riskLevel === 'High').length})
             </Badge>
           </div>
-          
-          {/* Temporary Map Placeholder */}
-          <div className="relative h-[500px] md:h-[400px] w-full rounded-lg overflow-hidden border bg-gradient-to-br from-green-50 to-blue-50">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center space-y-4">
-                <MapPin className="h-16 w-16 text-green-600 mx-auto" />
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2">Skikda Agricultural Region</h3>
-                  <p className="text-gray-600 mb-4">Interactive map view temporarily unavailable</p>
-                  <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
-                    {filteredPlots.map((plot) => (
-                      <div
-                        key={plot.id}
-                        className={`p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 hover:shadow-md ${
-                          selectedPlot?.id === plot.id 
-                            ? 'border-green-500 bg-green-50' 
-                            : 'border-gray-200 bg-white hover:border-gray-300'
-                        }`}
-                        onClick={() => onPlotSelect?.(plot)}
-                        style={{
-                          borderColor: selectedPlot?.id === plot.id ? getRiskColor(plot.riskLevel) : undefined
-                        }}
-                      >
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="font-medium text-sm">{plot.name}</span>
-                          <div 
-                            className="w-3 h-3 rounded-full"
-                            style={{ backgroundColor: getRiskColor(plot.riskLevel) }}
-                          ></div>
-                        </div>
-                        <div className="text-xs text-gray-600">
-                          <p>{plot.crop} - {plot.area}ha</p>
-                          <p>{plot.sensors.filter(s => s.status === 'online').length}/{plot.sensors.length} sensors</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+
+          {isCreating && (
+            <div className="mb-6">
+              <AddPlotForm 
+                onCancel={() => setIsCreating(false)}
+                onSubmit={handleAddPlot}
+              />
             </div>
-            
-            {/* Map Controls */}
-            <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
-              <Button
-                size="sm"
-                variant={isCreating ? "default" : "outline"}
-                onClick={() => setIsCreating(!isCreating)}
-                className="bg-white/90 backdrop-blur-sm shadow-lg"
-              >
-                <Plus className="h-4 w-4 mr-1" />
-                {isCreating ? 'Cancel' : 'Add Plot'}
-              </Button>
-              
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => setShowSatellite(!showSatellite)}
-                className="bg-white/90 backdrop-blur-sm shadow-lg"
-              >
-                <Layers className="h-4 w-4 mr-1" />
-                {showSatellite ? 'Map' : 'Satellite'}
-              </Button>
+          )}
+
+          {!isCreating && (
+            <div className="text-center py-8 bg-gradient-to-br from-green-50 to-blue-50 rounded-lg border">
+              <MapPin className="h-12 w-12 text-green-600 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">Skikda Agricultural Region</h3>
+              <p className="text-gray-600 mb-4">Manage your plots manually by adding coordinates and plot information</p>
+              <p className="text-sm text-gray-500">
+                Total Plots: {farmerData.plots.length} | Total Area: {farmerData.plots.reduce((sum, plot) => sum + plot.area, 0).toFixed(1)} ha
+              </p>
             </div>
-          </div>
+          )}
 
           <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
             <div>
@@ -182,29 +164,21 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
               </div>
             </div>
             <div>
-              <h4 className="font-semibold mb-2">Sensor Status</h4>
+              <h4 className="font-semibold mb-2">Management Actions</h4>
               <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-green-500 rounded-full"></div>
-                  <span>Online</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-yellow-500 rounded-full"></div>
-                  <span>Battery Low</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-red-500 rounded-full"></div>
-                  <span>Offline</span>
-                </div>
+                <p>Add new plots manually</p>
+                <p>Edit existing plot details</p>
+                <p>Monitor risk assessments</p>
+                <p>Track sensor deployment</p>
               </div>
             </div>
             <div>
-              <h4 className="font-semibold mb-2">Map Controls</h4>
+              <h4 className="font-semibold mb-2">Location Guidelines</h4>
               <div className="space-y-1">
-                <p>Click plots for details</p>
-                <p>Search to filter plots</p>
-                <p>Toggle satellite view</p>
-                <p>Add new plots</p>
+                <p>Latitude: 36.5 - 37.5</p>
+                <p>Longitude: 6.5 - 7.5</p>
+                <p>Region: Skikda, Algeria</p>
+                <p>Coordinate precision: 6 decimals</p>
               </div>
             </div>
           </div>
@@ -241,6 +215,9 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
                 <p>Risk Score: {plot.riskScore}/100</p>
                 <p>Sensors: {plot.sensors.filter(s => s.status === 'online').length}/{plot.sensors.length} online</p>
                 <p>Last Yield: {plot.lastYield} t/ha</p>
+                <p className="text-xs text-gray-500">
+                  Coords: {plot.coordinates.lat.toFixed(4)}, {plot.coordinates.lng.toFixed(4)}
+                </p>
               </div>
               <div className="mt-3">
                 <div className="w-full bg-gray-200 rounded-full h-2">
