@@ -52,25 +52,27 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
 
   const handleAddPlot = (formData: PlotFormData) => {
     const newPlot: Plot = {
-      id: `plot_${Date.now()}`,
+      id: Date.now(),
       name: formData.name,
       crop: formData.crop,
       area: formData.area,
-      coordinates: {
-        lat: formData.latitude,
-        lng: formData.longitude
-      },
+      coordinates: [
+        [formData.latitude, formData.longitude],
+        [formData.latitude + 0.001, formData.longitude + 0.001],
+        [formData.latitude + 0.001, formData.longitude - 0.001],
+        [formData.latitude - 0.001, formData.longitude]
+      ],
       soilType: formData.soilType,
       irrigationMethod: formData.irrigationMethod,
       plantingDate: formData.plantingDate,
       expectedHarvest: formData.expectedHarvest,
-      riskLevel: 'Low', // Default risk level for new plots
-      riskScore: Math.floor(Math.random() * 40) + 10, // Random low risk score
-      lastYield: 0, // No previous yield for new plots
-      sensors: [], // No sensors initially
-      ndviTrend: [0.5], // Default NDVI value
-      moistureLevels: [65], // Default moisture level
-      notes: formData.notes
+      riskLevel: 'Low',
+      color: '#10B981',
+      riskScore: Math.floor(Math.random() * 40) + 10,
+      lastYield: 0,
+      sensors: [],
+      ndviTrend: [0.5],
+      moistureLevels: [65]
     };
 
     setFarmerData(prev => ({
@@ -216,7 +218,7 @@ const PlotMap: React.FC<PlotMapProps> = ({ onPlotSelect, selectedPlot }) => {
                 <p>Sensors: {plot.sensors.filter(s => s.status === 'online').length}/{plot.sensors.length} online</p>
                 <p>Last Yield: {plot.lastYield} t/ha</p>
                 <p className="text-xs text-gray-500">
-                  Coords: {plot.coordinates.lat.toFixed(4)}, {plot.coordinates.lng.toFixed(4)}
+                  Coords: {plot.coordinates[0][0].toFixed(4)}, {plot.coordinates[0][1].toFixed(4)}
                 </p>
               </div>
               <div className="mt-3">
