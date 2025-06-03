@@ -39,6 +39,21 @@ import {
   Activity
 } from 'lucide-react';
 
+interface FarmerDetails {
+  email: string;
+  phone: string;
+  primaryCrop: string;
+  totalPlots: number;
+  registered: string;
+  policyType: string;
+  premium: string;
+  renewal: string;
+  specialNotes?: string;
+  riskFactors?: string[];
+  achievements?: string[];
+  claimHistory?: string;
+}
+
 const FarmerManagement = () => {
   const data = getDemoInsurerData();
   const [searchTerm, setSearchTerm] = useState('');
@@ -102,8 +117,8 @@ const FarmerManagement = () => {
     }
   };
 
-  const getFarmerDetails = (farmer: any) => {
-    const baseDetails = {
+  const getFarmerDetails = (farmer: any): FarmerDetails => {
+    const baseDetails: FarmerDetails = {
       email: `${farmer.name.toLowerCase().replace(' ', '.')}@email.dz`,
       phone: `+213 555 ${Math.floor(Math.random() * 900) + 100} ${Math.floor(Math.random() * 900) + 100}`,
       primaryCrop: farmer.crop,
