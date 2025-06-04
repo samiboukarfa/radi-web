@@ -40,7 +40,7 @@ const FarmerDashboardOverview: React.FC = () => {
       case 'salem':
         return {
           title: `Welcome back, ${farmerData.personalInfo.fullName} 🫒`,
-          subtitle: 'Constantine olive grove monitoring - Drought conditions managed',
+          subtitle: 'Constantine olive grove monitoring - Drought and hail conditions managed',
           highlight: 'RADI Score: 8.0/10 (Low Risk) • NDVI: 0.31 (Stable) • LST: +4.3°C anomaly'
         };
       case 'hamza':
