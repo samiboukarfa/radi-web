@@ -235,11 +235,9 @@ const InsurerDashboardOverview = () => {
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <FileText className="h-5 w-5 text-purple-600" />
-            <span>Claims Processing & Case Study Validation</span>
+            <span>Claims Processing & Validation</span>
           </CardTitle>
-          <CardDescription>
-            Detailed claims history including validated case studies with satellite evidence
-          </CardDescription>
+          <CardDescription>Detailed claims history including validation with satellite evidence</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -258,10 +256,7 @@ const InsurerDashboardOverview = () => {
                         <p className="text-gray-500">Farmer</p>
                         <p className="font-medium">{claim.farmer}</p>
                       </div>
-                      <div>
-                        <p className="text-gray-500">Amount</p>
-                        <p className="font-medium text-green-600">{formatCurrency(claim.amount)}</p>
-                      </div>
+                      
                       <div>
                         <p className="text-gray-500">Location</p>
                         <p className="font-medium">{claim.location}</p>
@@ -310,11 +305,7 @@ const InsurerDashboardOverview = () => {
               <p className="text-sm font-medium text-gray-900">Register Farmer</p>
               <p className="text-xs text-gray-500">Add new case study</p>
             </button>
-            <button className="p-4 border border-gray-200 rounded-lg hover:bg-orange-50 transition-colors">
-              <AlertCircle className="h-6 w-6 text-orange-600 mx-auto mb-2" />
-              <p className="text-sm font-medium text-gray-900">Process Claims</p>
-              <p className="text-xs text-gray-500">Review satellite evidence</p>
-            </button>
+            
             <button className="p-4 border border-gray-200 rounded-lg hover:bg-green-50 transition-colors">
               <Activity className="h-6 w-6 text-green-600 mx-auto mb-2" />
               <p className="text-sm font-medium text-gray-900">Risk Assessment</p>
@@ -322,22 +313,12 @@ const InsurerDashboardOverview = () => {
             </button>
             <button className="p-4 border border-gray-200 rounded-lg hover:bg-purple-50 transition-colors">
               <FileText className="h-6 w-6 text-purple-600 mx-auto mb-2" />
-              <p className="text-sm font-medium text-gray-900">Case Study Report</p>
+              <p className="text-sm font-medium text-gray-900">Report</p>
               <p className="text-xs text-gray-500">Generate documentation</p>
             </button>
           </div>
           
-          <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg">
-            <h3 className="font-semibold text-blue-900 mb-2">CNMA Insurance Products</h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs text-blue-800">
-              <span>• Multirisque Agricole</span>
-              <span>• Livestock Insurance</span>
-              <span>• Equipment Coverage</span>
-              <span>• Catastrophe Insurance</span>
-              <span>• DACA Scheme</span>
-              <span>• Specialty Crop Insurance</span>
-            </div>
-          </div>
+          
         </CardContent>
       </Card>
     </div>;
