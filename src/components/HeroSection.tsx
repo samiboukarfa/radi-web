@@ -36,9 +36,7 @@ const HeroSection = () => {
           {/* Bilingual Slogans */}
           <div className="mb-8 space-y-3">
             
-            <p className="text-xl md:text-2xl italic">
-              Le risqué n'est plus une surprise
-            </p>
+            <p className="text-xl md:text-2xl italic">decode the climate,  defend your farm</p>
           </div>
 
           <p className="text-lg md:text-xl mb-10 text-gray-200 leading-relaxed">
