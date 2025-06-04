@@ -38,7 +38,7 @@ const ServicesSection = () => {
     {
       icon: FileText,
       title: 'Exportable Reports',
-      description: 'PDF/Excel reports for claims and analysis',
+      description: 'PDF/Excel reports for Post-Disaster and risk analysis',
       color: 'text-agri-green'
     }
   ];
