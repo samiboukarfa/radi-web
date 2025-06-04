@@ -1,10 +1,9 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { LandPlot, Layers, Sensor, Shield, CheckCircle, Clock, Phone, Mail, Smartphone } from 'lucide-react';
+import { LandPlot, Layers, Wifi, Shield, CheckCircle, Clock, Phone, Mail, Smartphone } from 'lucide-react';
 
 const PricingSection = () => {
   const [showFAQ, setShowFAQ] = useState(false);
@@ -174,7 +173,7 @@ const PricingSection = () => {
           <div className="text-center">
             <div className="flex justify-center mb-4">
               <div className="bg-sky-blue rounded-full p-3">
-                <Sensor className="h-8 w-8 text-white" />
+                <Wifi className="h-8 w-8 text-white" />
               </div>
             </div>
             <h3 className="text-2xl font-bold text-gray-900 mb-2">IoT Sensor Integration</h3>
