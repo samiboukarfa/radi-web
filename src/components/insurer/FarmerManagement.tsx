@@ -144,7 +144,7 @@ const FarmerManagement = () => {
               <div>
                 <p className="text-sm text-gray-600">Total Farmers</p>
                 <p className="text-2xl font-bold">{data.farmers.length}</p>
-                <p className="text-xs text-blue-600">2 Case Studies Active</p>
+                
               </div>
               <User className="h-8 w-8 text-blue-600" />
             </div>
