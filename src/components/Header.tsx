@@ -24,6 +24,13 @@ const Header = () => {
     navigate('/');
   };
 
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg">
       <div className="container mx-auto px-6">
@@ -41,6 +48,12 @@ const Header = () => {
             <a href="#home" className="text-gray-700 hover:text-agri-green transition-colors">Home</a>
             <a href="#about" className="text-gray-700 hover:text-agri-green transition-colors">About</a>
             <a href="#services" className="text-gray-700 hover:text-agri-green transition-colors">Services</a>
+            <button 
+              onClick={() => scrollToSection('pricing')} 
+              className="text-gray-700 hover:text-agri-green transition-colors cursor-pointer"
+            >
+              Pricing
+            </button>
             <a href="#contact" className="text-gray-700 hover:text-agri-green transition-colors">Contact</a>
           </nav>
 
@@ -96,6 +109,15 @@ const Header = () => {
               <a href="#home" className="text-gray-700 hover:text-agri-green transition-colors">Home</a>
               <a href="#about" className="text-gray-700 hover:text-agri-green transition-colors">About</a>
               <a href="#services" className="text-gray-700 hover:text-agri-green transition-colors">Services</a>
+              <button 
+                onClick={() => {
+                  scrollToSection('pricing');
+                  setIsMobileMenuOpen(false);
+                }} 
+                className="text-gray-700 hover:text-agri-green transition-colors text-left"
+              >
+                Pricing
+              </button>
               <a href="#contact" className="text-gray-700 hover:text-agri-green transition-colors">Contact</a>
               <div className="flex items-center space-x-4 pt-4">
                 <button 
