@@ -51,9 +51,7 @@ const HeroSection = () => {
                 <Button size="lg" className="bg-sky-blue hover:bg-sky-blue-dark text-white text-lg px-8 py-4 h-auto" onClick={handleFarmerClick}>
                   Get Started as Farmer
                 </Button>
-                <Button size="lg" variant="outline" onClick={handleInsurerClick} className="border-white hover:text-agri-green text-lg px-8 py-4 h-auto bg-[agri-green-DEFAULT] bg-cyan-500 hover:bg-cyan-400 text-slate-50">
-                  Join as Insurer
-                </Button>
+                <Button size="lg" variant="outline" onClick={handleInsurerClick} className="border-white hover:text-agri-green text-lg px-8 py-4 h-auto bg-[agri-green-DEFAULT] bg-cyan-500 hover:bg-cyan-400 text-slate-50">Join as Company</Button>
               </>}
           </div>
 
