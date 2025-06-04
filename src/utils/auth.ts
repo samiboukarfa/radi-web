@@ -1,4 +1,3 @@
-
 export interface User {
   email: string;
   name: string;
@@ -41,11 +40,11 @@ const DEMO_CREDENTIALS = {
     phone: '+213 555 0124',
     profileId: 'hamza'
   },
-  'cnma@radi.app': {
+  'crma@radi.app': {
     password: 'insurer123',
     userType: 'insurer' as const,
     name: 'Insurance Manager',
-    location: 'CNMA Alger Office',
+    location: 'CRMA Alger Office',
     phone: '+213 555 789 012'
   },
   'institution@radi.app': {
@@ -200,13 +199,13 @@ export const getDemoFarmerData = () => ({
   }
 });
 
-// Enhanced demo insurer data with CNMA
+// Enhanced demo insurer data with CRMA
 export const getDemoInsurerData = () => ({
   company: {
-    name: 'CNMA - Caisse Nationale de Mutualité Agricole',
-    fullName: 'Caisse Nationale de Mutualité Agricole',
-    license: 'CNMA-2024-001',
-    office: 'CNMA Alger Office',
+    name: 'CRMA - Caisse Régionale de Mutualité Agricole',
+    fullName: 'Caisse Régionale de Mutualité Agricole',
+    license: 'CRMA-2024-001',
+    office: 'CRMA Alger Office',
     manager: 'Insurance Manager',
     location: '24, boulevard Victor Hugo, Alger, Algeria',
     description: 'Leader in agricultural insurance in Algeria with 77% market share',
@@ -219,7 +218,6 @@ export const getDemoInsurerData = () => ({
     totalArea: 2856.5,
     activePolicies: 91,
     pendingClaims: 13,
-    monthlyPremium: 245000,
     riskDistribution: { low: 45, medium: 35, high: 20 }
   },
   farmers: [
@@ -232,7 +230,7 @@ export const getDemoInsurerData = () => ({
       risk: 'Medium', 
       riskScore: 6.5,
       policy: 'Active', 
-      policyNumber: 'CNMA-AGR-2024-001',
+      policyNumber: 'CRMA-AGR-2024-001',
       lastUpdate: '2024-01-15',
       claims: []
     },
@@ -245,7 +243,7 @@ export const getDemoInsurerData = () => ({
       risk: 'Low', 
       riskScore: 8.0,
       policy: 'Active', 
-      policyNumber: 'CNMA-AGR-2024-002',
+      policyNumber: 'CRMA-AGR-2024-002',
       lastUpdate: '2024-01-14',
       claims: []
     },
@@ -258,14 +256,14 @@ export const getDemoInsurerData = () => ({
       risk: 'High', 
       riskScore: 3.0,
       policy: 'Claim Approved', 
-      policyNumber: 'CNMA-AGR-2023-001',
+      policyNumber: 'CRMA-AGR-2023-001',
       lastUpdate: '2024-01-13',
       claims: [{
         date: '2023-05-19',
         amount: 45000,
         status: 'Paid',
         cause: 'Hailstorm damage',
-        claimId: 'CNMA-CLM-2023-001'
+        claimId: 'CRMA-CLM-2023-001'
       }]
     }
   ],
@@ -279,7 +277,7 @@ export const getDemoInsurerData = () => ({
       date: '2023-05-19', 
       location: 'Mezaguet Roha, Constantine', 
       riskScore: 3.0,
-      claimId: 'CNMA-CLM-2023-001',
+      claimId: 'CRMA-CLM-2023-001',
       evidence: 'Satellite-confirmed crop damage, NDVI drop from 0.22 to 0.18',
       weatherData: 'CAPE: 2850 J/kg, Lifted Index: -5.8°C'
     },
@@ -322,10 +320,7 @@ export const getDemoInsurerData = () => ({
   ],
   recentActivity: [
     'New farmer registration: Salem Khrobi from Constantine',
-    'Claim paid: Hamza Dawdi - 45,000 DZD (Hailstorm)',
     'Risk level updated: Ahmed Benali - Medium',
-    'Policy renewal: Salem Khrobi - Annual Premium',
-    'Weather alert issued for Constantine region',
-    'CNMA market share report: 77% agricultural sector'
+    'Weather alert issued for Constantine region'
   ]
 });

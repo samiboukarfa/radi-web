@@ -1,10 +1,13 @@
+
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { getDemoInsurerData } from '@/utils/auth';
-import { Users, MapPin, Shield, AlertCircle, TrendingUp, DollarSign, Activity, Clock, FileText, Award, CheckCircle, Eye, Building } from 'lucide-react';
+import { Users, MapPin, Shield, AlertCircle, TrendingUp, Activity, Clock, FileText, Award, CheckCircle, Eye, Building } from 'lucide-react';
+
 const InsurerDashboardOverview = () => {
   const data = getDemoInsurerData();
+
   const StatCard: React.FC<{
     title: string;
     value: string | number;
@@ -17,26 +20,24 @@ const InsurerDashboardOverview = () => {
     icon: Icon,
     trend,
     color = "blue"
-  }) => <Card>
+  }) => (
+    <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium text-gray-600">{title}</CardTitle>
         <Icon className={`h-4 w-4 text-${color}-600`} />
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold text-gray-900">{value}</div>
-        {trend && <p className="text-xs text-green-600 flex items-center mt-1">
+        {trend && (
+          <p className="text-xs text-green-600 flex items-center mt-1">
             <TrendingUp className="h-3 w-3 mr-1" />
             {trend}
-          </p>}
+          </p>
+        )}
       </CardContent>
-    </Card>;
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('fr-DZ', {
-      style: 'currency',
-      currency: 'DZD',
-      minimumFractionDigits: 0
-    }).format(amount);
-  };
+    </Card>
+  );
+
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'high':
@@ -49,8 +50,10 @@ const InsurerDashboardOverview = () => {
         return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
-  return <div className="space-y-6">
-      {/* CNMA Company Header */}
+
+  return (
+    <div className="space-y-6">
+      {/* CRMA Company Header */}
       <div className="bg-gradient-to-r from-blue-700 to-blue-800 text-white rounded-xl p-6">
         <div className="flex items-center justify-between">
           <div>
@@ -89,41 +92,41 @@ const InsurerDashboardOverview = () => {
       {/* Key Performance Indicators */}
       <div>
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Portfolio Performance Indicators</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
           <StatCard title="Insured Farmers" value={data.kpis.totalFarmers} icon={Users} trend="+12% this quarter" color="blue" />
           <StatCard title="Coverage Area" value={`${data.kpis.totalArea.toLocaleString()} ha`} icon={MapPin} trend="+8% expansion" color="green" />
           <StatCard title="Active Policies" value={data.kpis.activePolicies} icon={Shield} trend="+15% new policies" color="purple" />
           <StatCard title="Pending Claims" value={data.kpis.pendingClaims} icon={AlertCircle} color="orange" />
-          <StatCard title="Monthly Premiums" value={formatCurrency(data.kpis.monthlyPremium)} icon={DollarSign} trend="+5% vs last month" color="emerald" />
           <StatCard title="Risk Distribution" value={`${data.kpis.riskDistribution.low}% Low Risk`} icon={Activity} color="indigo" />
         </div>
       </div>
 
-      {/* Case Studies Portfolio */}
+      {/* Farmer Portfolio */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <Award className="h-5 w-5 text-blue-600" />
-              <span>Farmer's  List</span>
+              <span>Farmer Portfolio</span>
             </CardTitle>
-            <CardDescription>RADI validation through documented farmer cases</CardDescription>
+            <CardDescription>RADI validation through documented farmer profiles</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {data.farmers.map(farmer => <div key={farmer.id} className="border border-gray-200 rounded-lg p-4">
+              {data.farmers.map(farmer => (
+                <div key={farmer.id} className="border border-gray-200 rounded-lg p-4">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-2">
                         <h4 className="font-semibold text-gray-900">{farmer.name}</h4>
-                        {farmer.name === 'Salem Khrobi' || farmer.name === 'Hamza Dawdi'}
-                        {farmer.claims && farmer.claims.length > 0}
+                        {farmer.claims && farmer.claims.length > 0 && (
+                          <CheckCircle className="h-4 w-4 text-green-600" />
+                        )}
                       </div>
                       <div className="text-sm text-gray-600 space-y-1">
                         <p><strong>Location:</strong> {farmer.location}</p>
                         <p><strong>Crop:</strong> {farmer.crop} • {farmer.area} ha</p>
                         <p><strong>Policy:</strong> {farmer.policyNumber}</p>
-                        {farmer.claims && farmer.claims.length > 0}
                       </div>
                     </div>
                     <div className="text-right">
@@ -133,7 +136,8 @@ const InsurerDashboardOverview = () => {
                       <p className="text-xs text-gray-500">{farmer.policy}</p>
                     </div>
                   </div>
-                </div>)}
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
@@ -141,19 +145,21 @@ const InsurerDashboardOverview = () => {
         <Card>
           <CardHeader>
             <CardTitle>CRMA Operations Activity</CardTitle>
-            <CardDescription>Recent portfolio management and case study updates</CardDescription>
+            <CardDescription>Recent portfolio management updates</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {data.recentActivity.map((activity, index) => <div key={index} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+              {data.recentActivity.map((activity, index) => (
+                <div key={index} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
                   <Clock className="h-4 w-4 text-gray-400 mt-0.5" />
                   <div className="flex-1">
                     <p className="text-sm text-gray-900">{activity}</p>
                     <p className="text-xs text-gray-500">
-                      {index === 0 ? '2 hours ago' : index === 1 ? '5 hours ago' : index === 2 ? '1 day ago' : index === 3 ? '2 days ago' : index === 4 ? '3 days ago' : '1 week ago'}
+                      {index === 0 ? '2 hours ago' : index === 1 ? '5 hours ago' : '1 day ago'}
                     </p>
                   </div>
-                </div>)}
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
@@ -204,11 +210,12 @@ const InsurerDashboardOverview = () => {
               Claims & Risk Alerts
               <Badge variant="destructive">{data.alerts.length}</Badge>
             </CardTitle>
-            <CardDescription>Active notifications requiring CNMA attention</CardDescription>
+            <CardDescription>Active notifications requiring CRMA attention</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {data.alerts.map(alert => <div key={alert.id} className="border border-gray-200 rounded-lg p-4">
+              {data.alerts.map(alert => (
+                <div key={alert.id} className="border border-gray-200 rounded-lg p-4">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <h4 className="font-medium text-gray-900 text-sm">{alert.title}</h4>
@@ -221,7 +228,8 @@ const InsurerDashboardOverview = () => {
                       {alert.severity.toUpperCase()}
                     </Badge>
                   </div>
-                </div>)}
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
@@ -238,22 +246,26 @@ const InsurerDashboardOverview = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {data.claims.map(claim => <div key={claim.id} className="border-2 border-gray-200 rounded-lg p-4">
+            {data.claims.map(claim => (
+              <div key={claim.id} className="border-2 border-gray-200 rounded-lg p-4">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
                       <h4 className="font-semibold text-gray-900">{claim.type}</h4>
-                      {claim.farmer === 'Hamza Dawdi'}
-                      {claim.claimId && <Badge variant="secondary" className="text-xs">
+                      {claim.farmer === 'Hamza Dawdi' && (
+                        <CheckCircle className="h-4 w-4 text-green-600" />
+                      )}
+                      {claim.claimId && (
+                        <Badge variant="secondary" className="text-xs">
                           {claim.claimId}
-                        </Badge>}
+                        </Badge>
+                      )}
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                       <div>
                         <p className="text-gray-500">Farmer</p>
                         <p className="font-medium">{claim.farmer}</p>
                       </div>
-                      
                       <div>
                         <p className="text-gray-500">Location</p>
                         <p className="font-medium">{claim.location}</p>
@@ -263,31 +275,38 @@ const InsurerDashboardOverview = () => {
                         <p className="font-medium">{claim.date}</p>
                       </div>
                     </div>
-                    {claim.evidence && <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+                    {claim.evidence && (
+                      <div className="mt-3 p-3 bg-blue-50 rounded-lg">
                         <p className="text-xs font-medium text-blue-800">Satellite Evidence:</p>
                         <p className="text-xs text-blue-700">{claim.evidence}</p>
-                      </div>}
-                    {claim.weatherData && <div className="mt-2 p-3 bg-purple-50 rounded-lg">
+                      </div>
+                    )}
+                    {claim.weatherData && (
+                      <div className="mt-2 p-3 bg-purple-50 rounded-lg">
                         <p className="text-xs font-medium text-purple-800">Weather Validation:</p>
                         <p className="text-xs text-purple-700">{claim.weatherData}</p>
-                      </div>}
+                      </div>
+                    )}
                   </div>
                   <div className="text-right">
                     <Badge variant={claim.status === 'Paid' ? 'default' : claim.status === 'Under Review' ? 'secondary' : 'outline'} className="mb-2">
                       {claim.status}
                     </Badge>
-                    {claim.farmer === 'Hamza Dawdi' && <p className="text-xs text-green-600 font-medium">
+                    {claim.farmer === 'Hamza Dawdi' && (
+                      <p className="text-xs text-green-600 font-medium">
                         <CheckCircle className="h-3 w-3 inline mr-1" />
                         RADI Validated
-                      </p>}
+                      </p>
+                    )}
                   </div>
                 </div>
-              </div>)}
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>
 
-      {/* CNMA Service Portfolio */}
+      {/* CRMA Service Portfolio */}
       <Card>
         <CardHeader>
           <CardTitle>CRMA Service Portfolio & Quick Actions</CardTitle>
@@ -300,7 +319,7 @@ const InsurerDashboardOverview = () => {
             <button className="p-4 border border-gray-200 rounded-lg hover:bg-blue-50 transition-colors">
               <Users className="h-6 w-6 text-blue-600 mx-auto mb-2" />
               <p className="text-sm font-medium text-gray-900">Register Farmer</p>
-              <p className="text-xs text-gray-500">Add new case study</p>
+              <p className="text-xs text-gray-500">Add new profile</p>
             </button>
             
             <button className="p-4 border border-gray-200 rounded-lg hover:bg-green-50 transition-colors">
@@ -314,10 +333,10 @@ const InsurerDashboardOverview = () => {
               <p className="text-xs text-gray-500">Generate documentation</p>
             </button>
           </div>
-          
-          
         </CardContent>
       </Card>
-    </div>;
+    </div>
+  );
 };
+
 export default InsurerDashboardOverview;

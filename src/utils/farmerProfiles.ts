@@ -1,4 +1,3 @@
-
 import { Plot, Sensor, WeatherData, FarmerProfile } from './farmerData';
 
 export interface FarmerProfileData {
@@ -288,7 +287,7 @@ const ahmedProfile: FarmerProfileData = {
   ]
 };
 
-// Salem Khrobi - Constantine olive farmer (Case Study 1)
+// Salem Khrobi - Constantine olive farmer
 const salemProfile: FarmerProfileData = {
   personalInfo: {
     id: 123456789,
@@ -437,16 +436,13 @@ const salemProfile: FarmerProfileData = {
     }
   ],
   recentActivity: [
-    'Case study profile activated for Salem Khrobi',
     'NDVI reading stable at 0.31 for olive grove',
-    'Drought monitoring alert issued for Constantine',
-    'Soil moisture sensors reporting normal levels',
-    'CNMA policy CNMA-AGR-2024-002 renewed successfully',
+    'Drought and hail monitoring alert issued for Constantine',
     'Irrigation schedule optimized for drought conditions'
   ]
 };
 
-// Hamza Dawdi - Constantine wheat farmer with hailstorm claim (Case Study 2)
+// Hamza Dawdi - Constantine wheat farmer with hailstorm claim
 const hamzaProfile: FarmerProfileData = {
   personalInfo: {
     id: 123456779,
@@ -587,21 +583,20 @@ const hamzaProfile: FarmerProfileData = {
   ],
   recentActivity: [
     'Hailstorm damage assessment completed using satellite data',
-    'CNMA claim CNMA-CLM-2023-001 approved for 45,000 DZD',
+    'CRMA claim CRMA-CLM-2023-001 approved for 45,000 DZD',
     'Post-storm NDVI analysis shows crop damage confirmation',
     'Weather data validated: CAPE 2850 J/kg, Lifted Index -5.8°C',
-    'Insurance payout processed for hailstorm damage',
-    'Case study documentation completed for RADI validation'
+    'Insurance payout processed for hailstorm damage'
   ],
   claims: [
     {
-      id: 'CNMA-CLM-2023-001',
+      id: 'CRMA-CLM-2023-001',
       date: '2023-05-19',
       event: 'Hailstorm',
       status: 'Approved',
       payout: 45000,
       evidence: 'Satellite-confirmed crop damage, NDVI drop from 0.22 to 0.18',
-      insurer: 'CNMA'
+      insurer: 'CRMA'
     }
   ]
 };
