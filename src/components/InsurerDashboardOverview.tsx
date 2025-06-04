@@ -116,12 +116,8 @@ const InsurerDashboardOverview = () => {
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-2">
                         <h4 className="font-semibold text-gray-900">{farmer.name}</h4>
-                        {(farmer.name === 'Salem Khrobi' || farmer.name === 'Hamza Dawdi') && <Badge variant="outline" className="text-xs border-blue-500 text-blue-700">
-                            Case Study
-                          </Badge>}
-                        {farmer.claims && farmer.claims.length > 0 && <Badge variant="outline" className="text-xs border-green-500 text-green-700">
-                            Claim Processed
-                          </Badge>}
+                        {farmer.name === 'Salem Khrobi' || farmer.name === 'Hamza Dawdi'}
+                        {farmer.claims && farmer.claims.length > 0}
                       </div>
                       <div className="text-sm text-gray-600 space-y-1">
                         <p><strong>Location:</strong> {farmer.location}</p>
