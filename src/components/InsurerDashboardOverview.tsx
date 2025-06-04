@@ -59,8 +59,8 @@ const InsurerDashboardOverview = () => {
                 <Building className="h-8 w-8 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold">CNMA</h1>
-                <p className="text-lg text-blue-100">Caisse Nationale de Mutualité Agricole</p>
+                <h1 className="text-3xl font-bold">CRMA</h1>
+                <p className="text-lg text-blue-100">La Caisse Régionale de Mutualité Agricole</p>
                 <p className="text-sm text-blue-200 italic">Mutualité Agricole – حقكم أمانة</p>
               </div>
             </div>
@@ -143,7 +143,7 @@ const InsurerDashboardOverview = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>CNMA Operations Activity</CardTitle>
+            <CardTitle>CRMA Operations Activity</CardTitle>
             <CardDescription>Recent portfolio management and case study updates</CardDescription>
           </CardHeader>
           <CardContent>
@@ -248,10 +248,7 @@ const InsurerDashboardOverview = () => {
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
                       <h4 className="font-semibold text-gray-900">{claim.type}</h4>
-                      {claim.farmer === 'Hamza Dawdi' && <Badge variant="outline" className="text-xs border-green-500 text-green-700">
-                          <Award className="h-3 w-3 mr-1" />
-                          Validated Case Study
-                        </Badge>}
+                      {claim.farmer === 'Hamza Dawdi'}
                       {claim.claimId && <Badge variant="secondary" className="text-xs">
                           {claim.claimId}
                         </Badge>}
@@ -301,7 +298,7 @@ const InsurerDashboardOverview = () => {
       {/* CNMA Service Portfolio */}
       <Card>
         <CardHeader>
-          <CardTitle>CNMA Service Portfolio & Quick Actions</CardTitle>
+          <CardTitle>CRMA Service Portfolio & Quick Actions</CardTitle>
           <CardDescription>
             Algeria's leading agricultural insurance provider - Full service capabilities
           </CardDescription>
