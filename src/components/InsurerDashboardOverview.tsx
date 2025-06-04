@@ -123,10 +123,7 @@ const InsurerDashboardOverview = () => {
                         <p><strong>Location:</strong> {farmer.location}</p>
                         <p><strong>Crop:</strong> {farmer.crop} • {farmer.area} ha</p>
                         <p><strong>Policy:</strong> {farmer.policyNumber}</p>
-                        {farmer.claims && farmer.claims.length > 0 && <p className="text-green-600">
-                            <CheckCircle className="h-3 w-3 inline mr-1" />
-                            Claim: {formatCurrency(farmer.claims[0].amount)} - {farmer.claims[0].status}
-                          </p>}
+                        {farmer.claims && farmer.claims.length > 0}
                       </div>
                     </div>
                     <div className="text-right">
