@@ -71,7 +71,7 @@ const CaseStudyBanner: React.FC = () => {
                 </div>
               </div>
 
-              <p className="text-sm text-gray-700 mb-4">{data.description}</p>
+              
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {data.highlights.map((highlight, index) => <div key={index} className="flex items-start space-x-2">
