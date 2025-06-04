@@ -24,9 +24,9 @@ const TargetUsersSection = () => {
       image: 'https://images.unsplash.com/photo-1493962853295-0fd70327578a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
     },
     {
-      title: 'Institutions',
+      title: 'Public Institutions',
       description: 'Support agricultural development with reliable data',
-      details: 'Government agencies and NGOs can use our platform to monitor agricultural trends and support policy-making decisions.',
+      details: 'Government agencies, Banks, agricultural committees and NGOs can use our platform to monitor agricultural trends and support policy-making decisions.',
       bgColor: 'bg-gray-100',
       textColor: 'text-gray-700',
       buttonColor: 'bg-gray-700 hover:bg-gray-800',
