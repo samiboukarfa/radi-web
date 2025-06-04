@@ -12,7 +12,7 @@ const TargetUsersSection = () => {
       bgColor: 'bg-agri-green-light',
       textColor: 'text-agri-green',
       buttonColor: 'bg-agri-green hover:bg-agri-green-dark',
-      image: 'https://images.unsplash.com/photo-1517022812141-23620dba5c23?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+      image: '/1.jpg'
     },
     {
       title: 'Insurance Companies',
@@ -21,7 +21,7 @@ const TargetUsersSection = () => {
       bgColor: 'bg-sky-blue-light',
       textColor: 'text-sky-blue',
       buttonColor: 'bg-sky-blue hover:bg-sky-blue-dark',
-      image: 'https://images.unsplash.com/photo-1493962853295-0fd70327578a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+      image: '/2.jpg'
     },
     {
       title: 'Public Institutions',
@@ -30,7 +30,7 @@ const TargetUsersSection = () => {
       bgColor: 'bg-gray-100',
       textColor: 'text-gray-700',
       buttonColor: 'bg-gray-700 hover:bg-gray-800',
-      image: 'https://images.unsplash.com/photo-1465379944081-7f47de8d74ac?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+      image: '/3.jpg'
     }
   ];
 
