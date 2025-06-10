@@ -13,12 +13,12 @@ export interface User {
 export const getDemoFarmerData = () => ({
   personalInfo: {
     name: "Ahmed Ben Salem",
-    farmerId: "FARM-SKD-2024-001",
+    farmerId: "FARM-CST-2024-001",
     email: "ahmed.bensalem@example.com",
     phone: "+213 555 0123",
-    location: "Skikda, Algeria",
+    location: "Constantine, Algeria",
     farmSize: 65.4,
-    coordinates: [36.8765, 6.9811] as [number, number],
+    coordinates: [36.3650, 6.6147] as [number, number],
     joinDate: "2023-03-15",
     lastLogin: "2024-02-15T09:30:00Z"
   },
@@ -77,7 +77,7 @@ export const getDemoInsurerData = () => ({
     name: "CRMA",
     fullName: "La Caisse Régionale de Mutualité Agricole",
     license: "INS-ALG-2020-CRMA",
-    office: "Skikda Regional Office",
+    office: "Constantine Regional Office",
     marketShare: "Leading Regional Provider",
     ranking: "#1 in Eastern Algeria"
   },
@@ -94,7 +94,7 @@ export const getDemoInsurerData = () => ({
     {
       id: 1,
       name: "Ahmed Ben Salem",
-      location: "Skikda",
+      location: "Constantine",
       crop: "Wheat & Olives",
       area: 65.4,
       risk: "Low",
@@ -106,12 +106,12 @@ export const getDemoInsurerData = () => ({
     },
     {
       id: 2,
-      name: "Fatima Kaddour",
+      name: "Salem Khrobi",
       location: "Constantine",
-      crop: "Barley & Vegetables",
+      crop: "Olives",
       area: 42.1,
-      risk: "Medium",
-      riskScore: 5.8,
+      risk: "Low",
+      riskScore: 3.1,
       documentation: "Profile Updated",
       validation: "Assessment Complete",
       policy: "Active",
@@ -120,7 +120,7 @@ export const getDemoInsurerData = () => ({
     {
       id: 3,
       name: "Hamza Dawdi",
-      location: "Setif",
+      location: "Constantine",
       crop: "Wheat",
       area: 28.5,
       risk: "High",
@@ -137,7 +137,7 @@ export const getDemoInsurerData = () => ({
       title: "High Risk Weather Pattern Detected",
       severity: "high",
       farmer: "Hamza Dawdi",
-      location: "Setif",
+      location: "Constantine",
       time: "2 hours ago"
     },
     {
@@ -145,14 +145,14 @@ export const getDemoInsurerData = () => ({
       title: "Sensor Battery Low - Maintenance Required",
       severity: "medium",
       farmer: "Ahmed Ben Salem",
-      location: "Skikda",
+      location: "Constantine",
       time: "4 hours ago"
     },
     {
       id: 3,
       title: "Risk Assessment Update Required",
       severity: "low",
-      farmer: "Fatima Kaddour",
+      farmer: "Salem Khrobi",
       location: "Constantine",
       time: "1 day ago"
     }
@@ -164,7 +164,7 @@ export const getDemoInsurerData = () => ({
       type: "Hailstorm Damage Assessment",
       status: "Validated",
       date: "2024-01-20",
-      location: "Setif",
+      location: "Constantine",
       documentId: "DOC-2024-001",
       evidence: "Satellite imagery confirms 15% crop damage in northern section. NDVI analysis shows significant vegetation stress patterns consistent with hail impact.",
       weatherData: "Meteorological data confirms severe hailstorm on January 19, 2024, with hail diameter 2-3cm recorded at nearby weather station."
@@ -175,14 +175,14 @@ export const getDemoInsurerData = () => ({
       type: "Drought Impact Documentation",
       status: "Under Review",
       date: "2024-01-18",
-      location: "Skikda",
+      location: "Constantine",
       documentId: "DOC-2024-002",
       evidence: "NDVI trending analysis shows declining vegetation health over 3-week period. Soil moisture sensors confirm extended dry conditions.",
       weatherData: "Regional precipitation 65% below seasonal average. Temperature consistently 3-4°C above normal for January period."
     },
     {
       id: 3,
-      farmer: "Fatima Kaddour",
+      farmer: "Salem Khrobi",
       type: "Preventive Assessment",
       status: "Completed",
       date: "2024-01-15",
@@ -191,7 +191,7 @@ export const getDemoInsurerData = () => ({
     }
   ],
   recentActivity: [
-    "Risk assessment completed for Hamza Dawdi (Setif region)",
+    "Risk assessment completed for Hamza Dawdi (Constantine region)",
     "Documentation validated for hailstorm damage using satellite data",
     "Weather alert system activated for high-risk areas",
     "Farmer profile updated with latest RADI scores",
