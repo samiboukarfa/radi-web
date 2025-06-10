@@ -133,17 +133,7 @@ const ReportsAnalytics = () => {
 
       {/* Quick Performance Overview */}
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="text-center">
-              <p className="text-sm text-gray-600">Claims Ratio</p>
-              <p className={`text-2xl font-bold ${getPerformanceColor(performanceMetrics.claimsRatio, 'ratio')}`}>
-                {performanceMetrics.claimsRatio}%
-              </p>
-              <p className="text-xs text-gray-500">Target: &lt;20%</p>
-            </div>
-          </CardContent>
-        </Card>
+        
         <Card>
           <CardContent className="p-4">
             <div className="text-center">
