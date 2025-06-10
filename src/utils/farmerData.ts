@@ -1,4 +1,14 @@
 
+export interface Sensor {
+  id: string;
+  type: 'soil_moisture' | 'temperature' | 'humidity' | 'ph' | 'nutrients';
+  position: [number, number];
+  status: 'online' | 'offline' | 'battery_low' | 'maintenance';
+  lastReading: number;
+  timestamp: string;
+  batteryLevel: number;
+}
+
 export interface Plot {
   id: number;
   name: string;
@@ -18,14 +28,12 @@ export interface Plot {
   moistureLevels: number[];
 }
 
-export interface Sensor {
-  id: string;
-  type: 'soil_moisture' | 'temperature' | 'ph' | 'humidity';
-  position: [number, number];
-  status: 'online' | 'offline' | 'battery_low';
-  lastReading: number;
-  timestamp: string;
-  batteryLevel: number;
+export interface WeatherAlert {
+  type: 'heat' | 'cold' | 'drought' | 'flood' | 'storm' | 'frost';
+  severity: 'low' | 'medium' | 'high';
+  message: string;
+  startDate: string;
+  endDate: string;
 }
 
 export interface WeatherData {
@@ -45,13 +53,7 @@ export interface WeatherData {
     precipitation: number;
     windSpeed: number;
   }>;
-  alerts: Array<{
-    type: 'heat' | 'frost' | 'drought' | 'storm';
-    severity: 'low' | 'medium' | 'high';
-    message: string;
-    startDate: string;
-    endDate: string;
-  }>;
+  alerts: WeatherAlert[];
 }
 
 export interface FarmerProfile {
@@ -64,10 +66,9 @@ export interface FarmerProfile {
     nationalId: string;
     farmRegistration: string;
     emergencyContact: string;
-    profilePhoto?: string;
   };
   preferences: {
-    language: 'en' | 'ar' | 'fr';
+    language: 'en' | 'fr' | 'ar';
     notifications: {
       weather: boolean;
       risk: boolean;
@@ -85,27 +86,7 @@ export interface FarmerProfile {
     };
   };
   subscription: {
-    plan: 'basic' | 'premium' | 'enterprise';
+    plan: 'premium' | 'basic' | 'enterprise';
     status: 'active' | 'expired' | 'trial';
-    nextBilling: string;
-    paymentMethod: string;
   };
 }
-
-// Enhanced demo data for current farmer profile
-export const getEnhancedFarmerData = () => {
-  const currentProfileId = getCurrentProfile();
-  const profile = getFarmerProfile(currentProfileId);
-  
-  return {
-    plots: profile.plots,
-    weather: profile.weather,
-    profile: profile.profile,
-    alerts: profile.alerts,
-    recentActivity: profile.recentActivity,
-    claims: profile.claims || []
-  };
-};
-
-import { getFarmerProfile } from './farmerProfiles';
-import { getCurrentProfile } from './auth';
