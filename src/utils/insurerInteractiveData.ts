@@ -8,7 +8,6 @@ export interface FilteredData {
   riskFactors: any[];
   overallRiskScore: number;
   alerts: any[];
-  claims: any[];
 }
 
 export const getFilteredInsurerData = (
@@ -139,22 +138,6 @@ export const getFilteredInsurerData = (
     return alerts;
   };
 
-  // Filter claims based on selection
-  const getFilteredClaims = () => {
-    let claims = baseData.claims;
-    if (selectedFarmer) {
-      claims = claims.filter(claim => 
-        claim.farmer.toLowerCase().includes(selectedFarmer.toLowerCase())
-      );
-    }
-    if (selectedRegion) {
-      claims = claims.filter(claim => 
-        claim.location && claim.location.toLowerCase().includes(selectedRegion.toLowerCase())
-      );
-    }
-    return claims;
-  };
-
   return {
     farmers: filteredFarmers,
     regionalRisks: getRegionSpecificData(selectedRegion),
@@ -166,7 +149,6 @@ export const getFilteredInsurerData = (
       { name: 'Crop Diversity', value: 61, trend: 'up', color: 'text-yellow-600' }
     ],
     overallRiskScore: calculateOverallRisk(),
-    alerts: getFilteredAlerts(),
-    claims: getFilteredClaims()
+    alerts: getFilteredAlerts()
   };
 };

@@ -100,7 +100,9 @@ export const getDemoInsurerData = () => ({
       risk: "Low",
       riskScore: 2.5,
       documentation: "Complete Profile",
-      validation: "RADI Verified"
+      validation: "RADI Verified",
+      policy: "Active",
+      lastUpdate: "2024-02-15"
     },
     {
       id: 2,
@@ -111,7 +113,9 @@ export const getDemoInsurerData = () => ({
       risk: "Medium",
       riskScore: 5.8,
       documentation: "Profile Updated",
-      validation: "Assessment Complete"
+      validation: "Assessment Complete",
+      policy: "Active",
+      lastUpdate: "2024-02-14"
     },
     {
       id: 3,
@@ -122,7 +126,9 @@ export const getDemoInsurerData = () => ({
       risk: "High",
       riskScore: 8.2,
       documentation: "Documentation Submitted",
-      validation: "Under Review"
+      validation: "Under Review",
+      policy: "Pending",
+      lastUpdate: "2024-02-13"
     }
   ],
   alerts: [
@@ -242,14 +248,47 @@ export const clearUserSession = () => {
   localStorage.removeItem('currentUser');
 };
 
+// Current farmer profile management
+let currentProfile = 'ahmed';
+
+export const switchFarmerProfile = (profileId: string) => {
+  currentProfile = profileId;
+  localStorage.setItem('currentProfile', profileId);
+};
+
+export const getCurrentProfile = (): string => {
+  const stored = localStorage.getItem('currentProfile');
+  return stored || 'ahmed';
+};
+
+// Authentication helper functions
+export const isAuthenticated = (): boolean => {
+  return getUserSession() !== null;
+};
+
+export const getDashboardRoute = (userType: string): string => {
+  switch (userType) {
+    case 'farmer':
+      return '/farmer-dashboard';
+    case 'insurer':
+      return '/insurer-dashboard';
+    case 'institution':
+      return '/institution-dashboard';
+    case 'admin':
+      return '/admin-dashboard';
+    default:
+      return '/';
+  }
+};
+
 // Demo login function
-export const loginUser = (email: string, password: string): User | null => {
+export const authenticateUser = (email: string, password: string): User | null => {
   // Demo users for different roles
   const demoUsers: User[] = [
     {
       id: "farmer-001",
       name: "Ahmed Ben Salem",
-      email: "farmer@demo.com",
+      email: "farmer@radi.app",
       userType: "farmer",
       location: "Skikda, Algeria",
       farmSize: 65.4
@@ -257,31 +296,33 @@ export const loginUser = (email: string, password: string): User | null => {
     {
       id: "insurer-001", 
       name: "CRMA Representative",
-      email: "insurer@demo.com",
+      email: "crma@radi.app",
       userType: "insurer",
       location: "Skikda Regional Office"
     },
     {
       id: "institution-001",
       name: "Ministry Official",
-      email: "institution@demo.com", 
+      email: "institution@radi.app", 
       userType: "institution",
       location: "Algiers, Algeria"
     },
     {
       id: "admin-001",
       name: "System Administrator",
-      email: "admin@demo.com",
+      email: "admin@radi.app",
       userType: "admin", 
       location: "System Admin"
     }
   ];
 
   const user = demoUsers.find(u => u.email === email);
-  if (user && password === "demo") {
+  if (user && (password === "farmer123" || password === "insurer123" || password === "institution123" || password === "admin123")) {
     setUserSession(user);
     return user;
   }
   
   return null;
 };
+
+export const loginUser = authenticateUser;
