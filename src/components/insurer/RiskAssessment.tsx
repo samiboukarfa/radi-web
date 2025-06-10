@@ -1,40 +1,19 @@
-
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { getFilteredInsurerData } from '@/utils/insurerInteractiveData';
-import { 
-  AlertTriangle, 
-  TrendingUp, 
-  TrendingDown, 
-  MapPin, 
-  Search, 
-  Calendar,
-  Thermometer,
-  Droplets,
-  Wind,
-  Sun,
-  User,
-  Target
-} from 'lucide-react';
-
+import { AlertTriangle, TrendingUp, TrendingDown, MapPin, Search, Calendar, Thermometer, Droplets, Wind, Sun, User, Target } from 'lucide-react';
 const RiskAssessment = () => {
   const [selectedFarmer, setSelectedFarmer] = useState<string>('');
   const [selectedRegion, setSelectedRegion] = useState<string>('');
   const [timeframe, setTimeframe] = useState<string>('6months');
-
-  const filteredData = useMemo(() => 
-    getFilteredInsurerData(selectedFarmer, selectedRegion, timeframe),
-    [selectedFarmer, selectedRegion, timeframe]
-  );
-
+  const filteredData = useMemo(() => getFilteredInsurerData(selectedFarmer, selectedRegion, timeframe), [selectedFarmer, selectedRegion, timeframe]);
   const getRiskColor = (score: number) => {
     if (score >= 70) return 'bg-red-100 text-red-800 border-red-200';
     if (score >= 50) return 'bg-yellow-100 text-yellow-800 border-yellow-200';
     return 'bg-green-100 text-green-800 border-green-200';
   };
-
   const getTrendIcon = (trend: string) => {
     switch (trend) {
       case 'up':
@@ -53,31 +32,20 @@ const RiskAssessment = () => {
     setSelectedFarmer('');
     setSelectedRegion('');
   };
-
-  return (
-    <div className="space-y-6">
+  return <div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Risk Assessment</h1>
           <p className="text-gray-600">
-            {selectedFarmer && selectedRegion ? 
-              `Analyzing ${selectedFarmer} in ${selectedRegion}` :
-              selectedFarmer ? 
-              `Analyzing ${selectedFarmer}` :
-              selectedRegion ?
-              `Analyzing ${selectedRegion} region` :
-              'Monitor and analyze risk factors across your portfolio'
-            }
+            {selectedFarmer && selectedRegion ? `Analyzing ${selectedFarmer} in ${selectedRegion}` : selectedFarmer ? `Analyzing ${selectedFarmer}` : selectedRegion ? `Analyzing ${selectedRegion} region` : 'Monitor and analyze risk factors across your portfolio'}
           </p>
         </div>
         <div className="flex space-x-3">
-          {(selectedFarmer || selectedRegion) && (
-            <Button variant="outline" onClick={clearSelections}>
+          {(selectedFarmer || selectedRegion) && <Button variant="outline" onClick={clearSelections}>
               <Target className="h-4 w-4 mr-2" />
               Clear Filters
-            </Button>
-          )}
+            </Button>}
           <Button variant="outline">
             <Calendar className="h-4 w-4 mr-2" />
             Generate Report
@@ -101,21 +69,15 @@ const RiskAssessment = () => {
           <CardContent>
             <div className="relative">
               <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-              <select
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                value={selectedFarmer}
-                onChange={(e) => setSelectedFarmer(e.target.value)}
-              >
+              <select className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" value={selectedFarmer} onChange={e => setSelectedFarmer(e.target.value)}>
                 <option value="">All farmers...</option>
                 <option value="Ahmed Ben Ahmed">Ahmed Ben Ahmed - Skikda</option>
                 <option value="Salem Khrobi">Salem Khrobi - Constantine (Case Study)</option>
                 <option value="Hamza Dawdi">Hamza Dawdi - Constantine (Case Study)</option>
               </select>
-              {selectedFarmer && (
-                <div className="mt-2 p-2 bg-blue-50 rounded text-xs text-blue-700">
+              {selectedFarmer && <div className="mt-2 p-2 bg-blue-50 rounded text-xs text-blue-700">
                   <strong>Selected:</strong> {selectedFarmer}
-                </div>
-              )}
+                </div>}
             </div>
           </CardContent>
         </Card>
@@ -128,11 +90,7 @@ const RiskAssessment = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <select
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              value={selectedRegion}
-              onChange={(e) => setSelectedRegion(e.target.value)}
-            >
+            <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" value={selectedRegion} onChange={e => setSelectedRegion(e.target.value)}>
               <option value="">All Regions</option>
               <option value="Constantine">Constantine (Case Studies)</option>
               <option value="Skikda">Skikda</option>
@@ -140,14 +98,10 @@ const RiskAssessment = () => {
               <option value="Batna">Batna</option>
               <option value="Tlemcen">Tlemcen</option>
             </select>
-            {selectedRegion && (
-              <div className="mt-2 p-2 bg-green-50 rounded text-xs text-green-700">
+            {selectedRegion && <div className="mt-2 p-2 bg-green-50 rounded text-xs text-green-700">
                 <strong>Active Region:</strong> {selectedRegion}
-                {selectedRegion === 'Constantine' && (
-                  <p className="mt-1">Includes Salem & Hamza case studies</p>
-                )}
-              </div>
-            )}
+                {selectedRegion === 'Constantine' && <p className="mt-1">Includes Salem & Hamza case studies</p>}
+              </div>}
           </CardContent>
         </Card>
 
@@ -156,11 +110,7 @@ const RiskAssessment = () => {
             <CardTitle className="text-lg">Time Frame</CardTitle>
           </CardHeader>
           <CardContent>
-            <select
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              value={timeframe}
-              onChange={(e) => setTimeframe(e.target.value)}
-            >
+            <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" value={timeframe} onChange={e => setTimeframe(e.target.value)}>
               <option value="1month">Last Month</option>
               <option value="3months">Last 3 Months</option>
               <option value="6months">Last 6 Months</option>
@@ -171,37 +121,26 @@ const RiskAssessment = () => {
       </div>
 
       {/* Dynamic Context Banner */}
-      {(selectedFarmer || selectedRegion) && (
-        <Card className="border-2 border-blue-200 bg-blue-50">
+      {(selectedFarmer || selectedRegion) && <Card className="border-2 border-blue-200 bg-blue-50">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
               <Target className="h-5 w-5 text-blue-600" />
               <h3 className="font-semibold text-blue-900">Focused Analysis Active</h3>
             </div>
             <p className="text-sm text-blue-700 mt-1">
-              {selectedFarmer && selectedRegion ? 
-                `Displaying risk analysis specifically for ${selectedFarmer} in ${selectedRegion} region over the ${timeframe}.` :
-                selectedFarmer ? 
-                `Showing risk profile and recommendations tailored for ${selectedFarmer}.` :
-                `Regional analysis focused on ${selectedRegion} with ${filteredData.farmers.length} farmers.`
-              }
+              {selectedFarmer && selectedRegion ? `Displaying risk analysis specifically for ${selectedFarmer} in ${selectedRegion} region over the ${timeframe}.` : selectedFarmer ? `Showing risk profile and recommendations tailored for ${selectedFarmer}.` : `Regional analysis focused on ${selectedRegion} with ${filteredData.farmers.length} farmers.`}
             </p>
           </CardContent>
-        </Card>
-      )}
+        </Card>}
 
       {/* Overall Risk Score - Dynamic */}
       <Card>
         <CardHeader>
           <CardTitle>
-            {selectedFarmer ? `${selectedFarmer} Risk Profile` : 
-             selectedRegion ? `${selectedRegion} Regional Risk Overview` :
-             'Portfolio Risk Overview'}
+            {selectedFarmer ? `${selectedFarmer} Risk Profile` : selectedRegion ? `${selectedRegion} Regional Risk Overview` : 'Portfolio Risk Overview'}
           </CardTitle>
           <CardDescription>
-            {selectedFarmer ? 'Individual farmer risk assessment' :
-             selectedRegion ? `Risk assessment for ${selectedRegion} region` :
-             'Current risk assessment across all farmers'}
+            {selectedFarmer ? 'Individual farmer risk assessment' : selectedRegion ? `Risk assessment for ${selectedRegion} region` : 'Current risk assessment across all farmers'}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -209,20 +148,8 @@ const RiskAssessment = () => {
             <div className="text-center">
               <div className="relative w-24 h-24 mx-auto mb-3">
                 <svg className="w-24 h-24" viewBox="0 0 36 36">
-                  <path
-                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                    fill="none"
-                    stroke="#E5E7EB"
-                    strokeWidth="3"
-                  />
-                  <path
-                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                    fill="none"
-                    stroke={filteredData.overallRiskScore >= 70 ? "#EF4444" : 
-                            filteredData.overallRiskScore >= 50 ? "#F59E0B" : "#10B981"}
-                    strokeWidth="3"
-                    strokeDasharray={`${filteredData.overallRiskScore}, 100`}
-                  />
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#E5E7EB" strokeWidth="3" />
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke={filteredData.overallRiskScore >= 70 ? "#EF4444" : filteredData.overallRiskScore >= 50 ? "#F59E0B" : "#10B981"} strokeWidth="3" strokeDasharray={`${filteredData.overallRiskScore}, 100`} />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <span className="text-2xl font-bold text-gray-900">{filteredData.overallRiskScore}</span>
@@ -230,13 +157,11 @@ const RiskAssessment = () => {
               </div>
               <p className="text-sm font-medium text-gray-900">Overall Risk Score</p>
               <p className="text-xs text-gray-500">
-                {filteredData.overallRiskScore >= 70 ? 'High Risk' :
-                 filteredData.overallRiskScore >= 50 ? 'Medium Risk' : 'Low Risk'}
+                {filteredData.overallRiskScore >= 70 ? 'High Risk' : filteredData.overallRiskScore >= 50 ? 'Medium Risk' : 'Low Risk'}
               </p>
             </div>
 
-            {filteredData.riskFactors.map((factor, index) => (
-              <div key={index} className="text-center">
+            {filteredData.riskFactors.map((factor, index) => <div key={index} className="text-center">
                 <div className="flex items-center justify-center mb-2">
                   <span className={`text-2xl font-bold ${factor.color}`}>{factor.value}</span>
                   <div className="ml-2">
@@ -245,16 +170,11 @@ const RiskAssessment = () => {
                 </div>
                 <p className="text-sm font-medium text-gray-900">{factor.name}</p>
                 <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-                  <div 
-                    className={`h-2 rounded-full ${
-                      factor.value >= 70 ? 'bg-red-500' :
-                      factor.value >= 50 ? 'bg-yellow-500' : 'bg-green-500'
-                    }`}
-                    style={{ width: `${factor.value}%` }}
-                  />
+                  <div className={`h-2 rounded-full ${factor.value >= 70 ? 'bg-red-500' : factor.value >= 50 ? 'bg-yellow-500' : 'bg-green-500'}`} style={{
+                width: `${factor.value}%`
+              }} />
                 </div>
-              </div>
-            ))}
+              </div>)}
           </div>
         </CardContent>
       </Card>
@@ -269,8 +189,7 @@ const RiskAssessment = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {filteredData.regionalRisks.map((region, index) => (
-              <div key={index} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+            {filteredData.regionalRisks.map((region, index) => <div key={index} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                 <div className="flex items-center space-x-4">
                   <MapPin className="h-5 w-5 text-gray-400" />
                   <div>
@@ -278,9 +197,7 @@ const RiskAssessment = () => {
                     <p className="text-sm text-gray-500">
                       {region.farmers} farmers • {region.avgYield}% avg yield
                     </p>
-                    {region.details && (
-                      <p className="text-xs text-blue-600 mt-1">{region.details}</p>
-                    )}
+                    {region.details && <p className="text-xs text-blue-600 mt-1">{region.details}</p>}
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
@@ -293,8 +210,7 @@ const RiskAssessment = () => {
                   </Badge>
                   {getTrendIcon(region.trend)}
                 </div>
-              </div>
-            ))}
+              </div>)}
           </div>
         </CardContent>
       </Card>
@@ -304,8 +220,7 @@ const RiskAssessment = () => {
         <CardHeader>
           <CardTitle>Weather Risk Analysis</CardTitle>
           <CardDescription>
-            {selectedRegion ? `Weather conditions for ${selectedRegion}` : 
-             'Current weather conditions and 5-day forecast impact'}
+            {selectedRegion ? `Weather conditions for ${selectedRegion}` : 'Current weather conditions and 5-day forecast impact'}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -315,9 +230,7 @@ const RiskAssessment = () => {
               <p className="text-sm font-medium text-gray-900">Temperature</p>
               <p className="text-2xl font-bold text-gray-900">{filteredData.weatherData.temperature.current}°C</p>
               <div className="flex justify-center space-x-1 mt-2">
-                {filteredData.weatherData.temperature.forecast.map((temp, i) => (
-                  <div key={i} className="text-xs text-gray-500">{temp}°</div>
-                ))}
+                {filteredData.weatherData.temperature.forecast.map((temp, i) => <div key={i} className="text-xs text-gray-500">{temp}°</div>)}
               </div>
               <Badge className={getRiskColor(filteredData.weatherData.temperature.risk === 'medium' ? 55 : 30)} variant="outline">
                 {filteredData.weatherData.temperature.risk} risk
@@ -329,9 +242,7 @@ const RiskAssessment = () => {
               <p className="text-sm font-medium text-gray-900">Precipitation</p>
               <p className="text-2xl font-bold text-gray-900">{filteredData.weatherData.precipitation.current}mm</p>
               <div className="flex justify-center space-x-1 mt-2">
-                {filteredData.weatherData.precipitation.forecast.map((prec, i) => (
-                  <div key={i} className="text-xs text-gray-500">{prec}mm</div>
-                ))}
+                {filteredData.weatherData.precipitation.forecast.map((prec, i) => <div key={i} className="text-xs text-gray-500">{prec}mm</div>)}
               </div>
               <Badge className={getRiskColor(filteredData.weatherData.precipitation.risk === 'high' ? 75 : 30)} variant="outline">
                 {filteredData.weatherData.precipitation.risk} risk
@@ -343,9 +254,7 @@ const RiskAssessment = () => {
               <p className="text-sm font-medium text-gray-900">Humidity</p>
               <p className="text-2xl font-bold text-gray-900">{filteredData.weatherData.humidity.current}%</p>
               <div className="flex justify-center space-x-1 mt-2">
-                {filteredData.weatherData.humidity.forecast.map((hum, i) => (
-                  <div key={i} className="text-xs text-gray-500">{hum}%</div>
-                ))}
+                {filteredData.weatherData.humidity.forecast.map((hum, i) => <div key={i} className="text-xs text-gray-500">{hum}%</div>)}
               </div>
               <Badge className={getRiskColor(35)} variant="outline">
                 {filteredData.weatherData.humidity.risk} risk
@@ -357,9 +266,7 @@ const RiskAssessment = () => {
               <p className="text-sm font-medium text-gray-900">Wind Speed</p>
               <p className="text-2xl font-bold text-gray-900">{filteredData.weatherData.windSpeed.current} km/h</p>
               <div className="flex justify-center space-x-1 mt-2">
-                {filteredData.weatherData.windSpeed.forecast.map((wind, i) => (
-                  <div key={i} className="text-xs text-gray-500">{wind}</div>
-                ))}
+                {filteredData.weatherData.windSpeed.forecast.map((wind, i) => <div key={i} className="text-xs text-gray-500">{wind}</div>)}
               </div>
               <Badge className={getRiskColor(filteredData.weatherData.windSpeed.risk === 'medium' ? 55 : 25)} variant="outline">
                 {filteredData.weatherData.windSpeed.risk} risk
@@ -370,8 +277,7 @@ const RiskAssessment = () => {
       </Card>
 
       {/* Filtered Alerts */}
-      {filteredData.alerts.length > 0 && (
-        <Card>
+      {filteredData.alerts.length > 0 && <Card>
           <CardHeader>
             <CardTitle>
               Active Alerts
@@ -383,8 +289,7 @@ const RiskAssessment = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {filteredData.alerts.map((alert) => (
-                <div key={alert.id} className="border border-gray-200 rounded-lg p-4">
+              {filteredData.alerts.map(alert => <div key={alert.id} className="border border-gray-200 rounded-lg p-4">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <h4 className="font-medium text-gray-900 text-sm">{alert.title}</h4>
@@ -393,29 +298,21 @@ const RiskAssessment = () => {
                       </p>
                       <p className="text-xs text-gray-500 mt-1">{alert.time}</p>
                     </div>
-                    <Badge className={
-                      alert.severity === 'high' ? 'bg-red-100 text-red-800 border-red-200' :
-                      alert.severity === 'medium' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' :
-                      'bg-green-100 text-green-800 border-green-200'
-                    } variant="outline">
+                    <Badge className={alert.severity === 'high' ? 'bg-red-100 text-red-800 border-red-200' : alert.severity === 'medium' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' : 'bg-green-100 text-green-800 border-green-200'} variant="outline">
                       {alert.severity.toUpperCase()}
                     </Badge>
                   </div>
-                </div>
-              ))}
+                </div>)}
             </div>
           </CardContent>
-        </Card>
-      )}
+        </Card>}
 
       {/* Risk Predictions & Recommendations - Dynamic */}
       <Card>
         <CardHeader>
           <CardTitle>Risk Predictions & Recommendations</CardTitle>
           <CardDescription>
-            {selectedFarmer ? `Personalized recommendations for ${selectedFarmer}` :
-             selectedRegion ? `Regional strategies for ${selectedRegion}` :
-             'AI-powered risk forecasting and mitigation strategies'}
+            {selectedFarmer ? `Personalized recommendations for ${selectedFarmer}` : selectedRegion ? `Regional strategies for ${selectedRegion}` : 'AI-powered risk forecasting and mitigation strategies'}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -423,8 +320,7 @@ const RiskAssessment = () => {
             <div>
               <h3 className="font-semibold mb-3">30-Day Risk Forecast</h3>
               <div className="space-y-3">
-                {selectedFarmer === 'Salem Khrobi' ? (
-                  <>
+                {selectedFarmer === 'Salem Khrobi' ? <>
                     <div className="flex items-center justify-between p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                       <div>
                         <p className="font-medium text-yellow-800">Drought Monitoring</p>
@@ -443,9 +339,7 @@ const RiskAssessment = () => {
                         Week 2-3
                       </Badge>
                     </div>
-                  </>
-                ) : selectedFarmer === 'Hamza Dawdi' ? (
-                  <>
+                  </> : selectedFarmer === 'Hamza Dawdi' ? <>
                     <div className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
                       <div>
                         <p className="font-medium text-green-800">Recovery Monitoring</p>
@@ -464,9 +358,7 @@ const RiskAssessment = () => {
                         Ongoing
                       </Badge>
                     </div>
-                  </>
-                ) : (
-                  <>
+                  </> : <>
                     <div className="flex items-center justify-between p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                       <div>
                         <p className="font-medium text-yellow-800">
@@ -489,15 +381,13 @@ const RiskAssessment = () => {
                         Week 4
                       </Badge>
                     </div>
-                  </>
-                )}
+                  </>}
               </div>
             </div>
             <div>
               <h3 className="font-semibold mb-3">Recommended Actions</h3>
               <div className="space-y-3">
-                {selectedFarmer === 'Salem Khrobi' ? (
-                  <>
+                {selectedFarmer === 'Salem Khrobi' ? <>
                     <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
                       <p className="font-medium text-green-800">Maintain Current Strategy</p>
                       <p className="text-sm text-green-600">Drought management is effective, continue monitoring</p>
@@ -506,9 +396,7 @@ const RiskAssessment = () => {
                       <p className="font-medium text-blue-800">Case Study Documentation</p>
                       <p className="text-sm text-blue-600">Document successful drought mitigation practices</p>
                     </div>
-                  </>
-                ) : selectedFarmer === 'Hamza Dawdi' ? (
-                  <>
+                  </> : selectedFarmer === 'Hamza Dawdi' ? <>
                     <div className="p-3 bg-orange-50 border border-orange-200 rounded-lg">
                       <p className="font-medium text-orange-800">Enhanced Monitoring</p>
                       <p className="text-sm text-orange-600">Increase weather pattern surveillance for early warning</p>
@@ -517,9 +405,7 @@ const RiskAssessment = () => {
                       <p className="font-medium text-purple-800">Recovery Support</p>
                       <p className="text-sm text-purple-600">Provide additional resources for crop recovery</p>
                     </div>
-                  </>
-                ) : (
-                  <>
+                  </> : <>
                     <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
                       <p className="font-medium text-green-800">
                         {selectedRegion ? `Focus on ${selectedRegion}` : 'Increase Monitoring'}
@@ -528,21 +414,13 @@ const RiskAssessment = () => {
                         {selectedRegion === 'Constantine' ? 'Support Salem and Hamza case studies' : 'Focus on high-risk farmers in affected regions'}
                       </p>
                     </div>
-                    <div className="p-3 bg-orange-50 border border-orange-200 rounded-lg">
-                      <p className="font-medium text-orange-800">Policy Adjustments</p>
-                      <p className="text-sm text-orange-600">
-                        {selectedRegion ? `Consider region-specific adjustments for ${selectedRegion}` : 'Consider premium adjustments for drought-prone areas'}
-                      </p>
-                    </div>
-                  </>
-                )}
+                    
+                  </>}
               </div>
             </div>
           </div>
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>;
 };
-
 export default RiskAssessment;
