@@ -89,14 +89,13 @@ const InsurerDashboardOverview = () => {
         </div>
       </div>
 
-      {/* Key Performance Indicators */}
+      {/* Key Performance Indicators - REMOVED FINANCIAL METRICS */}
       <div>
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Portfolio Performance Indicators</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           <StatCard title="Insured Farmers" value={data.kpis.totalFarmers} icon={Users} trend="+12% this quarter" color="blue" />
           <StatCard title="Coverage Area" value={`${data.kpis.totalArea.toLocaleString()} ha`} icon={MapPin} trend="+8% expansion" color="green" />
           <StatCard title="Active Policies" value={data.kpis.activePolicies} icon={Shield} trend="+15% new policies" color="purple" />
-          <StatCard title="Pending Claims" value={data.kpis.pendingClaims} icon={AlertCircle} color="orange" />
           <StatCard title="Risk Distribution" value={`${data.kpis.riskDistribution.low}% Low Risk`} icon={Activity} color="indigo" />
         </div>
       </div>
@@ -207,7 +206,7 @@ const InsurerDashboardOverview = () => {
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
-              Claims & Risk Alerts
+              Risk & Damage Alerts
               <Badge variant="destructive">{data.alerts.length}</Badge>
             </CardTitle>
             <CardDescription>Active notifications requiring CRMA attention</CardDescription>
@@ -235,14 +234,14 @@ const InsurerDashboardOverview = () => {
         </Card>
       </div>
 
-      {/* Comprehensive Claims Management */}
+      {/* Comprehensive Claims Management - REMOVED FINANCIAL INFO */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <FileText className="h-5 w-5 text-purple-600" />
-            <span>Claims Processing & Validation</span>
+            <span>Damage Documentation & Validation</span>
           </CardTitle>
-          <CardDescription>Detailed claims history including validation with satellite evidence</CardDescription>
+          <CardDescription>Detailed documentation including validation with satellite evidence</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -261,7 +260,7 @@ const InsurerDashboardOverview = () => {
                         </Badge>
                       )}
                     </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
                       <div>
                         <p className="text-gray-500">Farmer</p>
                         <p className="font-medium">{claim.farmer}</p>
@@ -289,7 +288,7 @@ const InsurerDashboardOverview = () => {
                     )}
                   </div>
                   <div className="text-right">
-                    <Badge variant={claim.status === 'Paid' ? 'default' : claim.status === 'Under Review' ? 'secondary' : 'outline'} className="mb-2">
+                    <Badge variant={claim.status === 'Approved' ? 'default' : claim.status === 'Under Review' ? 'secondary' : 'outline'} className="mb-2">
                       {claim.status}
                     </Badge>
                     {claim.farmer === 'Hamza Dawdi' && (
@@ -327,10 +326,17 @@ const InsurerDashboardOverview = () => {
               <p className="text-sm font-medium text-gray-900">Risk Assessment</p>
               <p className="text-xs text-gray-500">RADI score validation</p>
             </button>
+            
             <button className="p-4 border border-gray-200 rounded-lg hover:bg-purple-50 transition-colors">
               <FileText className="h-6 w-6 text-purple-600 mx-auto mb-2" />
-              <p className="text-sm font-medium text-gray-900">Report</p>
-              <p className="text-xs text-gray-500">Generate documentation</p>
+              <p className="text-sm font-medium text-gray-900">Generate Report</p>
+              <p className="text-xs text-gray-500">Damage documentation</p>
+            </button>
+            
+            <button className="p-4 border border-gray-200 rounded-lg hover:bg-orange-50 transition-colors">
+              <Shield className="h-6 w-6 text-orange-600 mx-auto mb-2" />
+              <p className="text-sm font-medium text-gray-900">Policy Management</p>
+              <p className="text-xs text-gray-500">Update coverage</p>
             </button>
           </div>
         </CardContent>

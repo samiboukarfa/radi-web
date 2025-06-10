@@ -30,7 +30,6 @@ export interface FarmerProfileData {
     date: string;
     event: string;
     status: string;
-    payout: number;
     evidence: string;
     insurer: string;
   }>;
@@ -251,9 +250,7 @@ const ahmedProfile: FarmerProfileData = {
     },
     subscription: {
       plan: 'premium' as const,
-      status: 'active' as const,
-      nextBilling: '2024-02-15',
-      paymentMethod: 'Credit Card ending in 4532'
+      status: 'active' as const
     }
   },
   alerts: [
@@ -410,9 +407,7 @@ const salemProfile: FarmerProfileData = {
     },
     subscription: {
       plan: 'premium' as const,
-      status: 'active' as const,
-      nextBilling: '2024-07-01',
-      paymentMethod: 'Bank Transfer'
+      status: 'active' as const
     }
   },
   alerts: [
@@ -442,7 +437,7 @@ const salemProfile: FarmerProfileData = {
   ]
 };
 
-// Hamza Dawdi - Constantine wheat farmer with hailstorm claim
+// Hamza Dawdi - Constantine wheat farmer with hailstorm claim (FINANCIAL INFO REMOVED)
 const hamzaProfile: FarmerProfileData = {
   personalInfo: {
     id: 123456779,
@@ -556,9 +551,7 @@ const hamzaProfile: FarmerProfileData = {
     },
     subscription: {
       plan: 'basic' as const,
-      status: 'active' as const,
-      nextBilling: '2024-06-15',
-      paymentMethod: 'Cash Payment'
+      status: 'active' as const
     }
   },
   alerts: [
@@ -583,10 +576,10 @@ const hamzaProfile: FarmerProfileData = {
   ],
   recentActivity: [
     'Hailstorm damage assessment completed using satellite data',
-    'CRMA claim CRMA-CLM-2023-001 approved for 45,000 DZD',
+    'CRMA damage claim documentation submitted',
     'Post-storm NDVI analysis shows crop damage confirmation',
     'Weather data validated: CAPE 2850 J/kg, Lifted Index -5.8°C',
-    'Insurance payout processed for hailstorm damage'
+    'Insurance documentation processed for hailstorm damage'
   ],
   claims: [
     {
@@ -594,7 +587,6 @@ const hamzaProfile: FarmerProfileData = {
       date: '2023-05-19',
       event: 'Hailstorm',
       status: 'Approved',
-      payout: 45000,
       evidence: 'Satellite-confirmed crop damage, NDVI drop from 0.22 to 0.18',
       insurer: 'CRMA'
     }
