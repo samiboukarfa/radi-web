@@ -1,326 +1,287 @@
+
 export interface User {
-  email: string;
+  id: string;
   name: string;
+  email: string;
   userType: 'farmer' | 'insurer' | 'institution' | 'admin';
-  phone?: string;
-  location?: string;
-  lastLogin?: string;
-  profileId?: string;
+  location: string;
+  farmSize?: number;
+  profilePicture?: string;
 }
 
-// Enhanced demo credentials with new case study profiles
-const DEMO_CREDENTIALS = {
-  'admin@radi.app': {
-    password: 'admin123',
-    userType: 'admin' as const,
-    name: 'Admin User',
-    location: 'Algiers, Algeria'
+// Demo farmer data
+export const getDemoFarmerData = () => ({
+  personalInfo: {
+    name: "Ahmed Ben Salem",
+    farmerId: "FARM-SKD-2024-001",
+    email: "ahmed.bensalem@example.com",
+    phone: "+213 555 0123",
+    location: "Skikda, Algeria",
+    farmSize: 65.4,
+    coordinates: [36.8765, 6.9811] as [number, number],
+    joinDate: "2023-03-15",
+    lastLogin: "2024-02-15T09:30:00Z"
   },
-  'farmer@radi.app': {
-    password: 'farmer123',
-    userType: 'farmer' as const,
-    name: 'Ahmed Benali',
-    location: 'Skikda, Algeria',
-    phone: '+213 555 123 456',
-    profileId: 'ahmed'
+  farmDetails: {
+    totalArea: 65.4,
+    cultivatedArea: 58.2,
+    irrigatedArea: 42.1,
+    primaryCrops: ["Wheat", "Barley", "Olives", "Vegetables"],
+    soilTypes: ["Clay Loam", "Sandy Loam", "Organic Rich"],
+    waterSources: ["Groundwater", "Drip Irrigation"],
+    equipment: ["Tractor", "Harvester", "Irrigation System"]
   },
-  'salem@radi.app': {
-    password: 'farmer123',
-    userType: 'farmer' as const,
-    name: 'Salem Khrobi',
-    location: 'Lkhrob, Constantine, Algeria',
-    phone: '+213 555 0123',
-    profileId: 'salem'
+  riskProfile: {
+    overallScore: 65,
+    weatherRisk: 70,
+    soilRisk: 45,
+    cropRisk: 60,
+    locationRisk: 55,
+    historicalLosses: [
+      { year: 2023, type: "Drought", severity: "Medium", area: 12.5 },
+      { year: 2022, type: "Hail", severity: "Low", area: 5.2 }
+    ]
   },
-  'hamza@radi.app': {
-    password: 'farmer123',
-    userType: 'farmer' as const,
-    name: 'Hamza Dawdi',
-    location: 'Mezaguet Roha, Constantine, Algeria',
-    phone: '+213 555 0124',
-    profileId: 'hamza'
-  },
-  'crma@radi.app': {
-    password: 'insurer123',
-    userType: 'insurer' as const,
-    name: 'Insurance Manager',
-    location: 'CRMA Alger Office',
-    phone: '+213 555 789 012'
-  },
-  'institution@radi.app': {
-    password: 'institution123',
-    userType: 'institution' as const,
-    name: 'Demo Institution',
-    location: 'Oran, Algeria'
-  }
-};
+  alerts: [
+    {
+      id: 1,
+      type: "weather",
+      severity: "medium",
+      title: "High Temperature Alert",
+      message: "Temperatures expected to reach 38°C this week",
+      timestamp: "2024-02-15T08:00:00Z",
+      location: "North Field"
+    },
+    {
+      id: 2,
+      type: "soil",
+      severity: "low",
+      title: "Soil Moisture Low",
+      message: "North field soil moisture below optimal levels",
+      timestamp: "2024-02-14T14:30:00Z",
+      location: "North Field"
+    }
+  ],
+  recentActivity: [
+    "Risk assessment updated for wheat crop",
+    "Weather alert resolved for south field",
+    "Sensor data synchronized for all plots",
+    "Documentation submitted for storm damage",
+    "Risk score recalculated based on recent data"
+  ]
+});
 
-export const authenticateUser = (email: string, password: string): User | null => {
-  const credential = DEMO_CREDENTIALS[email as keyof typeof DEMO_CREDENTIALS];
-  
-  if (credential && credential.password === password) {
-    return {
-      email,
-      name: credential.name,
-      userType: credential.userType,
-      location: credential.location,
-      phone: 'phone' in credential ? credential.phone : undefined,
-      profileId: 'profileId' in credential ? credential.profileId : undefined,
-      lastLogin: new Date().toLocaleString('en-US', {
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true
-      })
-    };
-  }
-  
-  return null;
-};
+// Demo insurer data
+export const getDemoInsurerData = () => ({
+  company: {
+    name: "CRMA",
+    fullName: "La Caisse Régionale de Mutualité Agricole",
+    license: "INS-ALG-2020-CRMA",
+    office: "Skikda Regional Office",
+    marketShare: "Leading Regional Provider",
+    ranking: "#1 in Eastern Algeria"
+  },
+  kpis: {
+    totalFarmers: 75,
+    totalArea: 4250,
+    riskDistribution: {
+      low: 45,
+      medium: 35,
+      high: 20
+    }
+  },
+  farmers: [
+    {
+      id: 1,
+      name: "Ahmed Ben Salem",
+      location: "Skikda",
+      crop: "Wheat & Olives",
+      area: 65.4,
+      risk: "Low",
+      riskScore: 2.5,
+      documentation: "Complete Profile",
+      validation: "RADI Verified"
+    },
+    {
+      id: 2,
+      name: "Fatima Kaddour",
+      location: "Constantine",
+      crop: "Barley & Vegetables",
+      area: 42.1,
+      risk: "Medium",
+      riskScore: 5.8,
+      documentation: "Profile Updated",
+      validation: "Assessment Complete"
+    },
+    {
+      id: 3,
+      name: "Hamza Dawdi",
+      location: "Setif",
+      crop: "Wheat",
+      area: 28.5,
+      risk: "High",
+      riskScore: 8.2,
+      documentation: "Documentation Submitted",
+      validation: "Under Review"
+    }
+  ],
+  alerts: [
+    {
+      id: 1,
+      title: "High Risk Weather Pattern Detected",
+      severity: "high",
+      farmer: "Hamza Dawdi",
+      location: "Setif",
+      time: "2 hours ago"
+    },
+    {
+      id: 2,
+      title: "Sensor Battery Low - Maintenance Required",
+      severity: "medium",
+      farmer: "Ahmed Ben Salem",
+      location: "Skikda",
+      time: "4 hours ago"
+    },
+    {
+      id: 3,
+      title: "Risk Assessment Update Required",
+      severity: "low",
+      farmer: "Fatima Kaddour",
+      location: "Constantine",
+      time: "1 day ago"
+    }
+  ],
+  documentation: [
+    {
+      id: 1,
+      farmer: "Hamza Dawdi",
+      type: "Hailstorm Damage Assessment",
+      status: "Validated",
+      date: "2024-01-20",
+      location: "Setif",
+      documentId: "DOC-2024-001",
+      evidence: "Satellite imagery confirms 15% crop damage in northern section. NDVI analysis shows significant vegetation stress patterns consistent with hail impact.",
+      weatherData: "Meteorological data confirms severe hailstorm on January 19, 2024, with hail diameter 2-3cm recorded at nearby weather station."
+    },
+    {
+      id: 2,
+      farmer: "Ahmed Ben Salem",
+      type: "Drought Impact Documentation",
+      status: "Under Review",
+      date: "2024-01-18",
+      location: "Skikda",
+      documentId: "DOC-2024-002",
+      evidence: "NDVI trending analysis shows declining vegetation health over 3-week period. Soil moisture sensors confirm extended dry conditions.",
+      weatherData: "Regional precipitation 65% below seasonal average. Temperature consistently 3-4°C above normal for January period."
+    },
+    {
+      id: 3,
+      farmer: "Fatima Kaddour",
+      type: "Preventive Assessment",
+      status: "Completed",
+      date: "2024-01-15",
+      location: "Constantine",
+      documentId: "DOC-2024-003"
+    }
+  ],
+  recentActivity: [
+    "Risk assessment completed for Hamza Dawdi (Setif region)",
+    "Documentation validated for hailstorm damage using satellite data",
+    "Weather alert system activated for high-risk areas",
+    "Farmer profile updated with latest RADI scores",
+    "Regional risk analysis updated with new meteorological data"
+  ]
+});
 
-export const setUserSession = (user: User): void => {
-  const sessionData = {
-    ...user,
-    lastLogin: new Date().toLocaleString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    })
-  };
-  localStorage.setItem('radiUser', JSON.stringify(sessionData));
+// Demo institution data
+export const getDemoInstitutionData = () => ({
+  organization: {
+    name: "Ministry of Agriculture and Rural Development",
+    department: "Agricultural Risk Management Division",
+    location: "Algiers, Algeria",
+    jurisdiction: "National"
+  },
+  metrics: {
+    totalFarmers: 2500000,
+    insuredFarmers: 185000,
+    coverage: 7.4,
+    registeredInsurers: 12,
+    activePrograms: 8
+  },
+  recentActivity: [
+    "New agricultural risk framework published",
+    "RADI methodology validation completed",
+    "Regional insurer licensing updated",
+    "Farmer registration system upgraded",
+    "Weather monitoring network expanded"
+  ]
+});
+
+// User session management
+let currentUser: User | null = null;
+
+export const setUserSession = (user: User) => {
+  currentUser = user;
+  localStorage.setItem('currentUser', JSON.stringify(user));
 };
 
 export const getUserSession = (): User | null => {
-  const userString = localStorage.getItem('radiUser');
-  if (userString) {
-    try {
-      return JSON.parse(userString);
-    } catch {
-      return null;
-    }
+  if (currentUser) return currentUser;
+  
+  const stored = localStorage.getItem('currentUser');
+  if (stored) {
+    currentUser = JSON.parse(stored);
+    return currentUser;
   }
+  
   return null;
 };
 
-export const clearUserSession = (): void => {
-  localStorage.removeItem('radiUser');
-  localStorage.removeItem('farmerDashboardPreferences');
-  localStorage.removeItem('currentProfile');
+export const clearUserSession = () => {
+  currentUser = null;
+  localStorage.removeItem('currentUser');
 };
 
-export const isAuthenticated = (): boolean => {
-  return getUserSession() !== null;
-};
+// Demo login function
+export const loginUser = (email: string, password: string): User | null => {
+  // Demo users for different roles
+  const demoUsers: User[] = [
+    {
+      id: "farmer-001",
+      name: "Ahmed Ben Salem",
+      email: "farmer@demo.com",
+      userType: "farmer",
+      location: "Skikda, Algeria",
+      farmSize: 65.4
+    },
+    {
+      id: "insurer-001", 
+      name: "CRMA Representative",
+      email: "insurer@demo.com",
+      userType: "insurer",
+      location: "Skikda Regional Office"
+    },
+    {
+      id: "institution-001",
+      name: "Ministry Official",
+      email: "institution@demo.com", 
+      userType: "institution",
+      location: "Algiers, Algeria"
+    },
+    {
+      id: "admin-001",
+      name: "System Administrator",
+      email: "admin@demo.com",
+      userType: "admin", 
+      location: "System Admin"
+    }
+  ];
 
-export const getDashboardRoute = (userType: string): string => {
-  switch (userType) {
-    case 'admin':
-      return '/admin-dashboard';
-    case 'farmer':
-      return '/farmer-dashboard';
-    case 'insurer':
-      return '/insurer-dashboard';
-    case 'institution':
-      return '/institution-dashboard';
-    default:
-      return '/';
+  const user = demoUsers.find(u => u.email === email);
+  if (user && password === "demo") {
+    setUserSession(user);
+    return user;
   }
+  
+  return null;
 };
-
-// Profile switching functionality
-export const switchFarmerProfile = (profileId: string): void => {
-  const currentUser = getUserSession();
-  if (!currentUser || currentUser.userType !== 'farmer') return;
-
-  const profiles = {
-    'ahmed': {
-      email: 'farmer@radi.app',
-      name: 'Ahmed Benali',
-      location: 'Skikda, Algeria',
-      phone: '+213 555 123 456'
-    },
-    'salem': {
-      email: 'salem@radi.app',
-      name: 'Salem Khrobi',
-      location: 'Lkhrob, Constantine, Algeria',
-      phone: '+213 555 0123'
-    },
-    'hamza': {
-      email: 'hamza@radi.app',
-      name: 'Hamza Dawdi',
-      location: 'Mezaguet Roha, Constantine, Algeria',
-      phone: '+213 555 0124'
-    }
-  };
-
-  const profile = profiles[profileId as keyof typeof profiles];
-  if (profile) {
-    const updatedUser = {
-      ...currentUser,
-      ...profile,
-      profileId
-    };
-    setUserSession(updatedUser);
-    localStorage.setItem('currentProfile', profileId);
-    window.location.reload();
-  }
-};
-
-export const getCurrentProfile = (): string => {
-  const user = getUserSession();
-  if (user?.profileId) return user.profileId;
-  return localStorage.getItem('currentProfile') || 'ahmed';
-};
-
-// Enhanced demo farmer data - legacy support
-export const getDemoFarmerData = () => ({
-  plots: [
-    { id: 1, name: 'North Field', crop: 'Wheat', area: 15.5, riskLevel: 'Medium', color: '#F59E0B' },
-    { id: 2, name: 'Olive Grove', crop: 'Olives', area: 8.2, riskLevel: 'Low', color: '#10B981' },
-    { id: 3, name: 'Vegetable Garden', crop: 'Tomatoes', area: 3.7, riskLevel: 'High', color: '#EF4444' },
-    { id: 4, name: 'Barley Field', crop: 'Barley', area: 22.1, riskLevel: 'Low', color: '#10B981' }
-  ],
-  alerts: [
-    { id: 1, title: 'High Temperature Warning', severity: 'high', time: '2 hours ago', plot: 'Vegetable Garden' },
-    { id: 2, title: 'Irrigation Schedule Reminder', severity: 'medium', time: '4 hours ago', plot: 'North Field' }
-  ],
-  recentActivity: [
-    'Plot "North Field" risk level updated to Medium',
-    'New weather alert: High temperature warning',
-    'Sensor data received from Olive Grove',
-    'Weekly report generated',
-    'Plot "Vegetable Garden" boundaries updated'
-  ],
-  weather: {
-    location: 'Skikda, Algeria',
-    temperature: 28,
-    condition: 'Partly Cloudy',
-    humidity: 65,
-    windSpeed: 12
-  }
-});
-
-// Enhanced demo insurer data with CRMA
-export const getDemoInsurerData = () => ({
-  company: {
-    name: 'CRMA - Caisse Régionale de Mutualité Agricole',
-    fullName: 'Caisse Régionale de Mutualité Agricole',
-    license: 'CRMA-2024-001',
-    office: 'CRMA Alger Office',
-    manager: 'Insurance Manager',
-    location: '24, boulevard Victor Hugo, Alger, Algeria',
-    description: 'Leader in agricultural insurance in Algeria with 77% market share',
-    tagline: 'Mutualité Agricole – حقكم أمانة',
-    marketShare: '77% of agricultural sector premiums',
-    ranking: '5th in Algerian property insurance market'
-  },
-  kpis: {
-    totalFarmers: 129,
-    totalArea: 2856.5,
-    activePolicies: 91,
-    pendingClaims: 13,
-    riskDistribution: { low: 45, medium: 35, high: 20 }
-  },
-  farmers: [
-    { 
-      id: 123456788, 
-      name: 'Ahmed Benali', 
-      location: 'Skikda', 
-      crop: 'Mixed (Wheat, Olives)', 
-      area: 49.5, 
-      risk: 'Medium', 
-      riskScore: 6.5,
-      policy: 'Active', 
-      policyNumber: 'CRMA-AGR-2024-001',
-      lastUpdate: '2024-01-15',
-      claims: []
-    },
-    { 
-      id: 123456789, 
-      name: 'Salem Khrobi', 
-      location: 'Lkhrob, Constantine', 
-      crop: 'Olives', 
-      area: 10, 
-      risk: 'Low', 
-      riskScore: 8.0,
-      policy: 'Active', 
-      policyNumber: 'CRMA-AGR-2024-002',
-      lastUpdate: '2024-01-14',
-      claims: []
-    },
-    { 
-      id: 123456779, 
-      name: 'Hamza Dawdi', 
-      location: 'Mezaguet Roha, Constantine', 
-      crop: 'Durum Wheat', 
-      area: 9, 
-      risk: 'High', 
-      riskScore: 3.0,
-      policy: 'Claim Approved', 
-      policyNumber: 'CRMA-AGR-2023-001',
-      lastUpdate: '2024-01-13',
-      claims: [{
-        date: '2023-05-19',
-        amount: 45000,
-        status: 'Paid',
-        cause: 'Hailstorm damage',
-        claimId: 'CRMA-CLM-2023-001'
-      }]
-    }
-  ],
-  claims: [
-    { 
-      id: 1, 
-      farmer: 'Hamza Dawdi', 
-      type: 'Hailstorm Damage', 
-      amount: 45000, 
-      status: 'Paid', 
-      date: '2023-05-19', 
-      location: 'Mezaguet Roha, Constantine', 
-      riskScore: 3.0,
-      claimId: 'CRMA-CLM-2023-001',
-      evidence: 'Satellite-confirmed crop damage, NDVI drop from 0.22 to 0.18',
-      weatherData: 'CAPE: 2850 J/kg, Lifted Index: -5.8°C'
-    },
-    { 
-      id: 2, 
-      farmer: 'Ahmed Benali', 
-      type: 'Drought Damage', 
-      amount: 32000, 
-      status: 'Under Review', 
-      date: '2024-01-08', 
-      location: 'Skikda', 
-      riskScore: 6.5 
-    }
-  ],
-  alerts: [
-    { 
-      id: 1, 
-      title: 'Moderate Drought Alert - Constantine Region', 
-      severity: 'medium', 
-      farmer: 'Salem Khrobi', 
-      time: '2 hours ago', 
-      location: 'Constantine' 
-    },
-    { 
-      id: 2, 
-      title: 'High LST Anomaly Detected', 
-      severity: 'high', 
-      farmer: 'Salem Khrobi', 
-      time: '4 hours ago', 
-      location: 'Lkhrob, Constantine' 
-    },
-    { 
-      id: 3, 
-      title: 'Weather Warning - High Temperature', 
-      severity: 'high', 
-      farmer: 'Multiple Farmers', 
-      time: '6 hours ago', 
-      location: 'Multiple Regions' 
-    }
-  ],
-  recentActivity: [
-    'New farmer registration: Salem Khrobi from Constantine',
-    'Risk level updated: Ahmed Benali - Medium',
-    'Weather alert issued for Constantine region'
-  ]
-});

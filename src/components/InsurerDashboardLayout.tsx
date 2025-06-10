@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { clearUserSession, getUserSession, getDemoInsurerData } from '@/utils/auth';
@@ -9,7 +7,6 @@ import {
   Users, 
   AlertTriangle, 
   FileText, 
-  PieChart, 
   Shield,
   Bell,
   LogOut,
@@ -49,9 +46,8 @@ const InsurerDashboardLayout: React.FC<InsurerDashboardLayoutProps> = ({
     { id: 'dashboard', label: 'Dashboard Overview', icon: LayoutDashboard },
     { id: 'farmers', label: 'Farmer Management', icon: Users },
     { id: 'risk', label: 'Risk Assessment', icon: AlertTriangle },
-    { id: 'claims', label: 'Claims & Alerts', icon: Bell },
-    { id: 'reports', label: 'Reports & Analytics', icon: FileText },
-    { id: 'portfolio', label: 'Portfolio Management', icon: PieChart }
+    { id: 'alerts', label: 'Risk & Alerts', icon: Bell },
+    { id: 'reports', label: 'Reports & Analytics', icon: FileText }
   ];
 
   const NavItem: React.FC<{ item: any; isMobile?: boolean }> = ({ item, isMobile = false }) => (
@@ -181,4 +177,3 @@ const InsurerDashboardLayout: React.FC<InsurerDashboardLayoutProps> = ({
 };
 
 export default InsurerDashboardLayout;
-

@@ -4,9 +4,8 @@ import InsurerDashboardLayout from '@/components/InsurerDashboardLayout';
 import InsurerDashboardOverview from '@/components/InsurerDashboardOverview';
 import FarmerManagement from '@/components/insurer/FarmerManagement';
 import RiskAssessment from '@/components/insurer/RiskAssessment';
-import ClaimsAlerts from '@/components/insurer/ClaimsAlerts';
+import RiskAlerts from '@/components/insurer/RiskAlerts';
 import ReportsAnalytics from '@/components/insurer/ReportsAnalytics';
-import PortfolioManagement from '@/components/insurer/PortfolioManagement';
 
 const InsurerDashboard = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
@@ -19,12 +18,10 @@ const InsurerDashboard = () => {
         return <FarmerManagement />;
       case 'risk':
         return <RiskAssessment />;
-      case 'claims':
-        return <ClaimsAlerts />;
+      case 'alerts':
+        return <RiskAlerts />;
       case 'reports':
         return <ReportsAnalytics />;
-      case 'portfolio':
-        return <PortfolioManagement />;
       default:
         return <InsurerDashboardOverview />;
     }

@@ -1,118 +1,136 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { getDemoInsurerData } from '@/utils/auth';
-import { FileText, Download, Calendar, TrendingUp, PieChart, BarChart3, Target, DollarSign, Users, AlertTriangle, Settings } from 'lucide-react';
+import { FileText, Download, Calendar, TrendingUp, BarChart3, Target, Users, AlertTriangle, Settings } from 'lucide-react';
+
 const ReportsAnalytics = () => {
   const data = getDemoInsurerData();
   const [selectedTimeframe, setSelectedTimeframe] = useState('monthly');
   const [selectedReportType, setSelectedReportType] = useState('performance');
+
   const performanceMetrics = {
-    claimsRatio: 15.2,
-    avgSettlementTime: 12,
+    avgAssessmentTime: 12,
     customerSatisfaction: 4.3,
     portfolioGrowth: 8.5,
     riskAccuracy: 87.3,
-    premiumCollection: 94.8
+    documentationRate: 94.8
   };
-  const reportTypes = [{
-    id: 'performance',
-    name: 'Performance Report',
-    description: 'Portfolio performance and KPI analysis',
-    icon: TrendingUp,
-    metrics: ['Claims Ratio', 'Settlement Time', 'Growth Rate', 'Collection Rate']
-  }, {
-    id: 'risk',
-    name: 'Risk Analytics Report',
-    description: 'Risk assessment accuracy and trends',
-    icon: AlertTriangle,
-    metrics: ['Risk Scoring Accuracy', 'Prediction Models', 'Regional Analysis', 'Trend Patterns']
-  }, {
-    id: 'financial',
-    name: 'Financial Report',
-    description: 'Revenue, claims, and profitability analysis',
-    icon: DollarSign,
-    metrics: ['Premium Revenue', 'Claims Payout', 'Profit Margins', 'Cost Analysis']
-  }, {
-    id: 'farmer',
-    name: 'Farmer Portfolio Report',
-    description: 'Individual farmer profiles and engagement',
-    icon: Users,
-    metrics: ['Registration Trends', 'Risk Profiles', 'Engagement Levels', 'Communication Logs']
-  }];
-  const monthlyData = [{
-    month: 'Aug',
-    premiums: 220000,
-    claims: 85000,
-    farmers: 115
-  }, {
-    month: 'Sep',
-    premiums: 235000,
-    claims: 92000,
-    farmers: 119
-  }, {
-    month: 'Oct',
-    premiums: 245000,
-    claims: 78000,
-    farmers: 123
-  }, {
-    month: 'Nov',
-    premiums: 240000,
-    claims: 105000,
-    farmers: 125
-  }, {
-    month: 'Dec',
-    premiums: 245000,
-    claims: 88000,
-    farmers: 127
-  }];
-  const regionalPerformance = [{
-    region: 'Skikda',
-    farmers: 15,
-    premiums: 45000,
-    claims: 12000,
-    ratio: 26.7
-  }, {
-    region: 'Constantine',
-    farmers: 22,
-    premiums: 66000,
-    claims: 8000,
-    ratio: 12.1
-  }, {
-    region: 'Setif',
-    farmers: 8,
-    premiums: 24000,
-    claims: 18000,
-    ratio: 75.0
-  }, {
-    region: 'Batna',
-    farmers: 18,
-    premiums: 54000,
-    claims: 9000,
-    ratio: 16.7
-  }, {
-    region: 'Tlemcen',
-    farmers: 12,
-    premiums: 36000,
-    claims: 6000,
-    ratio: 16.7
-  }];
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('fr-DZ', {
-      style: 'currency',
-      currency: 'DZD',
-      minimumFractionDigits: 0
-    }).format(amount);
-  };
+
+  const reportTypes = [
+    {
+      id: 'performance',
+      name: 'Performance Report',
+      description: 'Portfolio performance and KPI analysis',
+      icon: TrendingUp,
+      metrics: ['Assessment Time', 'Documentation Rate', 'Growth Rate', 'Accuracy Score']
+    },
+    {
+      id: 'risk',
+      name: 'Risk Analytics Report',
+      description: 'Risk assessment accuracy and trends',
+      icon: AlertTriangle,
+      metrics: ['Risk Scoring Accuracy', 'Prediction Models', 'Regional Analysis', 'Trend Patterns']
+    },
+    {
+      id: 'operational',
+      name: 'Operational Report',
+      description: 'Documentation and process analysis',
+      icon: Target,
+      metrics: ['Processing Time', 'Documentation Quality', 'Service Metrics', 'Efficiency Analysis']
+    },
+    {
+      id: 'farmer',
+      name: 'Farmer Portfolio Report',
+      description: 'Individual farmer profiles and engagement',
+      icon: Users,
+      metrics: ['Registration Trends', 'Risk Profiles', 'Engagement Levels', 'Communication Logs']
+    }
+  ];
+
+  const monthlyData = [
+    {
+      month: 'Aug',
+      farmers: 115,
+      assessments: 85,
+      documentation: 78
+    },
+    {
+      month: 'Sep',
+      farmers: 119,
+      assessments: 92,
+      documentation: 86
+    },
+    {
+      month: 'Oct',
+      farmers: 123,
+      assessments: 78,
+      documentation: 95
+    },
+    {
+      month: 'Nov',
+      farmers: 125,
+      assessments: 105,
+      documentation: 102
+    },
+    {
+      month: 'Dec',
+      farmers: 127,
+      assessments: 88,
+      documentation: 91
+    }
+  ];
+
+  const regionalPerformance = [
+    {
+      region: 'Skikda',
+      farmers: 15,
+      assessments: 45,
+      documentation: 42,
+      efficiency: 93.3
+    },
+    {
+      region: 'Constantine', 
+      farmers: 22,
+      assessments: 66,
+      documentation: 58,
+      efficiency: 87.9
+    },
+    {
+      region: 'Setif',
+      farmers: 8,
+      assessments: 24,
+      documentation: 18,
+      efficiency: 75.0
+    },
+    {
+      region: 'Batna',
+      farmers: 18,
+      assessments: 54,
+      documentation: 49,
+      efficiency: 90.7
+    },
+    {
+      region: 'Tlemcen',
+      farmers: 12,
+      assessments: 36,
+      documentation: 33,
+      efficiency: 91.7
+    }
+  ];
+
   const getPerformanceColor = (value: number, type: string) => {
-    if (type === 'ratio' && value > 50) return 'text-red-600';
-    if (type === 'ratio' && value > 25) return 'text-yellow-600';
+    if (type === 'efficiency' && value > 90) return 'text-green-600';
+    if (type === 'efficiency' && value > 80) return 'text-yellow-600';
     if (type === 'growth' && value > 5) return 'text-green-600';
     if (type === 'accuracy' && value > 85) return 'text-green-600';
     return 'text-gray-600';
   };
-  return <div className="space-y-6">
+
+  return (
+    <div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
@@ -132,13 +150,12 @@ const ReportsAnalytics = () => {
       </div>
 
       {/* Quick Performance Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         <Card>
           <CardContent className="p-4">
             <div className="text-center">
-              <p className="text-sm text-gray-600">Avg Settlement</p>
-              <p className="text-2xl font-bold text-blue-600">{performanceMetrics.avgSettlementTime} days</p>
+              <p className="text-sm text-gray-600">Avg Assessment</p>
+              <p className="text-2xl font-bold text-blue-600">{performanceMetrics.avgAssessmentTime} days</p>
               <p className="text-xs text-gray-500">Target: &lt;15 days</p>
             </div>
           </CardContent>
@@ -177,9 +194,9 @@ const ReportsAnalytics = () => {
         <Card>
           <CardContent className="p-4">
             <div className="text-center">
-              <p className="text-sm text-gray-600">Collection Rate</p>
-              <p className="text-2xl font-bold text-green-600">{performanceMetrics.premiumCollection}%</p>
-              <p className="text-xs text-gray-500">Premium collection</p>
+              <p className="text-sm text-gray-600">Documentation Rate</p>
+              <p className="text-2xl font-bold text-green-600">{performanceMetrics.documentationRate}%</p>
+              <p className="text-xs text-gray-500">Completion rate</p>
             </div>
           </CardContent>
         </Card>
@@ -195,7 +212,11 @@ const ReportsAnalytics = () => {
           <CardContent className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Time Frame</label>
-              <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" value={selectedTimeframe} onChange={e => setSelectedTimeframe(e.target.value)}>
+              <select 
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" 
+                value={selectedTimeframe} 
+                onChange={e => setSelectedTimeframe(e.target.value)}
+              >
                 <option value="weekly">Weekly</option>
                 <option value="monthly">Monthly</option>
                 <option value="quarterly">Quarterly</option>
@@ -207,7 +228,14 @@ const ReportsAnalytics = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Report Type</label>
               <div className="space-y-2">
-                {reportTypes.map(report => <div key={report.id} className={`p-3 border rounded-lg cursor-pointer transition-colors ${selectedReportType === report.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:bg-gray-50'}`} onClick={() => setSelectedReportType(report.id)}>
+                {reportTypes.map(report => (
+                  <div 
+                    key={report.id} 
+                    className={`p-3 border rounded-lg cursor-pointer transition-colors ${
+                      selectedReportType === report.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:bg-gray-50'
+                    }`} 
+                    onClick={() => setSelectedReportType(report.id)}
+                  >
                     <div className="flex items-center space-x-3">
                       <report.icon className="h-5 w-5 text-gray-600" />
                       <div>
@@ -215,7 +243,8 @@ const ReportsAnalytics = () => {
                         <p className="text-xs text-gray-500">{report.description}</p>
                       </div>
                     </div>
-                  </div>)}
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -232,14 +261,43 @@ const ReportsAnalytics = () => {
           </CardContent>
         </Card>
 
-        
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle>Regional Performance Analysis</CardTitle>
+            <CardDescription>Service efficiency and performance by region</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-gray-200">
+                    <th className="text-left py-3 px-4 font-medium text-gray-900">Region</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-900">Farmers</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-900">Assessments</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-900">Documentation</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-900">Efficiency</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {regionalPerformance.map((region, index) => (
+                    <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
+                      <td className="py-3 px-4 font-medium">{region.region}</td>
+                      <td className="py-3 px-4">{region.farmers}</td>
+                      <td className="py-3 px-4">{region.assessments}</td>
+                      <td className="py-3 px-4">{region.documentation}</td>
+                      <td className="py-3 px-4">
+                        <span className={getPerformanceColor(region.efficiency, 'efficiency')}>
+                          {region.efficiency.toFixed(1)}%
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
       </div>
-
-      {/* Regional Performance Analysis */}
-      <Card>
-        
-        
-      </Card>
 
       {/* Scheduled Reports */}
       <Card>
@@ -281,7 +339,7 @@ const ReportsAnalytics = () => {
               <div className="flex items-center space-x-4">
                 <Calendar className="h-5 w-5 text-gray-400" />
                 <div>
-                  <h3 className="font-medium">Quarterly Financial Analysis</h3>
+                  <h3 className="font-medium">Quarterly Operational Analysis</h3>
                   <p className="text-sm text-gray-500">Every quarter end • PDF + Excel • Management review</p>
                 </div>
               </div>
@@ -298,6 +356,8 @@ const ReportsAnalytics = () => {
           </div>
         </CardContent>
       </Card>
-    </div>;
+    </div>
+  );
 };
+
 export default ReportsAnalytics;

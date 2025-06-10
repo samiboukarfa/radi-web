@@ -14,7 +14,6 @@ import {
   FileText, 
   MapPin,
   Calendar,
-  DollarSign,
   Filter,
   Search,
   Download,
@@ -22,28 +21,27 @@ import {
   Satellite
 } from 'lucide-react';
 
-const ClaimsAlerts = () => {
+const RiskAlerts = () => {
   const data = getDemoInsurerData();
-  const [activeTab, setActiveTab] = useState<'alerts' | 'claims'>('alerts');
+  const [activeTab, setActiveTab] = useState<'alerts' | 'assessments'>('alerts');
   const [alertFilter, setAlertFilter] = useState('all');
-  const [claimFilter, setClaimFilter] = useState('all');
-  const [expandedClaim, setExpandedClaim] = useState<number | null>(null);
+  const [assessmentFilter, setAssessmentFilter] = useState('all');
+  const [expandedAssessment, setExpandedAssessment] = useState<number | null>(null);
 
-  const additionalClaims = [
-    { id: 4, farmer: 'Youcef Hammadi', type: 'Flood Damage', amount: 28000, status: 'Under Review', date: '2024-01-15', location: 'Annaba', riskScore: 75 },
-    { id: 5, farmer: 'Leila Benaissa', type: 'Crop Disease', amount: 15000, status: 'Investigating', date: '2024-01-12', location: 'Oran', riskScore: 45 },
-    { id: 6, farmer: 'Rachid Boumediene', type: 'Storm Damage', amount: 38000, status: 'Approved', date: '2024-01-08', location: 'Blida', riskScore: 68 }
+  const additionalAssessments = [
+    { id: 4, farmer: 'Youcef Hammadi', type: 'Flood Risk Evaluation', status: 'Under Review', date: '2024-01-15', location: 'Annaba', riskScore: 75 },
+    { id: 5, farmer: 'Leila Benaissa', type: 'Crop Disease Assessment', status: 'Investigating', date: '2024-01-12', location: 'Oran', riskScore: 45 },
+    { id: 6, farmer: 'Rachid Boumediene', type: 'Storm Damage Evaluation', status: 'Approved', date: '2024-01-08', location: 'Blida', riskScore: 68 }
   ];
-
-  const allClaims = [...data.claims, ...additionalClaims];
 
   const additionalAlerts = [
     { id: 4, title: 'Sensor Offline - Monitoring Issue', severity: 'medium', farmer: 'Youcef Hammadi', time: '1 hour ago', location: 'Annaba' },
     { id: 5, title: 'Crop Disease Detected - Urgent', severity: 'high', farmer: 'Leila Benaissa', time: '3 hours ago', location: 'Oran' },
-    { id: 6, title: 'Policy Renewal Due', severity: 'low', farmer: 'Rachid Boumediene', time: '5 hours ago', location: 'Blida' }
+    { id: 6, title: 'Weather Alert - Storm Warning', severity: 'high', farmer: 'Rachid Boumediene', time: '5 hours ago', location: 'Blida' }
   ];
 
   const allAlerts = [...data.alerts, ...additionalAlerts];
+  const allAssessments = [...additionalAssessments];
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -74,20 +72,12 @@ const ClaimsAlerts = () => {
     }
   };
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('fr-DZ', {
-      style: 'currency',
-      currency: 'DZD',
-      minimumFractionDigits: 0
-    }).format(amount);
-  };
-
   const filteredAlerts = allAlerts.filter(alert => 
     alertFilter === 'all' || alert.severity === alertFilter
   );
 
-  const filteredClaims = allClaims.filter(claim => 
-    claimFilter === 'all' || claim.status.toLowerCase().replace(' ', '') === claimFilter
+  const filteredAssessments = allAssessments.filter(assessment => 
+    assessmentFilter === 'all' || assessment.status.toLowerCase().replace(' ', '') === assessmentFilter
   );
 
   return (
@@ -95,8 +85,8 @@ const ClaimsAlerts = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Claims & Alerts Management</h1>
-          <p className="text-gray-600">Monitor active claims and risk notifications</p>
+          <h1 className="text-2xl font-bold text-gray-900">Risk & Alerts Management</h1>
+          <p className="text-gray-600">Monitor active risk assessments and alerts</p>
         </div>
         <div className="flex space-x-3">
           <Button variant="outline">
@@ -127,8 +117,8 @@ const ClaimsAlerts = () => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Pending Claims</p>
-                <p className="text-2xl font-bold text-yellow-600">{allClaims.filter(c => c.status === 'Under Review').length}</p>
+                <p className="text-sm text-gray-600">Pending Assessments</p>
+                <p className="text-2xl font-bold text-yellow-600">{allAssessments.filter(a => a.status === 'Under Review').length}</p>
               </div>
               <Clock className="h-8 w-8 text-yellow-600" />
             </div>
@@ -138,8 +128,8 @@ const ClaimsAlerts = () => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Approved Claims</p>
-                <p className="text-2xl font-bold text-green-600">{allClaims.filter(c => c.status === 'Approved').length}</p>
+                <p className="text-sm text-gray-600">Completed Assessments</p>
+                <p className="text-2xl font-bold text-green-600">{allAssessments.filter(a => a.status === 'Approved').length}</p>
               </div>
               <CheckCircle className="h-8 w-8 text-green-600" />
             </div>
@@ -149,10 +139,10 @@ const ClaimsAlerts = () => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Claims Value</p>
-                <p className="text-2xl font-bold text-blue-600">{formatCurrency(allClaims.reduce((sum, claim) => sum + claim.amount, 0))}</p>
+                <p className="text-sm text-gray-600">High Risk Areas</p>
+                <p className="text-2xl font-bold text-blue-600">{allAlerts.filter(a => a.severity === 'high').length}</p>
               </div>
-              <DollarSign className="h-8 w-8 text-blue-600" />
+              <AlertTriangle className="h-8 w-8 text-blue-600" />
             </div>
           </CardContent>
         </Card>
@@ -172,14 +162,14 @@ const ClaimsAlerts = () => {
             Active Alerts ({allAlerts.length})
           </button>
           <button
-            onClick={() => setActiveTab('claims')}
+            onClick={() => setActiveTab('assessments')}
             className={`py-2 px-1 border-b-2 font-medium text-sm ${
-              activeTab === 'claims'
+              activeTab === 'assessments'
                 ? 'border-blue-500 text-blue-600'
                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
             }`}
           >
-            Claims Processing ({allClaims.length})
+            Risk Assessments ({allAssessments.length})
           </button>
         </nav>
       </div>
@@ -253,17 +243,17 @@ const ClaimsAlerts = () => {
         </Card>
       )}
 
-      {/* Claims Tab */}
-      {activeTab === 'claims' && (
+      {/* Risk Assessments Tab */}
+      {activeTab === 'assessments' && (
         <Card>
           <CardHeader>
-            <CardTitle>Claims Processing Interface</CardTitle>
-            <CardDescription>Manage claim submissions and validation</CardDescription>
+            <CardTitle>Risk Assessment Processing</CardTitle>
+            <CardDescription>Manage risk evaluation submissions and validation</CardDescription>
             <div className="flex space-x-4">
               <select
                 className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                value={claimFilter}
-                onChange={(e) => setClaimFilter(e.target.value)}
+                value={assessmentFilter}
+                onChange={(e) => setAssessmentFilter(e.target.value)}
               >
                 <option value="all">All Statuses</option>
                 <option value="underreview">Under Review</option>
@@ -275,30 +265,30 @@ const ClaimsAlerts = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {filteredClaims.map((claim) => (
-                <div key={claim.id} className="border border-gray-200 rounded-lg overflow-hidden">
+              {filteredAssessments.map((assessment) => (
+                <div key={assessment.id} className="border border-gray-200 rounded-lg overflow-hidden">
                   <div className="p-4">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-3 mb-2">
-                          {getStatusIcon(claim.status)}
-                          <h3 className="font-medium text-gray-900">{claim.type}</h3>
-                          <Badge className={getStatusColor(claim.status)} variant="outline">
-                            {claim.status}
+                          {getStatusIcon(assessment.status)}
+                          <h3 className="font-medium text-gray-900">{assessment.type}</h3>
+                          <Badge className={getStatusColor(assessment.status)} variant="outline">
+                            {assessment.status}
                           </Badge>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm text-gray-600">
                           <div>
-                            <span className="font-medium">Farmer:</span> {claim.farmer}
+                            <span className="font-medium">Farmer:</span> {assessment.farmer}
                           </div>
                           <div>
-                            <span className="font-medium">Amount:</span> {formatCurrency(claim.amount)}
+                            <span className="font-medium">Risk Score:</span> {assessment.riskScore}
                           </div>
                           <div>
-                            <span className="font-medium">Date:</span> {claim.date}
+                            <span className="font-medium">Date:</span> {assessment.date}
                           </div>
                           <div>
-                            <span className="font-medium">Location:</span> {claim.location || 'N/A'}
+                            <span className="font-medium">Location:</span> {assessment.location || 'N/A'}
                           </div>
                         </div>
                       </div>
@@ -306,37 +296,37 @@ const ClaimsAlerts = () => {
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => setExpandedClaim(expandedClaim === claim.id ? null : claim.id)}
+                          onClick={() => setExpandedAssessment(expandedAssessment === assessment.id ? null : assessment.id)}
                         >
                           <Eye className="h-3 w-3 mr-1" />
-                          {expandedClaim === claim.id ? 'Hide' : 'Details'}
+                          {expandedAssessment === assessment.id ? 'Hide' : 'Details'}
                         </Button>
                       </div>
                     </div>
                   </div>
 
-                  {/* Expanded Claim Details */}
-                  {expandedClaim === claim.id && (
+                  {/* Expanded Assessment Details */}
+                  {expandedAssessment === assessment.id && (
                     <div className="border-t border-gray-200 bg-gray-50 p-4">
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>
-                          <h4 className="font-semibold mb-3">Claim Information</h4>
+                          <h4 className="font-semibold mb-3">Assessment Information</h4>
                           <div className="space-y-2 text-sm">
                             <div className="flex justify-between">
-                              <span className="text-gray-600">Policy Number:</span>
-                              <span className="font-medium">POL-{claim.id.toString().padStart(6, '0')}</span>
+                              <span className="text-gray-600">Assessment ID:</span>
+                              <span className="font-medium">ASS-{assessment.id.toString().padStart(6, '0')}</span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-gray-600">Risk Score at Incident:</span>
-                              <span className="font-medium">{claim.riskScore || 'N/A'}</span>
+                              <span className="text-gray-600">Risk Score:</span>
+                              <span className="font-medium">{assessment.riskScore || 'N/A'}</span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-gray-600">Incident Type:</span>
-                              <span className="font-medium">{claim.type}</span>
+                              <span className="text-gray-600">Assessment Type:</span>
+                              <span className="font-medium">{assessment.type}</span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-gray-600">Estimated Damage:</span>
-                              <span className="font-medium">{formatCurrency(claim.amount)}</span>
+                              <span className="text-gray-600">Documentation:</span>
+                              <span className="font-medium">Complete</span>
                             </div>
                           </div>
                         </div>
@@ -367,7 +357,7 @@ const ClaimsAlerts = () => {
                       <div className="mt-6 pt-4 border-t border-gray-200">
                         <div className="flex justify-between items-center">
                           <div className="text-sm text-gray-600">
-                            Recommended Action: {claim.status === 'Under Review' ? 'Approve with conditions' : 'Complete review'}
+                            Recommended Action: {assessment.status === 'Under Review' ? 'Approve assessment' : 'Complete review'}
                           </div>
                           <div className="flex space-x-2">
                             <Button variant="outline" size="sm">
@@ -397,4 +387,4 @@ const ClaimsAlerts = () => {
   );
 };
 
-export default ClaimsAlerts;
+export default RiskAlerts;

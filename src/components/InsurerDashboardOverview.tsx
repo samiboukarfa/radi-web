@@ -89,13 +89,12 @@ const InsurerDashboardOverview = () => {
         </div>
       </div>
 
-      {/* Key Performance Indicators - REMOVED FINANCIAL METRICS */}
+      {/* Key Performance Indicators */}
       <div>
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Portfolio Performance Indicators</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <StatCard title="Insured Farmers" value={data.kpis.totalFarmers} icon={Users} trend="+12% this quarter" color="blue" />
           <StatCard title="Coverage Area" value={`${data.kpis.totalArea.toLocaleString()} ha`} icon={MapPin} trend="+8% expansion" color="green" />
-          <StatCard title="Active Policies" value={data.kpis.activePolicies} icon={Shield} trend="+15% new policies" color="purple" />
           <StatCard title="Risk Distribution" value={`${data.kpis.riskDistribution.low}% Low Risk`} icon={Activity} color="indigo" />
         </div>
       </div>
@@ -118,21 +117,19 @@ const InsurerDashboardOverview = () => {
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-2">
                         <h4 className="font-semibold text-gray-900">{farmer.name}</h4>
-                        {farmer.claims && farmer.claims.length > 0 && (
-                          <CheckCircle className="h-4 w-4 text-green-600" />
-                        )}
+                        <CheckCircle className="h-4 w-4 text-green-600" />
                       </div>
                       <div className="text-sm text-gray-600 space-y-1">
                         <p><strong>Location:</strong> {farmer.location}</p>
                         <p><strong>Crop:</strong> {farmer.crop} • {farmer.area} ha</p>
-                        <p><strong>Policy:</strong> {farmer.policyNumber}</p>
+                        <p><strong>Documentation:</strong> {farmer.documentation}</p>
                       </div>
                     </div>
                     <div className="text-right">
                       <Badge className={`mb-2 ${farmer.risk === 'Low' ? 'bg-green-100 text-green-800' : farmer.risk === 'Medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}`}>
                         {farmer.riskScore}/10
                       </Badge>
-                      <p className="text-xs text-gray-500">{farmer.policy}</p>
+                      <p className="text-xs text-gray-500">{farmer.validation}</p>
                     </div>
                   </div>
                 </div>
@@ -164,7 +161,7 @@ const InsurerDashboardOverview = () => {
         </Card>
       </div>
 
-      {/* Risk Analysis and Claims Management */}
+      {/* Risk Analysis and Alert Management */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card>
           <CardHeader>
@@ -234,7 +231,7 @@ const InsurerDashboardOverview = () => {
         </Card>
       </div>
 
-      {/* Comprehensive Claims Management - REMOVED FINANCIAL INFO */}
+      {/* Comprehensive Documentation & Validation */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
@@ -245,53 +242,53 @@ const InsurerDashboardOverview = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {data.claims.map(claim => (
-              <div key={claim.id} className="border-2 border-gray-200 rounded-lg p-4">
+            {data.documentation.map(doc => (
+              <div key={doc.id} className="border-2 border-gray-200 rounded-lg p-4">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
-                      <h4 className="font-semibold text-gray-900">{claim.type}</h4>
-                      {claim.farmer === 'Hamza Dawdi' && (
+                      <h4 className="font-semibold text-gray-900">{doc.type}</h4>
+                      {doc.farmer === 'Hamza Dawdi' && (
                         <CheckCircle className="h-4 w-4 text-green-600" />
                       )}
-                      {claim.claimId && (
+                      {doc.documentId && (
                         <Badge variant="secondary" className="text-xs">
-                          {claim.claimId}
+                          {doc.documentId}
                         </Badge>
                       )}
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
                       <div>
                         <p className="text-gray-500">Farmer</p>
-                        <p className="font-medium">{claim.farmer}</p>
+                        <p className="font-medium">{doc.farmer}</p>
                       </div>
                       <div>
                         <p className="text-gray-500">Location</p>
-                        <p className="font-medium">{claim.location}</p>
+                        <p className="font-medium">{doc.location}</p>
                       </div>
                       <div>
                         <p className="text-gray-500">Date</p>
-                        <p className="font-medium">{claim.date}</p>
+                        <p className="font-medium">{doc.date}</p>
                       </div>
                     </div>
-                    {claim.evidence && (
+                    {doc.evidence && (
                       <div className="mt-3 p-3 bg-blue-50 rounded-lg">
                         <p className="text-xs font-medium text-blue-800">Satellite Evidence:</p>
-                        <p className="text-xs text-blue-700">{claim.evidence}</p>
+                        <p className="text-xs text-blue-700">{doc.evidence}</p>
                       </div>
                     )}
-                    {claim.weatherData && (
+                    {doc.weatherData && (
                       <div className="mt-2 p-3 bg-purple-50 rounded-lg">
                         <p className="text-xs font-medium text-purple-800">Weather Validation:</p>
-                        <p className="text-xs text-purple-700">{claim.weatherData}</p>
+                        <p className="text-xs text-purple-700">{doc.weatherData}</p>
                       </div>
                     )}
                   </div>
                   <div className="text-right">
-                    <Badge variant={claim.status === 'Approved' ? 'default' : claim.status === 'Under Review' ? 'secondary' : 'outline'} className="mb-2">
-                      {claim.status}
+                    <Badge variant={doc.status === 'Validated' ? 'default' : doc.status === 'Under Review' ? 'secondary' : 'outline'} className="mb-2">
+                      {doc.status}
                     </Badge>
-                    {claim.farmer === 'Hamza Dawdi' && (
+                    {doc.farmer === 'Hamza Dawdi' && (
                       <p className="text-xs text-green-600 font-medium">
                         <CheckCircle className="h-3 w-3 inline mr-1" />
                         RADI Validated
@@ -335,7 +332,7 @@ const InsurerDashboardOverview = () => {
             
             <button className="p-4 border border-gray-200 rounded-lg hover:bg-orange-50 transition-colors">
               <Shield className="h-6 w-6 text-orange-600 mx-auto mb-2" />
-              <p className="text-sm font-medium text-gray-900">Policy Management</p>
+              <p className="text-sm font-medium text-gray-900">Coverage Management</p>
               <p className="text-xs text-gray-500">Update coverage</p>
             </button>
           </div>
