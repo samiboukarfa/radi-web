@@ -181,38 +181,8 @@ const RiskAssessment = () => {
 
       {/* Regional Risk Analysis - Dynamic */}
       <Card>
-        <CardHeader>
-          <CardTitle>Regional Risk Analysis</CardTitle>
-          <CardDescription>
-            {selectedRegion ? `Detailed analysis for ${selectedRegion}` : 'Risk assessment by geographic region'}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {filteredData.regionalRisks.map((region, index) => <div key={index} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                <div className="flex items-center space-x-4">
-                  <MapPin className="h-5 w-5 text-gray-400" />
-                  <div>
-                    <h3 className="font-medium text-gray-900">{region.region}</h3>
-                    <p className="text-sm text-gray-500">
-                      {region.farmers} farmers • {region.avgYield}% avg yield
-                    </p>
-                    {region.details && <p className="text-xs text-blue-600 mt-1">{region.details}</p>}
-                  </div>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <div className="text-right">
-                    <p className="text-sm font-medium text-gray-900">Risk Score</p>
-                    <p className="text-lg font-bold">{region.riskScore}</p>
-                  </div>
-                  <Badge className={getRiskColor(region.riskScore)} variant="outline">
-                    {region.riskScore >= 70 ? 'High' : region.riskScore >= 50 ? 'Medium' : 'Low'}
-                  </Badge>
-                  {getTrendIcon(region.trend)}
-                </div>
-              </div>)}
-          </div>
-        </CardContent>
+        
+        
       </Card>
 
       {/* Weather Risk Factors - Dynamic */}
