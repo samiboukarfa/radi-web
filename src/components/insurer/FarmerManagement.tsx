@@ -321,19 +321,9 @@ const FarmerManagement = () => {
                                   <p>Registered: {getFarmerDetails(farmer).registered}</p>
                                 </div>
                               </div>
-                              <div>
-                                <h4 className="font-semibold mb-2">Policy Information</h4>
-                                <div className="text-sm space-y-1">
-                                  <p>Policy Type: {getFarmerDetails(farmer).policyType}</p>
-                                  <p>Premium: {getFarmerDetails(farmer).premium}</p>
-                                  <p>Renewal: {getFarmerDetails(farmer).renewal}</p>
-                                </div>
-                              </div>
+                              
                             </div>
-                            {getFarmerDetails(farmer).specialNotes && <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-                                <h5 className="font-semibold text-blue-900 mb-1">Case Study Notes:</h5>
-                                <p className="text-sm text-blue-700">{getFarmerDetails(farmer).specialNotes}</p>
-                              </div>}
+                            {getFarmerDetails(farmer).specialNotes}
                           </div>
                         </TableCell>
                       </TableRow>}
