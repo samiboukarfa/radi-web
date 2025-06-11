@@ -32,7 +32,7 @@ const ServicesSection = () => {
     {
       icon: BarChart3,
       title: 'Interactive Dashboards',
-      description: 'Customized interfaces for farmers and insurers',
+      description: 'Customized interfaces for farmers and institutions',
       color: 'text-sky-blue'
     },
     {
