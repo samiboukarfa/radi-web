@@ -119,10 +119,7 @@ const FarmerDashboardLayout: React.FC<FarmerDashboardLayoutProps> = ({
                   <span className="px-2 py-0.5 bg-orange-100 text-orange-700 text-xs font-medium rounded-full">
                     DEMO MODE
                   </span>
-                  {currentProfileData.isCaseStudy && <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-medium rounded-full flex items-center">
-                      <Award className="h-3 w-3 mr-1" />
-                      Case Study
-                    </span>}
+                  {currentProfileData.isCaseStudy}
                 </div>
               </div>
             </div>
