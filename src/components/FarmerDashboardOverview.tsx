@@ -242,41 +242,7 @@ const FarmerDashboardOverview: React.FC = () => {
           </CardHeader>
           <CardContent>
             {currentProfileId === 'hamza' && farmerData.claims ? <div className="space-y-4">
-                {farmerData.claims.map((claim, index) => <div key={index} className="p-4 bg-green-50 border-2 border-green-200 rounded-lg">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <CheckCircle className="h-5 w-5 text-green-600" />
-                          <p className="font-semibold text-green-800">{claim.event} Damage Claim</p>
-                        </div>
-                        <div className="grid grid-cols-2 gap-2 text-sm">
-                          <div>
-                            <p className="text-gray-600">Claim ID:</p>
-                            <p className="font-medium text-green-700">{claim.id}</p>
-                          </div>
-                          <div>
-                            <p className="text-gray-600">Status:</p>
-                            <p className="font-medium text-green-700">{claim.status}</p>
-                          </div>
-                          <div>
-                            <p className="text-gray-600">Date:</p>
-                            <p className="font-medium text-green-700">{claim.date}</p>
-                          </div>
-                          <div>
-                            <p className="text-gray-600">Insurer:</p>
-                            <p className="font-medium text-green-700">{claim.insurer}</p>
-                          </div>
-                        </div>
-                        <div className="mt-3 p-2 bg-white rounded border">
-                          <p className="text-xs font-medium text-gray-700">Evidence:</p>
-                          <p className="text-xs text-gray-600">{claim.evidence}</p>
-                        </div>
-                      </div>
-                      <span className="px-3 py-1 text-sm font-medium rounded-full bg-green-100 text-green-800">
-                        {claim.status}
-                      </span>
-                    </div>
-                  </div>)}
+                {farmerData.claims.map((claim, index) => {})}
               </div> : currentProfileId === 'salem' ? <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center p-3 bg-yellow-50 rounded-lg">
@@ -335,10 +301,7 @@ const FarmerDashboardOverview: React.FC = () => {
                     </p>
                   </div>}
               </div>}
-            <Button variant="outline" className="w-full mt-4" size="sm">
-              <TrendingUp className="h-4 w-4 mr-2" />
-              {currentProfileId === 'hamza' ? 'View Full Documentation' : currentProfileId === 'salem' ? 'View Drought Analysis' : 'View 7-Day Forecast'}
-            </Button>
+            
           </CardContent>
         </Card>
       </div>
