@@ -21,7 +21,7 @@ const HowItWorksSection = () => {
       number: '3',
       icon: Shield,
       title: 'receive instant alerts notifications',
-      description: 'Receive instant notifications and access tailored insurance solutions'
+      description: 'Receive instant notifications'
     }
   ];
 
