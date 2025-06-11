@@ -290,15 +290,31 @@ export const authenticateUser = (email: string, password: string): User | null =
       name: "Ahmed Ben Salem",
       email: "farmer@radi.app",
       userType: "farmer",
-      location: "Skikda, Algeria",
+      location: "Constantine, Algeria",
       farmSize: 65.4
+    },
+    {
+      id: "farmer-002",
+      name: "Salem Khrobi",
+      email: "salem@radi.app",
+      userType: "farmer",
+      location: "Constantine, Algeria",
+      farmSize: 42.1
+    },
+    {
+      id: "farmer-003",
+      name: "Hamza Dawdi",
+      email: "hamza@radi.app",
+      userType: "farmer",
+      location: "Constantine, Algeria",
+      farmSize: 28.5
     },
     {
       id: "insurer-001", 
       name: "CRMA Representative",
       email: "crma@radi.app",
       userType: "insurer",
-      location: "Skikda Regional Office"
+      location: "Constantine Regional Office"
     },
     {
       id: "institution-001",
@@ -319,6 +335,18 @@ export const authenticateUser = (email: string, password: string): User | null =
   const user = demoUsers.find(u => u.email === email);
   if (user && (password === "farmer123" || password === "insurer123" || password === "institution123" || password === "admin123")) {
     setUserSession(user);
+    
+    // Set the appropriate farmer profile based on which farmer is logging in
+    if (user.userType === "farmer") {
+      if (user.email === "salem@radi.app") {
+        switchFarmerProfile("salem");
+      } else if (user.email === "hamza@radi.app") {
+        switchFarmerProfile("hamza");
+      } else {
+        switchFarmerProfile("ahmed");
+      }
+    }
+    
     return user;
   }
   
