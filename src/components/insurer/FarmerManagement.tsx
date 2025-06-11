@@ -363,10 +363,8 @@ const FarmerManagement = () => {
                                     </div>}
                                 </div>
                                 {getFarmerDetails(farmer).claimHistory && <div className="mt-4">
-                                    <h6 className="font-medium text-gray-900 mb-2">Claims History</h6>
-                                    <div className="p-2 bg-yellow-50 rounded border border-yellow-200">
-                                      <span className="text-sm text-yellow-800">{getFarmerDetails(farmer).claimHistory}</span>
-                                    </div>
+                                    
+                                    
                                   </div>}
                               </div>
                             </div>
