@@ -4,21 +4,13 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { getEnhancedFarmerData, Plot } from '@/utils/farmerData';
 import AddPlotForm from './AddPlotForm';
-import { 
-  MapPin, 
-  Plus,
-  Edit,
-  Trash2,
-  Search
-} from 'lucide-react';
-
+import { MapPin, Plus, Edit, Trash2, Search } from 'lucide-react';
 interface PlotMapProps {
   onPlotSelect?: (plot: Plot) => void;
   selectedPlot?: Plot | null;
   isCreating?: boolean;
   onSetCreating?: (creating: boolean) => void;
 }
-
 interface PlotFormData {
   name: string;
   crop: string;
@@ -31,12 +23,11 @@ interface PlotFormData {
   longitude: number;
   notes?: string;
 }
-
-const PlotMap: React.FC<PlotMapProps> = ({ 
-  onPlotSelect, 
-  selectedPlot, 
-  isCreating = false, 
-  onSetCreating 
+const PlotMap: React.FC<PlotMapProps> = ({
+  onPlotSelect,
+  selectedPlot,
+  isCreating = false,
+  onSetCreating
 }) => {
   const [farmerData, setFarmerData] = useState(getEnhancedFarmerData());
   const [searchTerm, setSearchTerm] = useState('');
@@ -45,33 +36,26 @@ const PlotMap: React.FC<PlotMapProps> = ({
   const [internalIsCreating, setInternalIsCreating] = useState(false);
   const actualIsCreating = onSetCreating ? isCreating : internalIsCreating;
   const actualSetCreating = onSetCreating || setInternalIsCreating;
-
   const getRiskColor = (level: string) => {
     switch (level) {
-      case 'High': return '#EF4444';
-      case 'Medium': return '#F59E0B';
-      case 'Low': return '#10B981';
-      default: return '#6B7280';
+      case 'High':
+        return '#EF4444';
+      case 'Medium':
+        return '#F59E0B';
+      case 'Low':
+        return '#10B981';
+      default:
+        return '#6B7280';
     }
   };
-
-  const filteredPlots = farmerData.plots.filter(plot =>
-    plot.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    plot.crop.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
+  const filteredPlots = farmerData.plots.filter(plot => plot.name.toLowerCase().includes(searchTerm.toLowerCase()) || plot.crop.toLowerCase().includes(searchTerm.toLowerCase()));
   const handleAddPlot = (formData: PlotFormData) => {
     const newPlot: Plot = {
       id: Date.now(),
       name: formData.name,
       crop: formData.crop,
       area: formData.area,
-      coordinates: [
-        [formData.latitude, formData.longitude],
-        [formData.latitude + 0.001, formData.longitude + 0.001],
-        [formData.latitude + 0.001, formData.longitude - 0.001],
-        [formData.latitude - 0.001, formData.longitude]
-      ],
+      coordinates: [[formData.latitude, formData.longitude], [formData.latitude + 0.001, formData.longitude + 0.001], [formData.latitude + 0.001, formData.longitude - 0.001], [formData.latitude - 0.001, formData.longitude]],
       soilType: formData.soilType,
       irrigationMethod: formData.irrigationMethod,
       plantingDate: formData.plantingDate,
@@ -84,18 +68,14 @@ const PlotMap: React.FC<PlotMapProps> = ({
       ndviTrend: [0.5],
       moistureLevels: [65]
     };
-
     setFarmerData(prev => ({
       ...prev,
       plots: [...prev.plots, newPlot]
     }));
-
     actualSetCreating(false);
     console.log('New plot added:', newPlot);
   };
-
-  return (
-    <div className="space-y-6">
+  return <div className="space-y-6">
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -106,18 +86,9 @@ const PlotMap: React.FC<PlotMapProps> = ({
             <div className="flex items-center space-x-2">
               <div className="relative">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search plots..."
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm w-48"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
+                <input type="text" placeholder="Search plots..." className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm w-48" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
               </div>
-              <Button
-                onClick={() => actualSetCreating(!actualIsCreating)}
-                variant={actualIsCreating ? "outline" : "default"}
-              >
+              <Button onClick={() => actualSetCreating(!actualIsCreating)} variant={actualIsCreating ? "outline" : "default"}>
                 <Plus className="h-4 w-4 mr-2" />
                 {actualIsCreating ? 'Cancel' : 'Add Plot'}
               </Button>
@@ -137,25 +108,18 @@ const PlotMap: React.FC<PlotMapProps> = ({
             </Badge>
           </div>
 
-          {actualIsCreating && (
-            <div className="mb-6">
-              <AddPlotForm 
-                onCancel={() => actualSetCreating(false)}
-                onSubmit={handleAddPlot}
-              />
-            </div>
-          )}
+          {actualIsCreating && <div className="mb-6">
+              <AddPlotForm onCancel={() => actualSetCreating(false)} onSubmit={handleAddPlot} />
+            </div>}
 
-          {!actualIsCreating && (
-            <div className="text-center py-8 bg-gradient-to-br from-green-50 to-blue-50 rounded-lg border">
+          {!actualIsCreating && <div className="text-center py-8 bg-gradient-to-br from-green-50 to-blue-50 rounded-lg border">
               <MapPin className="h-12 w-12 text-green-600 mx-auto mb-4" />
               <h3 className="text-lg font-semibold text-gray-800 mb-2">Skikda Agricultural Region</h3>
               <p className="text-gray-600 mb-4">Manage your plots manually by adding coordinates and plot information</p>
               <p className="text-sm text-gray-500">
                 Total Plots: {farmerData.plots.length} | Total Area: {farmerData.plots.reduce((sum, plot) => sum + plot.area, 0).toFixed(1)} ha
               </p>
-            </div>
-          )}
+            </div>}
 
           <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
             <div>
@@ -163,15 +127,15 @@ const PlotMap: React.FC<PlotMapProps> = ({
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-green-500 rounded"></div>
-                  <span>Low Risk (0-40)</span>
+                  <span>Low Risk (7-10)</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-yellow-500 rounded"></div>
-                  <span>Medium Risk (41-70)</span>
+                  <span>Medium Risk (4-6)</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-red-500 rounded"></div>
-                  <span>High Risk (71-100)</span>
+                  <span>High Risk (0-3)</span>
                 </div>
               </div>
             </div>
@@ -198,24 +162,14 @@ const PlotMap: React.FC<PlotMapProps> = ({
       </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {filteredPlots.map((plot) => (
-          <Card 
-            key={plot.id}
-            className={`cursor-pointer transition-all duration-200 hover:shadow-md hover:scale-105 ${
-              selectedPlot?.id === plot.id ? 'ring-2 ring-green-500 shadow-lg' : ''
-            }`}
-            onClick={() => onPlotSelect?.(plot)}
-          >
+        {filteredPlots.map(plot => <Card key={plot.id} className={`cursor-pointer transition-all duration-200 hover:shadow-md hover:scale-105 ${selectedPlot?.id === plot.id ? 'ring-2 ring-green-500 shadow-lg' : ''}`} onClick={() => onPlotSelect?.(plot)}>
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="font-semibold">{plot.name}</h3>
-                <Badge 
-                  variant="outline"
-                  style={{ 
-                    borderColor: getRiskColor(plot.riskLevel),
-                    color: getRiskColor(plot.riskLevel)
-                  }}
-                >
+                <Badge variant="outline" style={{
+              borderColor: getRiskColor(plot.riskLevel),
+              color: getRiskColor(plot.riskLevel)
+            }}>
                   {plot.riskLevel}
                 </Badge>
               </div>
@@ -233,13 +187,10 @@ const PlotMap: React.FC<PlotMapProps> = ({
               </div>
               <div className="mt-3">
                 <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="h-2 rounded-full transition-all duration-300"
-                    style={{ 
-                      width: `${plot.riskScore}%`,
-                      backgroundColor: getRiskColor(plot.riskLevel)
-                    }}
-                  ></div>
+                  <div className="h-2 rounded-full transition-all duration-300" style={{
+                width: `${plot.riskScore}%`,
+                backgroundColor: getRiskColor(plot.riskLevel)
+              }}></div>
                 </div>
               </div>
               <div className="flex gap-1 mt-3">
@@ -252,12 +203,10 @@ const PlotMap: React.FC<PlotMapProps> = ({
                 </Button>
               </div>
             </CardContent>
-          </Card>
-        ))}
+          </Card>)}
       </div>
 
-      {filteredPlots.length === 0 && searchTerm && (
-        <Card>
+      {filteredPlots.length === 0 && searchTerm && <Card>
           <CardContent className="p-8 text-center">
             <Search className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-gray-900 mb-2">No plots found</h3>
@@ -265,10 +214,7 @@ const PlotMap: React.FC<PlotMapProps> = ({
               No plots match your search term "{searchTerm}". Try different keywords.
             </p>
           </CardContent>
-        </Card>
-      )}
-    </div>
-  );
+        </Card>}
+    </div>;
 };
-
 export default PlotMap;
