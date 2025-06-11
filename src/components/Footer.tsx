@@ -12,9 +12,7 @@ const Footer = () => {
               </div>
               <span className="text-2xl font-bold">RADI</span>
             </div>
-            <p className="text-gray-300 leading-relaxed">
-              Transforming agricultural insurance through AI-powered climate risk assessment for Algeria.
-            </p>
+            
             <div className="space-y-2 text-sm">
               <p>📍 Algiers Technology Park, Algeria</p>
               <p>📞 +213 (0) 555 123 456</p>
