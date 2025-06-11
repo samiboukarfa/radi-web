@@ -1,4 +1,3 @@
-
 export interface User {
   id: string;
   name: string;
@@ -71,7 +70,7 @@ export const getDemoFarmerData = () => ({
   ]
 });
 
-// Demo insurer data
+// Demo insurer data - Ahmed removed, only Salem and Hamza
 export const getDemoInsurerData = () => ({
   company: {
     name: "CRMA",
@@ -82,28 +81,15 @@ export const getDemoInsurerData = () => ({
     ranking: "#1 in Eastern Algeria"
   },
   kpis: {
-    totalFarmers: 75,
-    totalArea: 4250,
+    totalFarmers: 2,
+    totalArea: 70.6,
     riskDistribution: {
-      low: 45,
-      medium: 35,
-      high: 20
+      low: 50,
+      medium: 0,
+      high: 50
     }
   },
   farmers: [
-    {
-      id: 1,
-      name: "Ahmed Ben Salem",
-      location: "Constantine",
-      crop: "Wheat & Olives",
-      area: 65.4,
-      risk: "Low",
-      riskScore: 2.5,
-      documentation: "Complete Profile",
-      validation: "RADI Verified",
-      policy: "Active",
-      lastUpdate: "2024-02-15"
-    },
     {
       id: 2,
       name: "Salem Khrobi",
@@ -142,14 +128,6 @@ export const getDemoInsurerData = () => ({
     },
     {
       id: 2,
-      title: "Sensor Battery Low - Maintenance Required",
-      severity: "medium",
-      farmer: "Ahmed Ben Salem",
-      location: "Constantine",
-      time: "4 hours ago"
-    },
-    {
-      id: 3,
       title: "Risk Assessment Update Required",
       severity: "low",
       farmer: "Salem Khrobi",
@@ -168,17 +146,6 @@ export const getDemoInsurerData = () => ({
       documentId: "DOC-2024-001",
       evidence: "Satellite imagery confirms 15% crop damage in northern section. NDVI analysis shows significant vegetation stress patterns consistent with hail impact.",
       weatherData: "Meteorological data confirms severe hailstorm on January 19, 2024, with hail diameter 2-3cm recorded at nearby weather station."
-    },
-    {
-      id: 2,
-      farmer: "Ahmed Ben Salem",
-      type: "Drought Impact Documentation",
-      status: "Under Review",
-      date: "2024-01-18",
-      location: "Constantine",
-      documentId: "DOC-2024-002",
-      evidence: "NDVI trending analysis shows declining vegetation health over 3-week period. Soil moisture sensors confirm extended dry conditions.",
-      weatherData: "Regional precipitation 65% below seasonal average. Temperature consistently 3-4°C above normal for January period."
     },
     {
       id: 3,
@@ -283,7 +250,6 @@ export const getDashboardRoute = (userType: string): string => {
 
 // Demo login function
 export const authenticateUser = (email: string, password: string): User | null => {
-  // Demo users for different roles
   const demoUsers: User[] = [
     {
       id: "farmer-001",

@@ -1,4 +1,3 @@
-
 export interface Sensor {
   id: string;
   type: 'soil_moisture' | 'temperature' | 'humidity' | 'ph' | 'nutrients';
@@ -93,7 +92,6 @@ export interface FarmerProfile {
 
 // Enhanced demo data for current farmer profile
 export const getEnhancedFarmerData = () => {
-  // Generate sample plots data
   const plots: Plot[] = [
     {
       id: 1,
@@ -102,12 +100,12 @@ export const getEnhancedFarmerData = () => {
       area: 25.5,
       riskLevel: 'Low',
       color: '#10B981',
-      coordinates: [[36.8765, 6.9811], [36.8775, 6.9821], [36.8770, 6.9825], [36.8760, 6.9815]],
+      coordinates: [[36.3665, 6.6157], [36.3675, 6.6167], [36.3670, 6.6171], [36.3660, 6.6161]],
       sensors: [
         {
           id: "sensor_001",
           type: "soil_moisture",
-          position: [36.8768, 6.9818],
+          position: [36.3668, 6.6164],
           status: "online",
           lastReading: 45,
           timestamp: "2024-02-15T10:30:00Z",
@@ -116,7 +114,7 @@ export const getEnhancedFarmerData = () => {
         {
           id: "sensor_002",
           type: "temperature",
-          position: [36.8770, 6.9820],
+          position: [36.3670, 6.6166],
           status: "online",
           lastReading: 22,
           timestamp: "2024-02-15T10:30:00Z",
@@ -139,12 +137,12 @@ export const getEnhancedFarmerData = () => {
       area: 18.3,
       riskLevel: 'Medium',
       color: '#F59E0B',
-      coordinates: [[36.8720, 6.9750], [36.8730, 6.9760], [36.8725, 6.9765], [36.8715, 6.9755]],
+      coordinates: [[36.3620, 6.6097], [36.3630, 6.6107], [36.3625, 6.6111], [36.3615, 6.6101]],
       sensors: [
         {
           id: "sensor_003",
           type: "ph",
-          position: [36.8722, 6.9758],
+          position: [36.3622, 6.6104],
           status: "online",
           lastReading: 6.8,
           timestamp: "2024-02-15T10:30:00Z",
@@ -167,12 +165,12 @@ export const getEnhancedFarmerData = () => {
       area: 12.7,
       riskLevel: 'High',
       color: '#EF4444',
-      coordinates: [[36.8800, 6.9850], [36.8810, 6.9860], [36.8805, 6.9865], [36.8795, 6.9855]],
+      coordinates: [[36.3700, 6.6197], [36.3710, 6.6207], [36.3705, 6.6211], [36.3695, 6.6201]],
       sensors: [
         {
           id: "sensor_004",
           type: "humidity",
-          position: [36.8802, 6.9858],
+          position: [36.3702, 6.6204],
           status: "battery_low",
           lastReading: 68,
           timestamp: "2024-02-15T08:15:00Z",
@@ -195,12 +193,12 @@ export const getEnhancedFarmerData = () => {
       area: 8.9,
       riskLevel: 'Low',
       color: '#10B981',
-      coordinates: [[36.8680, 6.9700], [36.8690, 6.9710], [36.8685, 6.9715], [36.8675, 6.9705]],
+      coordinates: [[36.3580, 6.6047], [36.3590, 6.6057], [36.3585, 6.6061], [36.3575, 6.6051]],
       sensors: [
         {
           id: "sensor_005",
           type: "nutrients",
-          position: [36.8682, 6.9708],
+          position: [36.3582, 6.6054],
           status: "online",
           lastReading: 85,
           timestamp: "2024-02-15T10:30:00Z",
@@ -218,7 +216,6 @@ export const getEnhancedFarmerData = () => {
     }
   ];
 
-  // Generate weather data
   const weather: WeatherData = {
     current: {
       temperature: 24,
@@ -265,10 +262,10 @@ export const getEnhancedFarmerData = () => {
         fullName: "Ahmed Ben Salem",
         email: "ahmed.bensalem@example.com",
         phone: "+213 555 0123",
-        farmAddress: "Route Nationale 3, Skikda 21000, Algeria",
-        coordinates: [36.8765, 6.9811] as [number, number],
+        farmAddress: "Route Nationale 3, Constantine 25000, Algeria",
+        coordinates: [36.3650, 6.6147] as [number, number],
         nationalId: "199012345678",
-        farmRegistration: "FARM-SKD-2020-001",
+        farmRegistration: "FARM-CST-2020-001",
         emergencyContact: "+213 555 0124"
       },
       preferences: {

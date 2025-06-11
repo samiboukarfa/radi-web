@@ -46,8 +46,8 @@ const InsurerDashboardLayout: React.FC<InsurerDashboardLayoutProps> = ({
     { id: 'dashboard', label: 'Dashboard Overview', icon: LayoutDashboard },
     { id: 'farmers', label: 'Farmer Management', icon: Users },
     { id: 'risk', label: 'Risk Assessment', icon: AlertTriangle },
-    { id: 'alerts', label: 'Risk & Alerts', icon: Bell },
-    { id: 'reports', label: 'Reports & Analytics', icon: FileText }
+    { id: 'historical', label: 'Historical Risk Analysis', icon: FileText },
+    { id: 'alerts', label: 'Risk & Alerts', icon: Bell }
   ];
 
   const NavItem: React.FC<{ item: any; isMobile?: boolean }> = ({ item, isMobile = false }) => (
@@ -80,9 +80,7 @@ const InsurerDashboardLayout: React.FC<InsurerDashboardLayoutProps> = ({
           <div className="flex items-center justify-between">
             {/* Logo and Company Info */}
             <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 bg-blue-700 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">C</span>
-              </div>
+              <img src="/Logo.svg" alt="RADI Logo" className="w-10 h-10" />
               <div>
                 <h1 className="text-xl font-bold text-gray-900">
                   {insurerData.company.name}
