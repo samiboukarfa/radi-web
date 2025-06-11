@@ -114,7 +114,8 @@ const PlotMap: React.FC<PlotMapProps> = ({
 
           {!actualIsCreating && <div className="text-center py-8 bg-gradient-to-br from-green-50 to-blue-50 rounded-lg border">
               <MapPin className="h-12 w-12 text-green-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">Skikda Agricultural Region</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">
+Constantine Agricultural Region</h3>
               <p className="text-gray-600 mb-4">Manage your plots manually by adding coordinates and plot information</p>
               <p className="text-sm text-gray-500">
                 Total Plots: {farmerData.plots.length} | Total Area: {farmerData.plots.reduce((sum, plot) => sum + plot.area, 0).toFixed(1)} ha
