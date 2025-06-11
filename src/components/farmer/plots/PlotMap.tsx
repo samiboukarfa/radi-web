@@ -154,7 +154,7 @@ Constantine Agricultural Region</h3>
               <div className="space-y-1">
                 <p>Latitude: 36.5 - 37.5</p>
                 <p>Longitude: 6.5 - 7.5</p>
-                <p>Region: Skikda, Algeria</p>
+                
                 <p>Coordinate precision: 6 decimals</p>
               </div>
             </div>
