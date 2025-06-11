@@ -81,7 +81,7 @@ const PlotMap: React.FC<PlotMapProps> = ({
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center space-x-2">
               <MapPin className="h-5 w-5" />
-              <span>Plot Management - Skikda Region</span>
+              <span>Plot Management - Constantine Region</span>
             </CardTitle>
             <div className="flex items-center space-x-2">
               <div className="relative">
