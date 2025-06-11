@@ -67,9 +67,7 @@ const FarmerDashboardOverview: React.FC = () => {
         <h1 className="text-2xl font-bold mb-2">
           {profileMessage.title}
         </h1>
-        <p className="text-green-100 mb-2">
-          {profileMessage.subtitle}
-        </p>
+        
         <div className="mt-4 flex items-center space-x-4 text-sm flex-wrap gap-2">
           <span className="inline-flex items-center px-3 py-1 bg-white bg-opacity-20 rounded-full">
             Demo Account Active
