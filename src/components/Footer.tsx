@@ -12,7 +12,9 @@ const Footer = () => {
             </div>
             
             <div className="space-y-2 text-sm">
-              <p className="text-base text-left">From the farm to the financial institution — RADI gives each user personalized tools to monitor, predict, and respond to climate threats.                          
+              <p className="text-base text-left">From the farm to the financial institution — RADI gives each user personalized tools to monitor, predict, and respond to climate threats.   
+
+
 
 
 📍 Algiers Technology Park, Algeria</p>
