@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -43,6 +44,12 @@ const Header = () => {
               className="text-gray-700 hover:text-agri-green transition-colors"
             >
               Services
+            </button>
+            <button 
+              onClick={() => scrollToSection('pricing')}
+              className="text-gray-700 hover:text-agri-green transition-colors"
+            >
+              Pricing
             </button>
             <button 
               onClick={() => scrollToSection('contact')}
@@ -96,6 +103,12 @@ const Header = () => {
                 className="text-gray-700 hover:text-agri-green transition-colors text-left"
               >
                 Services
+              </button>
+              <button 
+                onClick={() => scrollToSection('pricing')}
+                className="text-gray-700 hover:text-agri-green transition-colors text-left"
+              >
+                Pricing
               </button>
               <button 
                 onClick={() => scrollToSection('contact')}

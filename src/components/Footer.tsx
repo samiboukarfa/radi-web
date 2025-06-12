@@ -1,15 +1,21 @@
+
 import React from 'react';
 import { Separator } from '@/components/ui/separator';
+
 const Footer = () => {
-  return <footer className="bg-gray-900 text-white">
+  return (
+    <footer className="bg-gray-900 text-white">
       <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              
               <span className="text-2xl font-bold">RADI</span>
             </div>
+            
+            <p className="text-gray-300 text-sm">
+              From the farm to the financial institution — RADI gives each user personalized tools to monitor, predict, and respond to climate threats.
+            </p>
             
             <div className="space-y-2 text-sm">
               <p>📍 Algiers Technology Park, Algeria</p>
@@ -35,7 +41,6 @@ const Footer = () => {
             <nav className="flex flex-col space-y-2">
               <a href="#" className="text-gray-300 hover:text-white transition-colors">Risk Assessment</a>
               <a href="#" className="text-gray-300 hover:text-white transition-colors">Weather Monitoring</a>
-              
               <a href="#" className="text-gray-300 hover:text-white transition-colors">Analytics Dashboard</a>
             </nav>
           </div>
@@ -77,6 +82,8 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>;
+    </footer>
+  );
 };
+
 export default Footer;
