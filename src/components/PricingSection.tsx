@@ -41,9 +41,7 @@ const PricingSection = () => {
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             Choose Your Plan
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Start with a free month and choose the plan that best fits your farming needs
-          </p>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">Start with a free month and choose the plan that best fits your needs</p>
         </div>
 
         {/* Pricing Cards */}
