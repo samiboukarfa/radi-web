@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -5,12 +6,15 @@ import { getUserSession, getCurrentProfile } from '@/utils/auth';
 import { getFarmerProfile } from '@/utils/farmerProfiles';
 import CaseStudyBanner from './farmer/CaseStudyBanner';
 import { MapPin, AlertTriangle, Cloud, TrendingUp, Plus, Eye, CheckCircle, Award, Activity, Droplets } from 'lucide-react';
+
 const FarmerDashboardOverview: React.FC = () => {
   const user = getUserSession();
   const currentProfileId = getCurrentProfile();
   const farmerData = getFarmerProfile(currentProfileId);
+
   const totalArea = farmerData.plots.reduce((sum, plot) => sum + plot.area, 0);
   const highRiskPlots = farmerData.plots.filter(plot => plot.riskLevel === 'High').length;
+
   const getRiskColor = (level: string) => {
     switch (level) {
       case 'High':
@@ -23,6 +27,7 @@ const FarmerDashboardOverview: React.FC = () => {
         return 'text-gray-600 bg-gray-100';
     }
   };
+
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'high':
@@ -35,6 +40,7 @@ const FarmerDashboardOverview: React.FC = () => {
         return 'text-gray-600 bg-gray-100';
     }
   };
+
   const getProfileSpecificMessage = () => {
     switch (currentProfileId) {
       case 'salem':
@@ -57,8 +63,11 @@ const FarmerDashboardOverview: React.FC = () => {
         };
     }
   };
+
   const profileMessage = getProfileSpecificMessage();
-  return <div className="space-y-6">
+
+  return (
+    <div className="space-y-6">
       {/* Case Study Banner (only for Salem and Hamza) */}
       <CaseStudyBanner />
 
@@ -146,22 +155,27 @@ const FarmerDashboardOverview: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {farmerData.plots.map(plot => <div key={plot.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              {farmerData.plots.map(plot => (
+                <div key={plot.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                   <div className="flex items-center space-x-3">
                     <div className="w-4 h-4 rounded-full" style={{
-                  backgroundColor: plot.color
-                }} />
+                      backgroundColor: plot.color
+                    }} />
                     <div>
                       <p className="font-medium">{plot.name}</p>
                       <p className="text-sm text-gray-500">{plot.crop} • {plot.area} ha</p>
-                      {currentProfileId === 'salem' && <div className="flex items-center space-x-4 text-xs text-gray-600 mt-1">
+                      {currentProfileId === 'salem' && (
+                        <div className="flex items-center space-x-4 text-xs text-gray-600 mt-1">
                           <span>NDVI: 0.31</span>
                           <span>LST: +4.3°C</span>
                           <span className="text-yellow-600">Rainfall: -38mm</span>
-                        </div>}
-                      {currentProfileId === 'hamza' && <div className="text-xs text-red-600 mt-1">
+                        </div>
+                      )}
+                      {currentProfileId === 'hamza' && (
+                        <div className="text-xs text-red-600 mt-1">
                           <span>Post-hail NDVI: 0.18 (was 0.22)</span>
-                        </div>}
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="text-right">
@@ -170,7 +184,8 @@ const FarmerDashboardOverview: React.FC = () => {
                     </span>
                     <p className="text-xs text-gray-500 mt-1">Score: {plot.riskScore}/100</p>
                   </div>
-                </div>)}
+                </div>
+              ))}
             </div>
             <Button variant="outline" className="w-full mt-4" size="sm">
               <MapPin className="h-4 w-4 mr-2" />
@@ -187,7 +202,8 @@ const FarmerDashboardOverview: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {farmerData.recentActivity.map((activity, index) => <div key={index} className="flex items-start space-x-3">
+              {farmerData.recentActivity.map((activity, index) => (
+                <div key={index} className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-agri-green rounded-full mt-2 flex-shrink-0" />
                   <div className="flex-1">
                     <p className="text-sm text-gray-700">{activity}</p>
@@ -195,7 +211,8 @@ const FarmerDashboardOverview: React.FC = () => {
                       {index === 0 ? '1 hour ago' : index === 1 ? '3 hours ago' : index === 2 ? '6 hours ago' : index === 3 ? '1 day ago' : index === 4 ? '2 days ago' : '3 days ago'}
                     </p>
                   </div>
-                </div>)}
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
@@ -208,7 +225,8 @@ const FarmerDashboardOverview: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {farmerData.alerts.map(alert => <div key={alert.id} className="p-3 border border-gray-200 rounded-lg">
+              {farmerData.alerts.map(alert => (
+                <div key={alert.id} className="p-3 border border-gray-200 rounded-lg">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <p className="font-medium text-sm">{alert.title}</p>
@@ -221,7 +239,8 @@ const FarmerDashboardOverview: React.FC = () => {
                       {alert.severity.charAt(0).toUpperCase() + alert.severity.slice(1)}
                     </span>
                   </div>
-                </div>)}
+                </div>
+              ))}
             </div>
             <Button variant="outline" className="w-full mt-4" size="sm">
               <Eye className="h-4 w-4 mr-2" />
@@ -241,9 +260,17 @@ const FarmerDashboardOverview: React.FC = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {currentProfileId === 'hamza' && farmerData.claims ? <div className="space-y-4">
-                {farmerData.claims.map((claim, index) => {})}
-              </div> : currentProfileId === 'salem' ? <div className="space-y-4">
+            {currentProfileId === 'hamza' && farmerData.claims ? (
+              <div className="space-y-4">
+                <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                  <p className="text-sm font-medium text-green-800">CRMA Claim Status</p>
+                  <p className="text-xs text-green-700 mt-1">
+                    Claim ID: CNMA-CLM-2023-001 - Approved and processed
+                  </p>
+                </div>
+              </div>
+            ) : currentProfileId === 'salem' ? (
+              <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center p-3 bg-yellow-50 rounded-lg">
                     <Droplets className="h-8 w-8 text-yellow-600 mx-auto mb-2" />
@@ -261,19 +288,23 @@ const FarmerDashboardOverview: React.FC = () => {
                   <div className="flex items-center space-x-2 mt-1">
                     <div className="flex-1 bg-gray-200 rounded-full h-2">
                       <div className="bg-green-500 h-2 rounded-full" style={{
-                    width: '62%'
-                  }}></div>
+                        width: '62%'
+                      }}></div>
                     </div>
                     <span className="text-sm font-bold text-green-700">0.31</span>
                   </div>
                   <p className="text-xs text-green-600 mt-1">Stable despite drought conditions</p>
                 </div>
-                {farmerData.weather.alerts.length > 0 && <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                {farmerData.weather.alerts.length > 0 && (
+                  <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                     <p className="text-sm font-medium text-yellow-800">
                       Active Alert: {farmerData.weather.alerts[0].message}
                     </p>
-                  </div>}
-              </div> : <div className="space-y-4">
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <Cloud className="h-8 w-8 text-sky-blue" />
@@ -295,13 +326,15 @@ const FarmerDashboardOverview: React.FC = () => {
                   </div>
                 </div>
                 
-                {farmerData.weather.alerts.length > 0 && <div className="p-2 bg-yellow-50 border border-yellow-200 rounded">
+                {farmerData.weather.alerts.length > 0 && (
+                  <div className="p-2 bg-yellow-50 border border-yellow-200 rounded">
                     <p className="text-xs text-yellow-800 font-medium">
                       Weather Alert: {farmerData.weather.alerts[0].message}
                     </p>
-                  </div>}
-              </div>}
-            
+                  </div>
+                )}
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -310,7 +343,7 @@ const FarmerDashboardOverview: React.FC = () => {
       <Card>
         <CardHeader>
           <CardTitle>Quick Actions</CardTitle>
-          <CardDescription>Common tasks and case study features</CardDescription>
+          <CardDescription>Common tasks and monitoring features</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -340,16 +373,18 @@ const FarmerDashboardOverview: React.FC = () => {
               <Award className="h-5 w-5 mr-2" />
               <div className="text-left">
                 <p className="font-medium">
-                  {currentProfileId === 'hamza' ? 'Case Study Report' : currentProfileId === 'salem' ? 'Drought Case Study' : 'Farm Reports'}
+                  {currentProfileId === 'hamza' ? 'Recovery Report' : currentProfileId === 'salem' ? 'Drought Analysis' : 'Farm Reports'}
                 </p>
                 <p className="text-xs text-gray-500">
-                  {currentProfileId === 'hamza' ? 'Hailstorm validation docs' : currentProfileId === 'salem' ? 'Olive resilience analysis' : 'Performance analytics'}
+                  {currentProfileId === 'hamza' ? 'Hailstorm recovery docs' : currentProfileId === 'salem' ? 'Olive resilience analysis' : 'Performance analytics'}
                 </p>
               </div>
             </Button>
           </div>
         </CardContent>
       </Card>
-    </div>;
+    </div>
+  );
 };
+
 export default FarmerDashboardOverview;
