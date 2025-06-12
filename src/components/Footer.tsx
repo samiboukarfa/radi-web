@@ -12,7 +12,10 @@ const Footer = () => {
             </div>
             
             <div className="space-y-2 text-sm">
-              <p>📍 Algiers Technology Park, Algeria</p>
+              <p className="text-base text-left">From the farm to the financial institution — RADI gives each user personalized tools to monitor, predict, and respond to climate threats.
+
+
+📍 Algiers Technology Park, Algeria</p>
               <p>📞 +213 (0) 555 123 456</p>
               <p>✉️ contact@radi-app.dz</p>
             </div>
