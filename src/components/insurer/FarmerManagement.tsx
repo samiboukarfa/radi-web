@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import {
   Card,
@@ -41,34 +42,35 @@ import { useToast } from "@/components/ui/use-toast"
 
 const FarmerManagement: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedFarmer, setSelectedFarmer] = useState('ahmed');
-  const [farmerData, setFarmerData] = useState(getDemoInsurerData().farmers.find(f => f.id === selectedFarmer));
+  const [selectedFarmer, setSelectedFarmer] = useState('1');
+  const [farmerData, setFarmerData] = useState(getDemoInsurerData().farmers.find(f => f.id.toString() === selectedFarmer));
   const [isEditing, setIsEditing] = useState(false);
   const [editedData, setEditedData] = useState({
-    fullName: farmerData?.personalInfo.fullName || '',
-    farmAddress: farmerData?.personalInfo.farmAddress || '',
-    contactNumber: farmerData?.personalInfo.contactNumber || '',
-    emailAddress: farmerData?.personalInfo.emailAddress || '',
-    farmSize: farmerData?.farmDetails.farmSize || '',
-    cropsCultivated: farmerData?.farmDetails.cropsCultivated || '',
-    irrigationMethods: farmerData?.farmDetails.irrigationMethods || '',
-    soilType: farmerData?.farmDetails.soilType || '',
-    specialNotes: farmerData?.specialNotes || 'Standard monitoring protocols applied.',
+    fullName: farmerData?.name || '',
+    farmAddress: farmerData?.location || '',
+    contactNumber: '+213 555 123 456',
+    emailAddress: 'farmer@example.com',
+    farmSize: farmerData?.area?.toString() || '',
+    cropsCultivated: farmerData?.crop || '',
+    irrigationMethods: 'Drip Irrigation',
+    soilType: 'Clay Loam',
+    specialNotes: 'Standard monitoring protocols applied.',
   });
   const { toast } = useToast()
+
   useEffect(() => {
-    const newFarmerData = getDemoInsurerData().farmers.find(f => f.id === selectedFarmer);
+    const newFarmerData = getDemoInsurerData().farmers.find(f => f.id.toString() === selectedFarmer);
     setFarmerData(newFarmerData);
     setEditedData({
-      fullName: newFarmerData?.personalInfo.fullName || '',
-      farmAddress: newFarmerData?.personalInfo.farmAddress || '',
-      contactNumber: newFarmerData?.personalInfo.contactNumber || '',
-      emailAddress: newFarmerData?.personalInfo.emailAddress || '',
-      farmSize: newFarmerData?.farmDetails.farmSize || '',
-      cropsCultivated: newFarmerData?.farmDetails.cropsCultivated || '',
-      irrigationMethods: newFarmerData?.farmDetails.irrigationMethods || '',
-      soilType: newFarmerData?.farmDetails.soilType || '',
-      specialNotes: newFarmerData?.specialNotes || 'Drought-resistant olive varieties showing good adaptation.',
+      fullName: newFarmerData?.name || '',
+      farmAddress: newFarmerData?.location || '',
+      contactNumber: '+213 555 123 456',
+      emailAddress: 'farmer@example.com',
+      farmSize: newFarmerData?.area?.toString() || '',
+      cropsCultivated: newFarmerData?.crop || '',
+      irrigationMethods: 'Drip Irrigation',
+      soilType: 'Clay Loam',
+      specialNotes: 'Standard monitoring protocols applied.',
     });
   }, [selectedFarmer]);
 
@@ -81,8 +83,6 @@ const FarmerManagement: React.FC = () => {
   };
 
   const handleSaveChanges = () => {
-    // Here you would typically send the editedData to your backend to update the farmer's information
-    // For this demo, we'll just display a success message
     toast({
       title: "Success!",
       description: "Farmer details updated successfully.",
@@ -93,21 +93,21 @@ const FarmerManagement: React.FC = () => {
   const handleCancelEdit = () => {
     setIsEditing(false);
     setEditedData({
-      fullName: farmerData?.personalInfo.fullName || '',
-      farmAddress: farmerData?.personalInfo.farmAddress || '',
-      contactNumber: farmerData?.personalInfo.contactNumber || '',
-      emailAddress: farmerData?.personalInfo.emailAddress || '',
-      farmSize: farmerData?.farmDetails.farmSize || '',
-      cropsCultivated: farmerData?.farmDetails.cropsCultivated || '',
-      irrigationMethods: farmerData?.farmDetails.irrigationMethods || '',
-      soilType: farmerData?.farmDetails.soilType || '',
-      specialNotes: farmerData?.specialNotes || 'Post-storm recovery monitoring in progress.',
+      fullName: farmerData?.name || '',
+      farmAddress: farmerData?.location || '',
+      contactNumber: '+213 555 123 456',
+      emailAddress: 'farmer@example.com',
+      farmSize: farmerData?.area?.toString() || '',
+      cropsCultivated: farmerData?.crop || '',
+      irrigationMethods: 'Drip Irrigation',
+      soilType: 'Clay Loam',
+      specialNotes: 'Standard monitoring protocols applied.',
     });
   };
 
   const filteredFarmers = getDemoInsurerData().farmers.filter(farmer =>
-    farmer.personalInfo.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    farmer.personalInfo.farmAddress.toLowerCase().includes(searchTerm.toLowerCase())
+    farmer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    farmer.location.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -155,7 +155,6 @@ const FarmerManagement: React.FC = () => {
                     <Input id="username" defaultValue="Ain Smara, Constantine" className="col-span-3" />
                   </div>
                 </div>
-                {/* @ts-expect-error */}
                 <Button type="submit">Create New Farmer</Button>
               </DialogContent>
             </Dialog>
@@ -173,15 +172,19 @@ const FarmerManagement: React.FC = () => {
             <TableBody>
               {filteredFarmers.map((farmer) => (
                 <TableRow key={farmer.id}>
-                  <TableCell className="font-medium">{farmer.personalInfo.fullName}</TableCell>
-                  <TableCell>{farmer.personalInfo.farmAddress}</TableCell>
+                  <TableCell className="font-medium">{farmer.name}</TableCell>
+                  <TableCell>{farmer.location}</TableCell>
                   <TableCell>
                     <Badge variant="secondary">
                       {farmer.riskScore}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="sm">
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => setSelectedFarmer(farmer.id.toString())}
+                    >
                       <Edit className="h-4 w-4 mr-2" />
                       View Details
                     </Button>
