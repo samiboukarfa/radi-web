@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -34,11 +33,7 @@ const RiskAlerts = () => {
     { id: 6, farmer: 'Rachid Boumediene', type: 'Storm Damage Evaluation', status: 'Approved', date: '2024-01-08', location: 'Blida', riskScore: 68 }
   ];
 
-  const additionalAlerts = [
-    { id: 4, title: 'Sensor Offline - Monitoring Issue', severity: 'medium', farmer: 'Youcef Hammadi', time: '1 hour ago', location: 'Annaba' },
-    { id: 5, title: 'Crop Disease Detected - Urgent', severity: 'high', farmer: 'Leila Benaissa', time: '3 hours ago', location: 'Oran' },
-    { id: 6, title: 'Weather Alert - Storm Warning', severity: 'high', farmer: 'Rachid Boumediene', time: '5 hours ago', location: 'Blida' }
-  ];
+  const additionalAlerts = [];
 
   const allAlerts = [...data.alerts, ...additionalAlerts];
   const allAssessments = [...additionalAssessments];

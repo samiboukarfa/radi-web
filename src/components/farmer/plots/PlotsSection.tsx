@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -14,8 +13,8 @@ const PlotsSection: React.FC = () => {
   const [isCreating, setIsCreating] = useState(false);
 
   const handleAddNewPlot = () => {
-    setActiveTab('map'); // Switch to map tab if not already there
-    setIsCreating(true); // Trigger the add plot form
+    setActiveTab('map');
+    setIsCreating(true);
   };
 
   return (
@@ -38,16 +37,8 @@ const PlotsSection: React.FC = () => {
         </div>
       </div>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="text-center">
-              <p className="text-2xl font-bold text-gray-900">{farmerData.plots.length}</p>
-              <p className="text-sm text-gray-600">Total Plots</p>
-            </div>
-          </CardContent>
-        </Card>
+      {/* Quick Stats - Removed Total Plots and Active Sensors cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card>
           <CardContent className="p-4">
             <div className="text-center">
@@ -55,16 +46,6 @@ const PlotsSection: React.FC = () => {
                 {farmerData.plots.reduce((sum, plot) => sum + plot.area, 0).toFixed(1)}
               </p>
               <p className="text-sm text-gray-600">Total Hectares</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="text-center">
-              <p className="text-2xl font-bold text-gray-900">
-                {farmerData.plots.flatMap(p => p.sensors).filter(s => s.status === 'online').length}
-              </p>
-              <p className="text-sm text-gray-600">Active Sensors</p>
             </div>
           </CardContent>
         </Card>
