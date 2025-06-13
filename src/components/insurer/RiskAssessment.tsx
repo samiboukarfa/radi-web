@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { getFilteredInsurerData } from '@/utils/insurerInteractiveData';
 import { AlertTriangle, TrendingUp, TrendingDown, MapPin, Search, Calendar, Thermometer, Droplets, Wind, Sun, User, Target } from 'lucide-react';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 const RiskAssessment = () => {
   const [selectedFarmer, setSelectedFarmer] = useState<string>('');
   const [selectedRegion, setSelectedRegion] = useState<string>('');
@@ -69,12 +70,16 @@ const RiskAssessment = () => {
           <CardContent>
             <div className="relative">
               <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-              <select className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" value={selectedFarmer} onChange={e => setSelectedFarmer(e.target.value)}>
-                <option value="">All farmers...</option>
-                <option value="Ahmed Ben Ahmed">Ahmed Ben Ahmed - Skikda</option>
-                <option value="Salem Khrobi">Salem Khrobi - Constantine (Case Study)</option>
-                <option value="Hamza Dawdi">Hamza Dawdi - Constantine (Case Study)</option>
-              </select>
+              <Select defaultValue="ahmed" onValueChange={setSelectedFarmer}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a farmer to assess" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ahmed">Ahmed Benali - Mixed Crops</SelectItem>
+                  <SelectItem value="salem">Salem Khrobi - Olive Cultivation</SelectItem>
+                  <SelectItem value="hamza">Hamza Dawdi - Wheat Farming</SelectItem>
+                </SelectContent>
+              </Select>
               {selectedFarmer && <div className="mt-2 p-2 bg-blue-50 rounded text-xs text-blue-700">
                   <strong>Selected:</strong> {selectedFarmer}
                 </div>}

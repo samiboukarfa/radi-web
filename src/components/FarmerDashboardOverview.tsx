@@ -1,10 +1,8 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { getUserSession, getCurrentProfile } from '@/utils/auth';
 import { getFarmerProfile } from '@/utils/farmerProfiles';
-import CaseStudyBanner from './farmer/CaseStudyBanner';
 import { MapPin, AlertTriangle, Cloud, TrendingUp, Plus, Eye, CheckCircle, Award, Activity, Droplets } from 'lucide-react';
 
 const FarmerDashboardOverview: React.FC = () => {
@@ -68,9 +66,6 @@ const FarmerDashboardOverview: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Case Study Banner (only for Salem and Hamza) */}
-      <CaseStudyBanner />
-
       {/* Welcome Message */}
       <div className="bg-gradient-to-r from-agri-green to-green-600 text-white p-6 rounded-lg">
         <h1 className="text-2xl font-bold mb-2">
