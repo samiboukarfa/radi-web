@@ -27,37 +27,56 @@ const FarmerDashboardLayout: React.FC<FarmerDashboardLayoutProps> = ({
     clearUserSession();
     navigate('/');
   };
-  const navigationItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'plots', label: 'My Plots', icon: MapPin },
-    { id: 'risk', label: 'Risk Monitoring', icon: AlertTriangle },
-    { id: 'weather', label: 'Weather', icon: Cloud },
-    { id: 'sensors', label: 'Sensors', icon: Activity },
-    { id: 'reports', label: 'Reports', icon: FileText },
-    { id: 'alerts', label: 'Alerts', icon: Bell },
-    { id: 'profile', label: 'Profile', icon: Settings }
-  ];
-  const farmerProfiles = [
-    {
-      id: 'ahmed',
-      name: 'Ahmed Benali',
-      location: 'Constantine, Algeria',
-      description: 'Original demo farmer - Mixed crops',
-      isDefault: true
-    },
-    {
-      id: 'salem',
-      name: 'Salem Khrobi',
-      location: 'Lkhrob, Constantine',
-      description: 'Olive cultivation with drought monitoring'
-    },
-    {
-      id: 'hamza',
-      name: 'Hamza Dawdi',
-      location: 'Mezaguet Roha, Constantine',
-      description: 'Wheat farming with hailstorm monitoring'
-    }
-  ];
+  const navigationItems = [{
+    id: 'dashboard',
+    label: 'Dashboard',
+    icon: LayoutDashboard
+  }, {
+    id: 'plots',
+    label: 'My Plots',
+    icon: MapPin
+  }, {
+    id: 'risk',
+    label: 'Risk Monitoring',
+    icon: AlertTriangle
+  }, {
+    id: 'weather',
+    label: 'Weather',
+    icon: Cloud
+  }, {
+    id: 'sensors',
+    label: 'Sensors',
+    icon: Activity
+  }, {
+    id: 'reports',
+    label: 'Reports',
+    icon: FileText
+  }, {
+    id: 'alerts',
+    label: 'Alerts',
+    icon: Bell
+  }, {
+    id: 'profile',
+    label: 'Profile',
+    icon: Settings
+  }];
+  const farmerProfiles = [{
+    id: 'ahmed',
+    name: 'Ahmed Benali',
+    location: 'Constantine, Algeria',
+    description: 'Original demo farmer - Mixed crops',
+    isDefault: true
+  }, {
+    id: 'salem',
+    name: 'Salem Khrobi',
+    location: 'Lkhrob, Constantine',
+    description: 'Olive cultivation with drought monitoring'
+  }, {
+    id: 'hamza',
+    name: 'Hamza Dawdi',
+    location: 'Mezaguet Roha, Constantine',
+    description: 'Wheat farming with hailstorm monitoring'
+  }];
   const currentProfileData = farmerProfiles.find(p => p.id === currentProfile) || farmerProfiles[0];
   const handleProfileSwitch = (profileId: string) => {
     switchFarmerProfile(profileId);
@@ -109,49 +128,28 @@ const FarmerDashboardLayout: React.FC<FarmerDashboardLayoutProps> = ({
             <div className="flex items-center space-x-4">
               {/* Profile Switcher */}
               <div className="relative">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-                  className="flex items-center space-x-2"
-                >
-                  <Users className="h-4 w-4" />
-                  <span className="hidden md:block">{currentProfileData.name}</span>
-                  <ChevronDown className="h-3 w-3" />
-                </Button>
                 
-                {isProfileDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                
+                {isProfileDropdownOpen && <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
                     <div className="p-3 border-b border-gray-100">
                       <h3 className="font-medium text-gray-900">Switch Demo Profile</h3>
                       <p className="text-xs text-gray-500">Experience different farmer scenarios</p>
                     </div>
                     <div className="p-2">
-                      {farmerProfiles.map(profile => (
-                        <button
-                          key={profile.id}
-                          onClick={() => handleProfileSwitch(profile.id)}
-                          className={`w-full text-left p-3 rounded-lg hover:bg-gray-50 transition-colors ${
-                            currentProfile === profile.id ? 'bg-green-50 border border-green-200' : ''
-                          }`}
-                        >
+                      {farmerProfiles.map(profile => <button key={profile.id} onClick={() => handleProfileSwitch(profile.id)} className={`w-full text-left p-3 rounded-lg hover:bg-gray-50 transition-colors ${currentProfile === profile.id ? 'bg-green-50 border border-green-200' : ''}`}>
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
                               <div className="flex items-center space-x-2">
                                 <h4 className="font-medium text-gray-900 text-sm">{profile.name}</h4>
-                                {currentProfile === profile.id && (
-                                  <span className="text-xs text-green-600 font-medium">ACTIVE</span>
-                                )}
+                                {currentProfile === profile.id && <span className="text-xs text-green-600 font-medium">ACTIVE</span>}
                               </div>
                               <p className="text-xs text-gray-600 mt-1">{profile.location}</p>
                               <p className="text-xs text-gray-500 mt-1">{profile.description}</p>
                             </div>
                           </div>
-                        </button>
-                      ))}
+                        </button>)}
                     </div>
-                  </div>
-                )}
+                  </div>}
               </div>
 
               {/* Notifications */}
