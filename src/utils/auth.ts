@@ -33,21 +33,56 @@ export const authenticateUser = (email: string, password: string): User | null =
   const demoUsers: User[] = [
     {
       id: '1',
+      name: 'Admin',
+      email: 'admin@radi.app',
+      userType: 'admin',
+      location: 'Algeria'
+    },
+    {
+      id: '2',
       name: 'Ahmed Benali',
-      email: 'ahmed@demo.com',
+      email: 'farmer@radi.app',
+      userType: 'farmer',
+      location: 'Skikda, Algeria'
+    },
+    {
+      id: '3',
+      name: 'Salem Khrobi',
+      email: 'salem@radi.app',
       userType: 'farmer',
       location: 'Constantine, Algeria'
     },
     {
-      id: '2',
+      id: '4',
+      name: 'Hamza Dawdi',
+      email: 'hamza@radi.app',
+      userType: 'farmer',
+      location: 'Constantine, Algeria'
+    },
+    {
+      id: '5',
       name: 'CRMA Insurance',
-      email: 'insurer@demo.com',
+      email: 'crma@radi.app',
       userType: 'insurer',
       location: 'Algiers, Algeria'
+    },
+    {
+      id: '6',
+      name: 'Institution User',
+      email: 'institution@radi.app',
+      userType: 'institution',
+      location: 'Algeria'
     }
   ];
 
-  return demoUsers.find(user => user.email === email) || null;
+  const validPasswords = ['admin123', 'farmer123', 'insurer123', 'institution123'];
+  const user = demoUsers.find(user => user.email === email);
+  
+  if (user && validPasswords.includes(password)) {
+    return user;
+  }
+  
+  return null;
 };
 
 // Dashboard routing
