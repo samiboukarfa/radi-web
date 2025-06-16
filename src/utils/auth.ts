@@ -1,4 +1,81 @@
-import { FarmerData } from "@/components/FarmerDetails";
+
+// User types
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  userType: 'farmer' | 'insurer' | 'admin' | 'institution';
+  location: string;
+}
+
+// Session management
+export const setUserSession = (user: User) => {
+  localStorage.setItem('userSession', JSON.stringify(user));
+};
+
+export const getUserSession = (): User | null => {
+  const session = localStorage.getItem('userSession');
+  return session ? JSON.parse(session) : null;
+};
+
+export const clearUserSession = () => {
+  localStorage.removeItem('userSession');
+  localStorage.removeItem('currentProfile');
+};
+
+export const isAuthenticated = (): boolean => {
+  return getUserSession() !== null;
+};
+
+// Authentication
+export const authenticateUser = (email: string, password: string): User | null => {
+  // Demo authentication - in real app this would be API call
+  const demoUsers: User[] = [
+    {
+      id: '1',
+      name: 'Ahmed Benali',
+      email: 'ahmed@demo.com',
+      userType: 'farmer',
+      location: 'Constantine, Algeria'
+    },
+    {
+      id: '2',
+      name: 'CRMA Insurance',
+      email: 'insurer@demo.com',
+      userType: 'insurer',
+      location: 'Algiers, Algeria'
+    }
+  ];
+
+  return demoUsers.find(user => user.email === email) || null;
+};
+
+// Dashboard routing
+export const getDashboardRoute = (userType: string): string => {
+  switch (userType) {
+    case 'farmer':
+      return '/farmer-dashboard';
+    case 'insurer':
+      return '/insurer-dashboard';
+    case 'admin':
+      return '/admin-dashboard';
+    case 'institution':
+      return '/institution-dashboard';
+    default:
+      return '/';
+  }
+};
+
+// Farmer profile management
+export const getCurrentProfile = (): string => {
+  return localStorage.getItem('currentProfile') || 'ahmed';
+};
+
+export const switchFarmerProfile = (profileId: string) => {
+  localStorage.setItem('currentProfile', profileId);
+  // Trigger page refresh to update data
+  window.location.reload();
+};
 
 export const getDemoInsurerData = () => {
   return {
