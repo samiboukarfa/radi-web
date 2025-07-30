@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { getUserSession, getCurrentProfile } from '@/utils/auth';
 import { getFarmerProfile } from '@/utils/farmerProfiles';
-import { MapPin, AlertTriangle, Cloud, TrendingUp, Plus, Eye, CheckCircle, Award, Activity, Droplets } from 'lucide-react';
+import { calculateRiskScore, ClimateHazard, getRiskScoreColor, getRiskScoreBgColor } from '@/utils/riskScore';
+import RiskScoreModal from '@/components/farmer/risk/RiskScoreModal';
+import { MapPin, AlertTriangle, Cloud, TrendingUp, Plus, Eye, CheckCircle, Award, Activity, Droplets, Calculator } from 'lucide-react';
 
 const FarmerDashboardOverview: React.FC = () => {
   const user = getUserSession();
@@ -12,6 +15,13 @@ const FarmerDashboardOverview: React.FC = () => {
 
   const totalArea = farmerData.plots.reduce((sum, plot) => sum + plot.area, 0);
   const highRiskPlots = farmerData.plots.filter(plot => plot.riskLevel === 'High').length;
+
+  // Live Risk Assessment State
+  const [selectedHazard, setSelectedHazard] = useState<ClimateHazard>('Drought');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Calculate risk score for selected hazard
+  const riskCalculation = calculateRiskScore(farmerData.riskParameters, selectedHazard);
 
   const getRiskColor = (level: string) => {
     switch (level) {
@@ -337,6 +347,126 @@ const FarmerDashboardOverview: React.FC = () => {
         </Card>
       </div>
 
+      {/* Live Risk Assessment */}
+      <Card className="border-2 border-dashed border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center space-x-2">
+                <Calculator className="h-5 w-5 text-blue-600" />
+                <span>Live Risk Assessment</span>
+              </CardTitle>
+              <CardDescription>
+                Calculate real-time risk scores using RADI algorithm for different climate hazards
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-6">
+            {/* Hazard Selection */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Select Climate Hazard</label>
+              <Select value={selectedHazard} onValueChange={(value: ClimateHazard) => setSelectedHazard(value)}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Choose hazard type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Drought">🌵 Drought</SelectItem>
+                  <SelectItem value="Heavy Rainfall">🌧️ Heavy Rainfall</SelectItem>
+                  <SelectItem value="Hailstorm">⛈️ Hailstorm</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Risk Score Display */}
+            <div className="bg-white rounded-lg p-6 border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Risk Score for {selectedHazard}</h3>
+                  <p className="text-sm text-gray-600">Based on current farm conditions</p>
+                </div>
+                <div className="text-right">
+                  <div className={`text-3xl font-bold ${getRiskScoreColor(riskCalculation.finalScore)}`}>
+                    {riskCalculation.finalScore}/10
+                  </div>
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${getRiskColor(riskCalculation.riskLevel)}`}>
+                    {riskCalculation.riskLevel} Risk
+                  </span>
+                </div>
+              </div>
+
+              {/* Progress Bar */}
+              <div className="w-full bg-gray-200 rounded-full h-3 mb-4">
+                <div 
+                  className={`h-3 rounded-full transition-all duration-500 ${
+                    riskCalculation.riskLevel === 'Low' ? 'bg-green-500' :
+                    riskCalculation.riskLevel === 'Medium' ? 'bg-yellow-500' : 'bg-red-500'
+                  }`}
+                  style={{ width: `${(riskCalculation.finalScore / 10) * 100}%` }}
+                />
+              </div>
+
+              {/* Top Contributors */}
+              <div className="mb-4">
+                <h4 className="text-sm font-medium text-gray-700 mb-2">Top Risk Contributors</h4>
+                <div className="space-y-2">
+                  {riskCalculation.breakdown
+                    .sort((a, b) => b.weightedScore - a.weightedScore)
+                    .slice(0, 3)
+                    .map((item, index) => (
+                    <div key={item.parameter} className="flex items-center justify-between text-sm">
+                      <span className="text-gray-600">{item.parameter}</span>
+                      <span className={`font-medium ${
+                        item.weightedScore > 0.5 ? 'text-red-600' :
+                        item.weightedScore > 0.2 ? 'text-yellow-600' : 'text-green-600'
+                      }`}>
+                        {item.weightedScore.toFixed(2)} ({(item.weight).toFixed(1)}%)
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Action Button */}
+              <Button 
+                onClick={() => setIsModalOpen(true)}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                <Eye className="h-4 w-4 mr-2" />
+                View Detailed Breakdown
+              </Button>
+            </div>
+
+            {/* Profile-Specific Insights */}
+            <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <h4 className="text-sm font-medium text-gray-900 mb-2">Farm-Specific Insights</h4>
+              <div className="text-sm text-gray-600 space-y-1">
+                {currentProfileId === 'salem' ? (
+                  <>
+                    <p>• Olive trees show drought resilience with stable NDVI (0.31)</p>
+                    <p>• High LST anomaly (+4.3°C) increases drought risk</p>
+                    <p>• Rainfall deficit (-38mm) is well-managed by irrigation</p>
+                  </>
+                ) : currentProfileId === 'hamza' ? (
+                  <>
+                    <p>• Post-hailstorm NDVI damage evident (0.18 vs normal 0.25+)</p>
+                    <p>• High CAPE (2850 J/kg) confirms severe convective conditions</p>
+                    <p>• Wind shear (22.4 m/s) contributed to hail formation</p>
+                  </>
+                ) : (
+                  <>
+                    <p>• Mixed crop portfolio provides natural risk diversification</p>
+                    <p>• Current NDVI levels indicate healthy vegetation</p>
+                    <p>• Weather monitoring essential for timely interventions</p>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Quick Actions */}
       <Card>
         <CardHeader>
@@ -381,6 +511,14 @@ const FarmerDashboardOverview: React.FC = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Risk Score Modal */}
+      <RiskScoreModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        result={riskCalculation}
+        hazard={selectedHazard}
+      />
     </div>
   );
 };

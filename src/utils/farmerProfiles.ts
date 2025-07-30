@@ -33,6 +33,32 @@ export interface FarmerProfileData {
     evidence: string;
     insurer: string;
   }>;
+  // RADI Risk Assessment Parameters
+  riskParameters: {
+    // Vegetation Indices
+    NDVI: number;
+    EVI: number;
+    NDMI: number;
+    
+    // Temperature Data
+    LST: number;
+    LSTAnomaly: number;
+    
+    // Rainfall Data
+    totalRainfall: number;
+    rainfallAnomaly: number;
+    
+    // Atmospheric Conditions
+    liftedIndex: number;
+    CAPE: number;
+    windShear: number;
+    
+    // Evapotranspiration
+    ETa: number;
+    
+    // Government Alerts
+    weatherAlerts: number;
+  };
 }
 
 // Ahmed Benali - Original Skikda farmer (Enhanced)
@@ -281,7 +307,32 @@ const ahmedProfile: FarmerProfileData = {
     'Plot "Vegetable Garden" boundaries updated via mobile app',
     'Irrigation schedule optimized for Barley Field',
     'Soil analysis results uploaded for North Field'
-  ]
+  ],
+  riskParameters: {
+    // Vegetation Indices
+    NDVI: 0.42,
+    EVI: 0.28,
+    NDMI: 0.15,
+    
+    // Temperature Data
+    LST: 32.5,
+    LSTAnomaly: 2.1,
+    
+    // Rainfall Data
+    totalRainfall: 15.2,
+    rainfallAnomaly: -12.5,
+    
+    // Atmospheric Conditions
+    liftedIndex: 3.2,
+    CAPE: 1800,
+    windShear: 8.5,
+    
+    // Evapotranspiration
+    ETa: 4.2,
+    
+    // Government Alerts
+    weatherAlerts: 1
+  }
 };
 
 // Salem Khrobi - Constantine olive farmer
@@ -434,7 +485,32 @@ const salemProfile: FarmerProfileData = {
     'NDVI reading stable at 0.31 for olive grove',
     'Drought and hail monitoring alert issued for Constantine',
     'Irrigation schedule optimized for drought conditions'
-  ]
+  ],
+  riskParameters: {
+    // Vegetation Indices - Salem's drought-resistant olives
+    NDVI: 0.31,
+    EVI: 0.22,
+    NDMI: -0.15,
+    
+    // Temperature Data - High heat stress
+    LST: 38.2,
+    LSTAnomaly: 4.3,
+    
+    // Rainfall Data - Drought conditions
+    totalRainfall: 8.5,
+    rainfallAnomaly: -38.0,
+    
+    // Atmospheric Conditions - Stable but hot
+    liftedIndex: 5.8,
+    CAPE: 1200,
+    windShear: 6.2,
+    
+    // Evapotranspiration - Low due to drought adaptation
+    ETa: 2.8,
+    
+    // Government Alerts - Drought warning active
+    weatherAlerts: 2
+  }
 };
 
 // Hamza Dawdi - Constantine wheat farmer with hailstorm claim (FINANCIAL INFO REMOVED)
@@ -590,7 +666,32 @@ const hamzaProfile: FarmerProfileData = {
       evidence: 'Satellite-confirmed crop damage, NDVI drop from 0.22 to 0.18',
       insurer: 'CRMA'
     }
-  ]
+  ],
+  riskParameters: {
+    // Vegetation Indices - Post-hailstorm damage
+    NDVI: 0.18,
+    EVI: 0.12,
+    NDMI: 0.08,
+    
+    // Temperature Data - Cool conditions during storm
+    LST: 24.1,
+    LSTAnomaly: -1.8,
+    
+    // Rainfall Data - Heavy precipitation with hail
+    totalRainfall: 65.3,
+    rainfallAnomaly: 35.8,
+    
+    // Atmospheric Conditions - Severe convective activity
+    liftedIndex: -5.8,
+    CAPE: 2850,
+    windShear: 22.4,
+    
+    // Evapotranspiration - Normal for wheat
+    ETa: 5.1,
+    
+    // Government Alerts - Severe storm warning
+    weatherAlerts: 1
+  }
 };
 
 export const farmerProfiles = {
