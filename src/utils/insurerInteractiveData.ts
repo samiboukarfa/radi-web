@@ -98,7 +98,7 @@ export const getFilteredInsurerData = (
       const farmer = baseData.farmers.find(f => 
         f.name.toLowerCase().includes(selectedFarmer.toLowerCase())
       );
-      return farmer ? farmer.riskScore * 10 : 58;
+      return farmer && typeof farmer.riskScore === 'number' ? farmer.riskScore * 10 : 58;
     }
     if (selectedRegion === 'Constantine') return 45;
     return 58;
