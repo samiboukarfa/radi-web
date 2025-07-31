@@ -4,9 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { getUserSession, getCurrentProfile } from '@/utils/auth';
 import { getFarmerProfile } from '@/utils/farmerProfiles';
-import { calculateRiskScore, ClimateHazard, getRiskScoreColor, getRiskScoreBgColor } from '@/utils/riskScore';
+import { ClimateHazard, getRiskScoreColor } from '@/utils/riskScore';
 import RiskScoreModal from '@/components/farmer/risk/RiskScoreModal';
-import { MapPin, AlertTriangle, Cloud, TrendingUp, Plus, Eye, CheckCircle, Award, Activity, Droplets, Calculator } from 'lucide-react';
+import RiskParametersEditor from '@/components/farmer/risk/RiskParametersEditor';
+import { useRiskCalculator } from '@/hooks/useRiskCalculator';
+import { MapPin, AlertTriangle, Cloud, TrendingUp, Plus, Eye, CheckCircle, Award, Activity, Droplets, Calculator, Settings, RefreshCw } from 'lucide-react';
 
 const FarmerDashboardOverview: React.FC = () => {
   const user = getUserSession();
@@ -16,12 +18,14 @@ const FarmerDashboardOverview: React.FC = () => {
   const totalArea = farmerData.plots.reduce((sum, plot) => sum + plot.area, 0);
   const highRiskPlots = farmerData.plots.filter(plot => plot.riskLevel === 'High').length;
 
-  // Live Risk Assessment State
-  const [selectedHazard, setSelectedHazard] = useState<ClimateHazard>('Drought');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // Calculate risk score for selected hazard
-  const riskCalculation = calculateRiskScore(farmerData.riskParameters, selectedHazard);
+  // Risk Calculator Hook
+  const riskCalculator = useRiskCalculator({
+    initialParameters: farmerData.riskParameters,
+    onParametersUpdate: (parameters) => {
+      // Here you could save to backend/localStorage if needed
+      console.log('Parameters updated:', parameters);
+    }
+  });
 
   const getRiskColor = (level: string) => {
     switch (level) {
@@ -112,11 +116,11 @@ const FarmerDashboardOverview: React.FC = () => {
             <AlertTriangle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className={`text-2xl font-bold ${currentProfileId === 'salem' ? 'text-green-600' : currentProfileId === 'hamza' ? 'text-red-600' : 'text-yellow-600'}`}>
-              {currentProfileId === 'salem' ? '8.0/10' : currentProfileId === 'hamza' ? '3.0/10' : '6.5/10'}
+            <div className={`text-2xl font-bold ${getRiskScoreColor(riskCalculator.result.finalScore)}`}>
+              {riskCalculator.result.finalScore}/10
             </div>
             <p className="text-xs text-muted-foreground">
-              {currentProfileId === 'salem' ? 'Low Risk - Drought managed' : currentProfileId === 'hamza' ? 'High Risk - Post-storm recovery' : `${highRiskPlots} plot${highRiskPlots !== 1 ? 's' : ''} need attention`}
+              {riskCalculator.result.riskLevel} Risk - {riskCalculator.hazard} Assessment
             </p>
           </CardContent>
         </Card>
@@ -360,6 +364,24 @@ const FarmerDashboardOverview: React.FC = () => {
                 Calculate real-time risk scores using RADI algorithm for different climate hazards
               </CardDescription>
             </div>
+            <div className="flex space-x-2">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={riskCalculator.openEditor}
+              >
+                <Settings className="h-4 w-4 mr-2" />
+                Update Parameters
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={riskCalculator.refreshData}
+              >
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Refresh Data
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent>
@@ -367,7 +389,7 @@ const FarmerDashboardOverview: React.FC = () => {
             {/* Hazard Selection */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Select Climate Hazard</label>
-              <Select value={selectedHazard} onValueChange={(value: ClimateHazard) => setSelectedHazard(value)}>
+              <Select value={riskCalculator.hazard} onValueChange={riskCalculator.updateHazard}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Choose hazard type" />
                 </SelectTrigger>
@@ -383,15 +405,16 @@ const FarmerDashboardOverview: React.FC = () => {
             <div className="bg-white rounded-lg p-6 border border-gray-200">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Risk Score for {selectedHazard}</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">Risk Score for {riskCalculator.hazard}</h3>
                   <p className="text-sm text-gray-600">Based on current farm conditions</p>
+                  <p className="text-xs text-gray-500">Last updated: {riskCalculator.lastUpdated.toLocaleTimeString()}</p>
                 </div>
                 <div className="text-right">
-                  <div className={`text-3xl font-bold ${getRiskScoreColor(riskCalculation.finalScore)}`}>
-                    {riskCalculation.finalScore}/10
+                  <div className={`text-3xl font-bold ${getRiskScoreColor(riskCalculator.result.finalScore)}`}>
+                    {riskCalculator.result.finalScore}/10
                   </div>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${getRiskColor(riskCalculation.riskLevel)}`}>
-                    {riskCalculation.riskLevel} Risk
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${getRiskColor(riskCalculator.result.riskLevel)}`}>
+                    {riskCalculator.result.riskLevel} Risk
                   </span>
                 </div>
               </div>
@@ -400,10 +423,10 @@ const FarmerDashboardOverview: React.FC = () => {
               <div className="w-full bg-gray-200 rounded-full h-3 mb-4">
                 <div 
                   className={`h-3 rounded-full transition-all duration-500 ${
-                    riskCalculation.riskLevel === 'Low' ? 'bg-green-500' :
-                    riskCalculation.riskLevel === 'Medium' ? 'bg-yellow-500' : 'bg-red-500'
+                    riskCalculator.result.riskLevel === 'Low' ? 'bg-green-500' :
+                    riskCalculator.result.riskLevel === 'Medium' ? 'bg-yellow-500' : 'bg-red-500'
                   }`}
-                  style={{ width: `${(riskCalculation.finalScore / 10) * 100}%` }}
+                  style={{ width: `${(riskCalculator.result.finalScore / 10) * 100}%` }}
                 />
               </div>
 
@@ -411,7 +434,7 @@ const FarmerDashboardOverview: React.FC = () => {
               <div className="mb-4">
                 <h4 className="text-sm font-medium text-gray-700 mb-2">Top Risk Contributors</h4>
                 <div className="space-y-2">
-                  {riskCalculation.breakdown
+                  {riskCalculator.result.breakdown
                     .sort((a, b) => b.weightedScore - a.weightedScore)
                     .slice(0, 3)
                     .map((item, index) => (
@@ -430,7 +453,7 @@ const FarmerDashboardOverview: React.FC = () => {
 
               {/* Action Button */}
               <Button 
-                onClick={() => setIsModalOpen(true)}
+                onClick={riskCalculator.openModal}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white"
               >
                 <Eye className="h-4 w-4 mr-2" />
@@ -514,10 +537,19 @@ const FarmerDashboardOverview: React.FC = () => {
 
       {/* Risk Score Modal */}
       <RiskScoreModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        result={riskCalculation}
-        hazard={selectedHazard}
+        isOpen={riskCalculator.isModalOpen}
+        onClose={riskCalculator.closeModal}
+        result={riskCalculator.result}
+        hazard={riskCalculator.hazard}
+      />
+
+      {/* Risk Parameters Editor */}
+      <RiskParametersEditor
+        isOpen={riskCalculator.isEditorOpen}
+        onClose={riskCalculator.closeEditor}
+        parameters={riskCalculator.parameters}
+        onParametersChange={riskCalculator.updateParameters}
+        onSave={riskCalculator.updateParameters}
       />
     </div>
   );
