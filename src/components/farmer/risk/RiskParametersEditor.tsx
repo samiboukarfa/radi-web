@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -173,12 +173,22 @@ const RiskParametersEditor: React.FC<RiskParametersEditorProps> = ({
   const [editedParameters, setEditedParameters] = useState<RiskParameters>(parameters);
   const [hasChanges, setHasChanges] = useState(false);
 
+  // Sync with incoming parameters when they change
+  useEffect(() => {
+    console.log('Parameters changed in editor:', parameters);
+    setEditedParameters(parameters);
+    setHasChanges(false);
+  }, [parameters]);
+
   const handleParameterChange = (key: keyof RiskParameters, value: string) => {
+    console.log('Parameter change:', key, '=', value);
     const numValue = parseFloat(value) || 0;
     const newParameters = { ...editedParameters, [key]: numValue };
     setEditedParameters(newParameters);
     setHasChanges(true);
+    
     // Immediately update the calculator for real-time preview
+    console.log('Calling onParametersChange with:', newParameters);
     onParametersChange(newParameters);
   };
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { RiskParameters, ClimateHazard, calculateRiskScore, RiskCalculationResult } from '@/utils/riskScore';
 import { toast } from '@/hooks/use-toast';
 
@@ -35,7 +35,10 @@ export const useRiskCalculator = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Calculate risk score whenever parameters or hazard changes
-  const result = calculateRiskScore(parameters, hazard);
+  const result = useMemo(() => {
+    console.log('Recalculating risk score with parameters:', parameters, 'hazard:', hazard);
+    return calculateRiskScore(parameters, hazard);
+  }, [parameters, hazard]);
 
   // Update timestamp when calculation changes
   useEffect(() => {
@@ -43,6 +46,7 @@ export const useRiskCalculator = ({
   }, [parameters, hazard]);
 
   const updateParameters = useCallback((newParameters: RiskParameters, saveToProfile = false) => {
+    console.log('Updating parameters:', newParameters, 'saveToProfile:', saveToProfile);
     setParameters(newParameters);
     
     if (saveToProfile && onParametersUpdate) {
@@ -50,6 +54,11 @@ export const useRiskCalculator = ({
       toast({
         title: "Parameters Saved",
         description: "Risk parameters have been saved and risk scores recalculated.",
+      });
+    } else if (!saveToProfile) {
+      toast({
+        title: "Risk Score Updated",
+        description: "Risk assessment updated with new parameters.",
       });
     }
   }, [onParametersUpdate]);

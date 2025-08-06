@@ -456,13 +456,13 @@ const FarmerDashboardOverview: React.FC = () => {
                 <h4 className="text-sm font-medium text-gray-900">Risk Parameters</h4>
                 <div className="flex space-x-2">
                   <Button 
-                    variant="outline" 
-                    size="sm"
+                    variant="default" 
+                    size="lg"
                     onClick={riskCalculator.openEditor}
-                    className="border-primary text-primary hover:bg-primary hover:text-white"
+                    className="px-6 py-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
                   >
-                    <Settings className="h-4 w-4 mr-2" />
-                    Edit Parameters
+                    <Settings className="h-5 w-5 mr-2" />
+                    Adjust Risk Parameters
                   </Button>
                   <Button 
                     variant="outline" 
