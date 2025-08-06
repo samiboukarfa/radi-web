@@ -8,7 +8,8 @@ import { ClimateHazard, getRiskScoreColor } from '@/utils/riskScore';
 import RiskScoreModal from '@/components/farmer/risk/RiskScoreModal';
 import RiskParametersEditor from '@/components/farmer/risk/RiskParametersEditor';
 import { useRiskCalculator } from '@/hooks/useRiskCalculator';
-import { MapPin, AlertTriangle, Cloud, TrendingUp, Plus, Eye, CheckCircle, Award, Activity, Droplets, Calculator, Settings, RefreshCw } from 'lucide-react';
+import { MapPin, AlertTriangle, Cloud, TrendingUp, Plus, Eye, CheckCircle, Award, Activity, Droplets, Calculator, Settings, RefreshCw, Clock } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 const FarmerDashboardOverview: React.FC = () => {
   const user = getUserSession();
@@ -351,36 +352,24 @@ const FarmerDashboardOverview: React.FC = () => {
         </Card>
       </div>
 
-      {/* Live Risk Assessment */}
-      <Card className="border-2 border-dashed border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50">
-        <CardHeader>
+      {/* Live Risk Assessment - Enhanced */}
+      <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-blue-50 shadow-lg">
+        <CardHeader className="pb-4">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="flex items-center space-x-2">
-                <Calculator className="h-5 w-5 text-blue-600" />
+              <CardTitle className="flex items-center space-x-2 text-lg">
+                <Calculator className="h-6 w-6 text-primary" />
                 <span>Live Risk Assessment</span>
               </CardTitle>
-              <CardDescription>
-                Calculate real-time risk scores using RADI algorithm for different climate hazards
+              <CardDescription className="text-sm">
+                Real-time RADI algorithm calculations with instant parameter updates
               </CardDescription>
             </div>
-            <div className="flex space-x-2">
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={riskCalculator.openEditor}
-              >
-                <Settings className="h-4 w-4 mr-2" />
-                Update Parameters
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={riskCalculator.refreshData}
-              >
-                <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh Data
-              </Button>
+            <div className="flex items-center space-x-2">
+              <Badge variant="secondary" className="text-xs">
+                <Clock className="h-3 w-3 mr-1" />
+                Updated {riskCalculator.lastUpdated.toLocaleTimeString()}
+              </Badge>
             </div>
           </div>
         </CardHeader>
@@ -459,6 +448,56 @@ const FarmerDashboardOverview: React.FC = () => {
                 <Eye className="h-4 w-4 mr-2" />
                 View Detailed Breakdown
               </Button>
+            </div>
+
+            {/* Parameter Controls Section */}
+            <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="text-sm font-medium text-gray-900">Risk Parameters</h4>
+                <div className="flex space-x-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={riskCalculator.openEditor}
+                    className="border-primary text-primary hover:bg-primary hover:text-white"
+                  >
+                    <Settings className="h-4 w-4 mr-2" />
+                    Edit Parameters
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={riskCalculator.refreshData}
+                  >
+                    <RefreshCw className="h-4 w-4 mr-2" />
+                    Refresh
+                  </Button>
+                </div>
+              </div>
+              
+              {/* Key Parameters Display */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                <div className="text-center p-2 bg-gray-50 rounded">
+                  <p className="text-gray-500">NDVI</p>
+                  <p className="font-bold text-green-600">{riskCalculator.parameters.NDVI.toFixed(3)}</p>
+                </div>
+                <div className="text-center p-2 bg-gray-50 rounded">
+                  <p className="text-gray-500">LST (°C)</p>
+                  <p className="font-bold text-orange-600">{riskCalculator.parameters.LST.toFixed(1)}</p>
+                </div>
+                <div className="text-center p-2 bg-gray-50 rounded">
+                  <p className="text-gray-500">Rainfall (mm)</p>
+                  <p className="font-bold text-blue-600">{riskCalculator.parameters.totalRainfall.toFixed(1)}</p>
+                </div>
+                <div className="text-center p-2 bg-gray-50 rounded">
+                  <p className="text-gray-500">CAPE (J/kg)</p>
+                  <p className="font-bold text-purple-600">{riskCalculator.parameters.CAPE.toFixed(0)}</p>
+                </div>
+              </div>
+              
+              <p className="text-xs text-gray-500 mt-2 text-center">
+                Click "Edit Parameters" to modify values and see real-time risk score changes
+              </p>
             </div>
 
             {/* Profile-Specific Insights */}
@@ -549,7 +588,7 @@ const FarmerDashboardOverview: React.FC = () => {
         onClose={riskCalculator.closeEditor}
         parameters={riskCalculator.parameters}
         onParametersChange={riskCalculator.updateParameters}
-        onSave={riskCalculator.updateParameters}
+        onSave={(params) => riskCalculator.updateParameters(params, true)}
       />
     </div>
   );

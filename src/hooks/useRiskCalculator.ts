@@ -42,17 +42,16 @@ export const useRiskCalculator = ({
     setLastUpdated(new Date());
   }, [parameters, hazard]);
 
-  const updateParameters = useCallback((newParameters: RiskParameters, saveToProfile = true) => {
+  const updateParameters = useCallback((newParameters: RiskParameters, saveToProfile = false) => {
     setParameters(newParameters);
     
     if (saveToProfile && onParametersUpdate) {
       onParametersUpdate(newParameters);
+      toast({
+        title: "Parameters Saved",
+        description: "Risk parameters have been saved and risk scores recalculated.",
+      });
     }
-    
-    toast({
-      title: "Parameters Updated",
-      description: "Risk scores have been recalculated with new parameters.",
-    });
   }, [onParametersUpdate]);
 
   const updateHazard = useCallback((newHazard: ClimateHazard) => {

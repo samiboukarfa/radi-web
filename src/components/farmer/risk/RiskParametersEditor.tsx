@@ -178,6 +178,7 @@ const RiskParametersEditor: React.FC<RiskParametersEditorProps> = ({
     const newParameters = { ...editedParameters, [key]: numValue };
     setEditedParameters(newParameters);
     setHasChanges(true);
+    // Immediately update the calculator for real-time preview
     onParametersChange(newParameters);
   };
 
