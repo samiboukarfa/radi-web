@@ -2,16 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { clearUserSession, getUserSession, switchFarmerProfile, getCurrentProfile } from '@/utils/auth';
 import { useNavigate } from 'react-router-dom';
-import { LayoutDashboard, MapPin, AlertTriangle, Cloud, Activity, FileText, Bell, Settings, LogOut, Menu, X, ChevronDown, Award, Users } from 'lucide-react';
+import { LayoutDashboard, MapPin, AlertTriangle, Cloud, Activity, FileText, Bell, Settings, LogOut, Menu, X, ChevronDown, Award, Users, Calculator } from 'lucide-react';
+import { hasCustomParameters } from '@/utils/riskParametersStorage';
 interface FarmerDashboardLayoutProps {
   activeSection: string;
   onSectionChange: (section: string) => void;
   children: React.ReactNode;
+  onRiskCalculatorOpen?: () => void;
 }
 const FarmerDashboardLayout: React.FC<FarmerDashboardLayoutProps> = ({
   activeSection,
   onSectionChange,
-  children
+  children,
+  onRiskCalculatorOpen
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
@@ -78,6 +81,7 @@ const FarmerDashboardLayout: React.FC<FarmerDashboardLayoutProps> = ({
     description: 'Wheat farming with hailstorm monitoring'
   }];
   const currentProfileData = farmerProfiles.find(p => p.id === currentProfile) || farmerProfiles[0];
+  const hasCustomRiskParams = hasCustomParameters(currentProfile);
   const handleProfileSwitch = (profileId: string) => {
     switchFarmerProfile(profileId);
     setIsProfileDropdownOpen(false);
@@ -126,6 +130,22 @@ const FarmerDashboardLayout: React.FC<FarmerDashboardLayoutProps> = ({
 
             {/* User Info and Actions */}
             <div className="flex items-center space-x-4">
+              {/* Risk Calculator Shortcut */}
+              {onRiskCalculatorOpen && (
+                <Button 
+                  onClick={onRiskCalculatorOpen}
+                  variant="default"
+                  size="sm"
+                  className={`relative px-4 py-2 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 ${hasCustomRiskParams ? 'ring-2 ring-orange-400 ring-offset-2' : ''}`}
+                >
+                  <Calculator className="h-4 w-4 mr-2" />
+                  Risk Calculator
+                  {hasCustomRiskParams && (
+                    <span className="absolute -top-1 -right-1 h-3 w-3 bg-orange-500 rounded-full animate-pulse" />
+                  )}
+                </Button>
+              )}
+
               {/* Profile Switcher */}
               <div className="relative">
                 

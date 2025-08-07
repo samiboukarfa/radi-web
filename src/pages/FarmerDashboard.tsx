@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import FarmerDashboardLayout from '@/components/FarmerDashboardLayout';
 import FarmerDashboardOverview from '@/components/FarmerDashboardOverview';
 import PlotsSection from '@/components/farmer/plots/PlotsSection';
@@ -21,11 +21,24 @@ const PlaceholderContent: React.FC<{ title: string; description: string }> = ({ 
 
 const FarmerDashboard = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
+  const riskCalculatorRef = useRef<{ openRiskCalculator: () => void }>(null);
+
+  const handleRiskCalculatorOpen = () => {
+    // Switch to dashboard if not already there
+    if (activeSection !== 'dashboard') {
+      setActiveSection('dashboard');
+    }
+    
+    // Wait for render then open calculator
+    setTimeout(() => {
+      riskCalculatorRef.current?.openRiskCalculator();
+    }, 100);
+  };
 
   const renderContent = () => {
     switch (activeSection) {
       case 'dashboard':
-        return <FarmerDashboardOverview />;
+        return <FarmerDashboardOverview ref={riskCalculatorRef} />;
       case 'plots':
         return <PlotsSection />;
       case 'risk':
@@ -66,14 +79,15 @@ const FarmerDashboard = () => {
           />
         );
       default:
-        return <FarmerDashboardOverview />;
+        return <FarmerDashboardOverview ref={riskCalculatorRef} />;
     }
   };
 
   return (
     <FarmerDashboardLayout 
-      activeSection={activeSection}
+      activeSection={activeSection} 
       onSectionChange={setActiveSection}
+      onRiskCalculatorOpen={handleRiskCalculatorOpen}
     >
       {renderContent()}
     </FarmerDashboardLayout>

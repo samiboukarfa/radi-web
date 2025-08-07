@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -10,8 +10,13 @@ import RiskParametersEditor from '@/components/farmer/risk/RiskParametersEditor'
 import { useRiskCalculator } from '@/hooks/useRiskCalculator';
 import { MapPin, AlertTriangle, Cloud, TrendingUp, Plus, Eye, CheckCircle, Award, Activity, Droplets, Calculator, Settings, RefreshCw, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { hasCustomParameters } from '@/utils/riskParametersStorage';
 
-const FarmerDashboardOverview: React.FC = () => {
+export interface FarmerDashboardOverviewRef {
+  openRiskCalculator: () => void;
+}
+
+const FarmerDashboardOverview = forwardRef<FarmerDashboardOverviewRef>((props, ref) => {
   const user = getUserSession();
   const currentProfileId = getCurrentProfile();
   const farmerData = getFarmerProfile(currentProfileId);
@@ -78,6 +83,14 @@ const FarmerDashboardOverview: React.FC = () => {
   };
 
   const profileMessage = getProfileSpecificMessage();
+  const hasCustomRiskParams = hasCustomParameters(currentProfileId);
+
+  // Expose methods via ref
+  useImperativeHandle(ref, () => ({
+    openRiskCalculator: () => {
+      riskCalculator.openEditor();
+    }
+  }));
 
   return (
     <div className="space-y-6">
@@ -455,15 +468,18 @@ const FarmerDashboardOverview: React.FC = () => {
               <div className="flex items-center justify-between mb-4">
                 <h4 className="text-sm font-medium text-gray-900">Risk Parameters</h4>
                 <div className="flex space-x-2">
-                  <Button 
-                    variant="default" 
-                    size="lg"
-                    onClick={riskCalculator.openEditor}
-                    className="px-6 py-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-                  >
-                    <Settings className="h-5 w-5 mr-2" />
-                    Adjust Risk Parameters
-                  </Button>
+                   <Button 
+                     variant="default" 
+                     size="lg"
+                     onClick={riskCalculator.openEditor}
+                     className={`px-6 py-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 relative ${hasCustomRiskParams ? 'ring-2 ring-orange-400 ring-offset-2' : ''}`}
+                   >
+                     <Settings className="h-5 w-5 mr-2" />
+                     Adjust Risk Parameters
+                     {hasCustomRiskParams && (
+                       <span className="absolute -top-1 -right-1 h-3 w-3 bg-orange-500 rounded-full animate-pulse" />
+                     )}
+                   </Button>
                   <Button 
                     variant="outline" 
                     size="sm"
@@ -592,6 +608,8 @@ const FarmerDashboardOverview: React.FC = () => {
       />
     </div>
   );
-};
+});
+
+FarmerDashboardOverview.displayName = 'FarmerDashboardOverview';
 
 export default FarmerDashboardOverview;
